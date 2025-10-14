@@ -59,24 +59,34 @@ AirSense is a web application that visualizes historical air quality data across
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/lopez-andres/AirSense.git
-cd AirSense
+git clone https://github.com/AirSense-Project/Airsense-V2.git
 ```
 
 2. Install dependencies:
 ```bash
+#\Airsense V2
 npm install
 ```
 
 3. Environment configuration:
-- Create a `.env` file based on `.env.example` (file: Por definir).  
-- Add database connection variables and any API keys (Por definir).
+- Create a `.env` file.  
+
+```bash
+#Airsense\backend
+DB_USER=base_de_datos_contaminacion_user
+DB_PASSWORD=sRea6jLsPmWiFZMMlWnel016TZZ9NuVh
+DB_HOST=dpg-d3kpnlili9vc73es3nsg-a.oregon-postgres.render.com
+DB_NAME=base_de_datos_contaminacion
+DB_PORT=5432
+```
 
 4. Start the development server:
 ```bash
-npm run dev
-# or
-npm start
+#Airsense V2\backend
+cd backend
+node index.js
+#or
+node --watch index.js
 ```
 
 5. Open the frontend in your browser (URL: Por definir or `http://localhost:PORT`).
