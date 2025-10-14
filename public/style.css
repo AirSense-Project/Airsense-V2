@@ -1,0 +1,130 @@
+/* ================================================================
+  AIRSENSE - ESTILOS GENERALES (Municipios + Estaciones)
+  --------------------------------------------------------------- */
+
+/* ------------------------------
+    style.css
+  Hoja de estilos para AirSense
+  ------------------------------ */
+
+/*  Estilo base del cuerpo */
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f7f9fb;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal */
+h1 {
+  text-align: center;
+  color: #2a5d67;
+  margin-bottom: 25px;
+}
+
+/* Selector de municipio */
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #2a5d67;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #a8d0da;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+}
+
+select:focus {
+  border-color: #2a5d67;
+  background-color: #f0fdfd;
+}
+
+/* Mapa principal */
+#map {
+  height: 500px;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: 2px solid #d1e7ec;
+}
+
+/* Mensaje de estado (carga o error) */
+#status {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  margin-top: 10px;
+}
+
+/* Animación de carga opcional */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading::after {
+  content: " ";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  border: 2px solid #2a5d67;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Marcadores de municipios */
+.municipio-marker {
+  stroke: #007bff;
+  fill: #007bff;
+  fill-opacity: 0.6;
+  stroke-width: 2;
+}
+
+
+/* ------------------------------
+  Cuadro informativo (leyenda en el mapa)
+  ------------------------------ */
+.info-box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  line-height: 1.4;
+}
+
+
+/* -----------------------------------------
+  Cuadro de información de las estaciones
+   ----------------------------------------- */
+/* Puntos de municipios */
+.municipio-marker {
+  stroke: #007bff;
+  fill: #007bff;
+  fill-opacity: 0.6;
+}
+
+/* Flechas o marcadores de estaciones */
+.leaflet-marker-icon {
+  filter: hue-rotate(100deg); /* da tono al pin clásico */
+}
+

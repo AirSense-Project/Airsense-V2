@@ -1,0 +1,62 @@
+<!--
+  ------------------------------
+  public/index.html
+  ------------------------------
+  Interfaz web para AirSense (Mapa de estaciones)
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Metadatos -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌍 Estaciones de Calidad del Aire - AirSense</title>
+
+  <!-- ----------------------------------------- -->
+  <!--  Estilos principales -->
+  <!-- ----------------------------------------- -->
+  <!-- Leaflet (mapas interactivos) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- Hoja de estilos personalizada -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <!----------------------------------------- -->
+    <!--  Título principal -->
+    <!------------------------------------------- -->
+    <h1 style="text-align:center; color:#2a5d67;">
+      🌍 Estaciones de Calidad del Aire - AirSense
+    </h1>
+
+    <!-- ----------------------------------------- -->
+    <!--  Selector de municipio -->
+    <!-- ----------------------------------------- -->
+    <label for="selectMunicipio">Selecciona un municipio:</label>
+    <select id="selectMunicipio">
+      <option value="">-- Selecciona un municipio --</option>
+    </select>
+
+
+    <!-- ----------------------------------------- -->
+    <!--  Contenedor del mapa -->
+    <!-- ----------------------------------------- -->
+    <div id="map"></div>
+    
+    <!--  Información de las estaciones -->
+    <div id="infoEstacion">
+    <p id="infoTexto"></p>
+  </div>
+
+  <!-- ----------------------------------------- -->
+  <!-- Scripts -->
+  <!-- ----------------------------------------- -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Script principal -->
+  <script src="script.js" defer></script>
+</body>
+</html>
