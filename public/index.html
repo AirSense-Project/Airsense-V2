@@ -1,62 +1,41 @@
-<!--
-  ------------------------------
-  public/index.html
-  ------------------------------
-  Interfaz web para AirSense (Mapa de estaciones)
--->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Metadatos -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌍 Estaciones de Calidad del Aire - AirSense</title>
+  <title>AirSense</title>
 
-  <!-- ----------------------------------------- -->
-  <!--  Estilos principales -->
-  <!-- ----------------------------------------- -->
-  <!-- Leaflet (mapas interactivos) -->
+  <!--Estilos de leaflet-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-  <!-- Hoja de estilos personalizada -->
+  <!-- css -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="container">
-    <!----------------------------------------- -->
+  <div class="contenedor">
     <!--  Título principal -->
-    <!------------------------------------------- -->
-    <h1 style="text-align:center; color:#2a5d67;">
-      🌍 Estaciones de Calidad del Aire - AirSense
-    </h1>
+    <h1>AirSense</h1>
 
-    <!-- ----------------------------------------- -->
-    <!--  Selector de municipio -->
-    <!-- ----------------------------------------- -->
+    <!-- Seleccion de un municipio-->
     <label for="selectMunicipio">Selecciona un municipio:</label>
-    <select id="selectMunicipio">
+    <select id="selectMunicipio" class="selector-municipio">
       <option value="">-- Selecciona un municipio --</option>
     </select>
 
 
-    <!-- ----------------------------------------- -->
     <!--  Contenedor del mapa -->
-    <!-- ----------------------------------------- -->
-    <div id="map"></div>
+    <div id="map" class="mapa"></div>
     
     <!--  Información de las estaciones -->
-    <div id="infoEstacion">
-    <p id="infoTexto"></p>
+    <div id="infoEstacion" class="estado">
+      <p id="infoTexto"></p>
+    </div>
   </div>
-
-  <!-- ----------------------------------------- -->
-  <!-- Scripts -->
-  <!-- ----------------------------------------- -->
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Script principal -->
+  <!-- Script javascript -->
   <script src="script.js" defer></script>
 </body>
 </html>

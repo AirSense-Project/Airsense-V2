@@ -1,13 +1,11 @@
-/* ================================================================
-  AIRSENSE - ESTILOS GENERALES (Municipios + Estaciones)
-  --------------------------------------------------------------- */
+/* ==========================================================================
+   ESTILOS BASE
+   Estilos fundacionales del documento
+   ========================================================================== */
 
-/* ------------------------------
-    style.css
-  Hoja de estilos para AirSense
-  ------------------------------ */
+/* body - Contenedor raíz del HTML
+   Define la tipografía base y colores de fondo para toda la aplicación */
 
-/*  Estilo base del cuerpo */
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background-color: #f7f9fb;
@@ -16,8 +14,15 @@ body {
   padding: 0;
 }
 
-/* Contenedor principal */
-.container {
+/* ==========================================================================
+   DISPOSICIÓN
+   Estructura y contenedores principales
+   ========================================================================== */
+
+/* .contenedor - Envoltorio principal de la aplicación
+   Centra el contenido y define el ancho máximo de la interfaz */
+
+.contenedor {
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
@@ -26,14 +31,22 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Título principal */
+/* ==========================================================================
+   TIPOGRAFÍA
+   Jerarquía de encabezados y texto
+   ========================================================================== */
+
 h1 {
   text-align: center;
   color: #2a5d67;
   margin-bottom: 25px;
 }
 
-/* Selector de municipio */
+/* ==========================================================================
+   FORMULARIOS
+   Controles de entrada y selección
+   ========================================================================== */
+
 label {
   display: block;
   font-weight: bold;
@@ -41,7 +54,10 @@ label {
   color: #2a5d67;
 }
 
-select {
+/* select - Selector desplegable de municipios
+   Permite al usuario elegir una ubicación de una lista predefinida */
+
+.selector-municipio {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -51,57 +67,31 @@ select {
   transition: 0.3s;
 }
 
-select:focus {
+.selector-municipio:focus {
   border-color: #2a5d67;
   background-color: #f0fdfd;
 }
 
-/* Mapa principal */
-#map {
+/* ==========================================================================
+   COMPONENTES DEL MAPA
+   Elementos de visualización cartográfica (Leaflet)
+   ========================================================================== */
+
+
+/* #mapa - Contenedor principal del mapa interactivo
+   Renderiza el mapa de Leaflet con controles de zoom y navegación */
+   
+.mapa {
   height: 500px;
   margin-top: 20px;
   border-radius: 12px;
   border: 2px solid #d1e7ec;
 }
 
-/* Mensaje de estado (carga o error) */
-#status {
-  text-align: center;
-  font-style: italic;
-  color: #888;
-  margin-top: 10px;
-}
+/* .mapa__cuadro-info - Leyenda flotante sobre el mapa
+   Muestra información contextual o datos de la ubicación seleccionada */
 
-/* Animación de carga opcional */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loading::after {
-  content: " ";
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-left: 6px;
-  border: 2px solid #2a5d67;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-/* Marcadores de municipios */
-.municipio-marker {
-  stroke: #007bff;
-  fill: #007bff;
-  fill-opacity: 0.6;
-  stroke-width: 2;
-}
-
-
-/* ------------------------------
-  Cuadro informativo (leyenda en el mapa)
-  ------------------------------ */
-.info-box {
+.mapa__cuadro-info {
   background: rgba(255, 255, 255, 0.9);
   padding: 10px 15px;
   border-radius: 10px;
@@ -112,19 +102,72 @@ select:focus {
   line-height: 1.4;
 }
 
+/* .mapa__marcador-municipio - Indicadores de ubicación en el mapa
+   Elementos SVG que señalan municipios específicos en el mapa */
 
-/* -----------------------------------------
-  Cuadro de información de las estaciones
-   ----------------------------------------- */
-/* Puntos de municipios */
-.municipio-marker {
+.mapa__marcador-municipio {
   stroke: #007bff;
   fill: #007bff;
   fill-opacity: 0.6;
+  stroke-width: 2;
 }
 
-/* Flechas o marcadores de estaciones */
+
+/* .leaflet-marker-icon - Íconos de marcador predeterminados de Leaflet
+   Modifica el color de los pines estándar de la biblioteca Leaflet */
+
 .leaflet-marker-icon {
-  filter: hue-rotate(100deg); /* da tono al pin clásico */
+  filter: hue-rotate(100deg); 
 }
+
+/* ==========================================================================
+   ESTADOS DE RETROALIMENTACIÓN
+   Mensajes e indicadores de estado para el usuario
+   ========================================================================== */
+
+/* #estado - Mensaje de estado de la aplicación
+   Informa al usuario sobre procesos de carga o errores */
+
+.estado {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  margin-top: 10px;
+}
+
+/* .cargando - Indicador visual de proceso en curso
+   Spinner animado que aparece durante peticiones asíncronas */
+
+.cargando::after {
+  content: " ";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  border: 2px solid #2a5d67;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+/* ==========================================================================
+   ANIMACIONES
+   Fotogramas clave para transiciones y efectos
+   ========================================================================== */
+
+/* @keyframes girar - Rotación continua de 360 grados
+   Utilizada para el indicador de carga circular */
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+
+
+
 

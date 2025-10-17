@@ -1,11 +1,27 @@
-// ------------------------------
-// backend/basedatos.js
-// ------------------------------
-require("dotenv").config();
-const { Pool } = require("pg");
-const fs = require("fs");
+/* ==========================================================================
+   AIRSENSE - MÓDULO DE CONEXIÓN A BASE DE DATOS
+   ==========================================================================
+   
+   Descripción: Gestiona la conexión a PostgreSQL y proporciona funciones
+                para consultar municipios, estaciones y ubicaciones
+   
+   Tecnologías: PostgreSQL, pg (node-postgres), dotenv
+   Compatibilidad: Soporta conexión SSL (Render) y sin SSL (desarrollo local)*/
 
-// 📂 Diagnóstico de entorno
+
+// ==========================================================================
+// IMPORTACIÓN DE DEPENDENCIAS
+// ==========================================================================
+
+require("dotenv").config();           // Carga variables de entorno desde .env
+const { Pool } = require("pg");       // Pool de conexiones de PostgreSQL
+const fs = require("fs");             // Sistema de archivos para verificaciones
+
+// ==========================================================================
+// DIAGNÓSTICO DE ENTORNO
+// ==========================================================================
+
+//validacion manual en las variables de entorno, para que esten cargadas correctamente
 console.log("📁 Ruta actual:", __dirname);
 console.log("📄 ¿Archivo .env encontrado?", fs.existsSync(__dirname + "/.env"));
 console.log("🧩 Variables cargadas:");
@@ -17,11 +33,35 @@ console.log({
   DB_PORT: process.env.DB_PORT
 });
 
+// ==========================================================================
+// POOL DE CONEXIONES
+// ==========================================================================
+
+//gestiona un conjunto de conexiones reutilizables a la base de datos
 let pool;
 
-// -----------------------------------------------------
-// Conexión con Render (SSL) o modo local (sin SSL)
-// -----------------------------------------------------
+
+/* ==========================================================================
+   INICIALIZACIÓN DE LA CONEXIÓN
+   ==========================================================================
+      Establece la conexión con PostgreSQL usando estrategia de fallback
+      
+      Flujo de conexión:
+      1. Intenta conectar con SSL habilitado (requerido por Render y servicios cloud)
+      2. Si falla por incompatibilidad SSL, reintenta sin SSL (desarrollo local)
+      3. Si ambos fallan, registra el error y detiene la ejecución
+       
+      Configuración SSL:
+        - require: true → Solicita SSL pero no es obligatorio
+        - rejectUnauthorized: false → Acepta certificados autofirmados
+       
+        Variables de entorno requeridas:
+        - DB_USER: Usuario de PostgreSQL
+        - DB_HOST: Host del servidor (ej: localhost, render.com)
+        - DB_NAME: Nombre de la base de datos
+        - DB_PASSWORD: Contraseña del usuario
+        - DB_PORT: Puerto de PostgreSQL (por defecto 5432) */
+
 async function conectarPostgres() {
   try {
     pool = new Pool({
@@ -58,11 +98,21 @@ async function conectarPostgres() {
   }
 }
 
-conectarPostgres();
+conectarPostgres();   //ejecutar conexion al cargar el modulo
 
-// -----------------------------------------------------
-// Función genérica de consulta SQL
-// -----------------------------------------------------
+
+// ==========================================================================
+// FUNCIÓN GENÉRICA DE CONSULTA
+// ==========================================================================
+
+/* Ejecuta una consulta SQL parametrizada en la base de datos
+  
+  Características:
+  - Usa conexiones del pool para eficiencia
+  - Soporta consultas parametrizadas (previene SQL injection)
+  - Libera automáticamente la conexión después de usarla
+  - Maneja errores y los propaga al llamado */
+
 const query = async (text, params) => {
   const client = await pool.connect();
   try {
@@ -76,9 +126,11 @@ const query = async (text, params) => {
   }
 };
 
-// -----------------------------------------------------
-// Obtener municipios (incluye lat/long)
-// -----------------------------------------------------
+// ==========================================================================
+// CONSULTAS DE NEGOCIO
+// ==========================================================================
+
+//Obtiene la lista completa de municipios con sus coordenadas
 const getMunicipios = async () => {
   const sql = `
     SELECT id_municipio, nombre_municipio, latitud, longitud
@@ -89,9 +141,7 @@ const getMunicipios = async () => {
   return res.rows;
 };
 
-// -----------------------------------------------------
-// Obtener estaciones por municipio (último año registrado)
-// -----------------------------------------------------
+//Obtiene las estaciones de un municipio específico con su última ubicación
 const getEstacionesPorMunicipio = async (id_municipio) => {
   const sql = `
     SELECT e.id_estacion, e.nombre_estacion, u.id_ubicacion, u.latitud, u.longitud, u.anio
@@ -109,9 +159,11 @@ const getEstacionesPorMunicipio = async (id_municipio) => {
   return res.rows;
 };
 
-// -----------------------------------------------------
-// Exportar todas las funciones
-// -----------------------------------------------------
+// ==========================================================================
+// EXPORTACIÓN DEL MÓDULO
+// ==========================================================================
+
+//Interfaz pública del módulo de base de datos, usada en otros archivos
 module.exports = {
   query,
   getMunicipios,
