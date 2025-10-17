@@ -9,15 +9,6 @@ AirSense is a web application that visualizes historical air quality data across
 
 ---
 
-## Objectives (SMART)
-- **Specific:** Implement an interactive web map for geospatial and temporal visualization of air pollution data for 10 municipalities of Valle del Cauca (2011–2023).
-- **Measurable:** Provide color classification (green = satisfactory, yellow = moderate, red = harmful) based on environmental standards.
-- **Achievable:** Use historical datasets from official sources (DAGMA, CVC, regional monitoring stations) and public community sensors where available.
-- **Realistic:** Deliver an MVP that uses historical data; IoT sensor integration is planned for later phases.
-- **Time-bound:** Prototype to be completed within the current academic semester.
-
----
-
 ## Features
 - Interactive map of Valle del Cauca with panning and zoom.
 - Display of monitoring stations as map markers.
@@ -40,7 +31,7 @@ AirSense is a web application that visualizes historical air quality data across
 ## Data Sources
 - Historical datasets: DAGMA, CVC, regional monitoring stations, public community sensors (all public datasets).  
 - Time range: 2011 — 2023.  
-- ~15 monitored chemical compounds across 10 municipalities.
+- ~24 monitored chemical compounds across 10 municipalities.
 
 ---
 
