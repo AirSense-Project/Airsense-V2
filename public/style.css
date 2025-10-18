@@ -23,8 +23,8 @@ body {
    Centra el contenido y define el ancho máximo de la interfaz */
 
 .contenedor {
-  max-width: 900px;
-  margin: 20px auto;
+  max-width: 1600px;
+  margin: 20px 0 20px 20px;;
   padding: 20px;
   background: #ffffff;
   border-radius: 12px;
@@ -58,7 +58,7 @@ label {
    Permite al usuario elegir una ubicación de una lista predefinida */
 
 .selector-municipio {
-  width: 100%;
+  width: 10%;
   padding: 10px;
   font-size: 16px;
   border: 2px solid #a8d0da;
@@ -86,6 +86,7 @@ label {
   margin-top: 20px;
   border-radius: 12px;
   border: 2px solid #d1e7ec;
+  
 }
 
 /* .mapa__cuadro-info - Leyenda flotante sobre el mapa
@@ -162,12 +163,227 @@ label {
   to { transform: rotate(360deg); }
 }
 
+/* ==========================================================================
+   DICCIONARIO DE CONTAMINANTES
+   Panel lateral informativo con transiciones fluidas
+   ========================================================================== */
+/* ==========================================================================
+   LAYOUT PRINCIPAL - Grid de dos columnas
+   Mapa a la izquierda | Diccionario a la derecha
+   ========================================================================== */
 
+.vista-principal {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Mapa ocupa 2/3, diccionario 1/3 */
+  gap: 20px;
+  margin-top: 20px;
+}
 
+/* Responsive: en pantallas pequeñas, cambiar a layout vertical */
+@media (max-width: 1024px) {
+  .vista-principal {
+    grid-template-columns: 1fr; /* Una sola columna */
+  }
+}
 
+/* ----- Columna del mapa ----- */
+.vista-principal__mapa {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
+/* Ajustar altura del mapa para que se vea balanceado */
+.mapa {
+  height: 600px; /* Aumentado de 500px para mejor proporción */
+  border-radius: 12px;
+  border: 2px solid #d1e7ec;
+}
 
+/* Info de estaciones (debajo del mapa) */
+.estado {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  padding: 10px;
+  background: #f7f9fb;
+  border-radius: 8px;
+  min-height: 30px;
+}
 
+/* ==========================================================================
+   DICCIONARIO - Panel lateral derecho
+   ========================================================================== */
 
+.diccionario {
+  background: linear-gradient(135deg, #ffffff 0%, #f7f9fb 100%);
+  border-radius: 12px;
+  border: 2px solid #d1e7ec;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: sticky; /* Se mantiene visible al hacer scroll */
+  top: 20px; /* Espacio desde el top al hacer scroll */
+  max-height: calc(100vh - 40px); /* Altura máxima = viewport - márgenes */
+  overflow-y: auto; /* Scroll interno si el contenido es muy largo */
+}
 
+/* Scroll suave y elegante */
+.diccionario::-webkit-scrollbar {
+  width: 8px;
+}
 
+.diccionario::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.diccionario::-webkit-scrollbar-thumb {
+  background: #a8d0da;
+  border-radius: 10px;
+}
+
+.diccionario::-webkit-scrollbar-thumb:hover {
+  background: #2a5d67;
+}
+
+/* ----- Vistas (Lista y Detalle) ----- */
+
+.diccionario__vista {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: none;
+}
+
+.diccionario__vista--activa {
+  opacity: 1;
+  transform: translateX(0);
+  display: block;
+}
+
+/* ----- Encabezados ----- */
+
+.diccionario__titulo {
+  color: #2a5d67;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.diccionario__intro {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* ----- Lista de contaminantes ----- */
+
+.diccionario__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diccionario__item {
+  background: #ffffff;
+  border: 2px solid #a8d0da;
+  border-radius: 8px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.diccionario__item:hover {
+  border-color: #2a5d67;
+  background: #f0fdfd;
+  transform: translateX(5px);
+  box-shadow: 0 3px 8px rgba(42, 93, 103, 0.15);
+}
+
+.diccionario__item-simbolo {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2a5d67;
+  min-width: 50px;
+}
+
+.diccionario__item-nombre {
+  flex: 1;
+  margin-left: 10px;
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.diccionario__item-icono {
+  color: #a8d0da;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.diccionario__item:hover .diccionario__item-icono {
+  transform: translateX(3px);
+}
+
+/* ----- Vista detalle ----- */
+
+.diccionario__btn-volver {
+  background: transparent;
+  border: none;
+  color: #2a5d67;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+  font-weight: 500;
+}
+
+.diccionario__btn-volver:hover {
+  background: #e8f4f8;
+}
+
+.diccionario__detalle h3 {
+  color: #2a5d67;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #a8d0da;
+  padding-bottom: 10px;
+  line-height: 1.3;
+}
+
+.diccionario__seccion {
+  margin-bottom: 20px;
+}
+
+.diccionario__seccion h4 {
+  color: #2a5d67;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.diccionario__seccion p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.85rem;
+}
+
+/* Iconos decorativos para las secciones */
+.diccionario__seccion h4::before {
+  content: "●";
+  color: #a8d0da;
+  font-size: 1rem;
+}
