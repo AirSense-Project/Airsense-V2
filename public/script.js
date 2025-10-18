@@ -98,7 +98,7 @@ Estructura esperada del objeto municipio:
 
 function llenarSelectMunicipios(municipios) {
   selectMunicipio.innerHTML =
-    '<option value="">-- Selecciona un municipio --</option>';
+    '<option value="">-- Selecciona --</option>';
 
   municipios.forEach((m) => {
     const option = document.createElement("option");
@@ -154,7 +154,25 @@ let infoBoxControl = null;
 
 selectMunicipio.addEventListener("change", async (e) => {
   const idMunicipio = e.target.value;
-  if (!idMunicipio) return;
+  if (!idMunicipio){
+    // Elimina los marcadores de estaciones (mantiene municipios)
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) map.removeLayer(layer);
+    });
+
+    // Restablece la vista centrada en el Valle del Cauca
+    map.setView([3.9, -76.6], 8.4);
+
+    // Elimina el cuadro informativo si existe
+    if (infoBoxControl) {
+      map.removeControl(infoBoxControl);
+      infoBoxControl = null;
+    }
+
+    mostrarEstado("Vista general del Valle del Cauca");
+    ocultarEstado(2000);
+    return; 
+  }
 
   try {
     mostrarEstado("Cargando estaciones...");
