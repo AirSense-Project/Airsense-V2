@@ -64,11 +64,11 @@ npm install
 
 ```bash
 #Airsense\backend
-DB_USER=base_de_datos_contaminacion_user
-DB_PASSWORD=sRea6jLsPmWiFZMMlWnel016TZZ9NuVh
-DB_HOST=dpg-d3kpnlili9vc73es3nsg-a.oregon-postgres.render.com
-DB_NAME=base_de_datos_contaminacion
-DB_PORT=5432
+DB_USER=postgres.czcidrooqhaxysxhxqbr
+DB_PASSWORD=contaminacionaire
+DB_HOST=aws-1-us-east-2.pooler.supabase.com
+DB_NAME=postgres
+DB_PORT=6543
 ```
 
 4. Start the development server:
