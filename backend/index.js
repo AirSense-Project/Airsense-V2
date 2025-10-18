@@ -63,6 +63,17 @@ app.get("/api/estaciones/:id_municipio", async (req, res) => {
   }
 });
 
+// Endpoint para obtener el diccionario de contaminantes
+app.get("/api/diccionario", async (req, res) => {
+  try {
+    const diccionario = await db.getDiccionario();
+    res.json(diccionario);
+  } catch (err) {
+    console.error("❌ Error al obtener diccionario:", err.message);
+    res.status(500).send("Error al obtener el diccionario.");
+  }
+});
+
 
 /* ==========================================================================
    RUTA DEL FRONTEND

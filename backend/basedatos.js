@@ -8,14 +8,13 @@
    Tecnologías: PostgreSQL, pg (node-postgres), dotenv
    Compatibilidad: Soporta conexión SSL (Render) y sin SSL (desarrollo local)*/
 
-
 // ==========================================================================
 // IMPORTACIÓN DE DEPENDENCIAS
 // ==========================================================================
 
-require("dotenv").config();           // Carga variables de entorno desde .env
-const { Pool } = require("pg");       // Pool de conexiones de PostgreSQL
-const fs = require("fs");             // Sistema de archivos para verificaciones
+require("dotenv").config(); // Carga variables de entorno desde .env
+const { Pool } = require("pg"); // Pool de conexiones de PostgreSQL
+const fs = require("fs"); // Sistema de archivos para verificaciones
 
 // ==========================================================================
 // DIAGNÓSTICO DE ENTORNO
@@ -30,7 +29,7 @@ console.log({
   DB_PASSWORD: process.env.DB_PASSWORD ? "[OK]" : "[VACÍA]",
   DB_HOST: process.env.DB_HOST,
   DB_NAME: process.env.DB_NAME,
-  DB_PORT: process.env.DB_PORT
+  DB_PORT: process.env.DB_PORT,
 });
 
 // ==========================================================================
@@ -39,7 +38,6 @@ console.log({
 
 //gestiona un conjunto de conexiones reutilizables a la base de datos
 let pool;
-
 
 /* ==========================================================================
    INICIALIZACIÓN DE LA CONEXIÓN
@@ -57,7 +55,7 @@ let pool;
        
         Variables de entorno requeridas:
         - DB_USER: Usuario de PostgreSQL
-        - DB_HOST: Host del servidor (ej: localhost, render.com)
+        - DB_HOST: Host del servidor (ej: localhost, supabase)
         - DB_NAME: Nombre de la base de datos
         - DB_PASSWORD: Contraseña del usuario
         - DB_PORT: Puerto de PostgreSQL (por defecto 5432) */
@@ -70,15 +68,15 @@ async function conectarPostgres() {
       database: process.env.DB_NAME,
       password: String(process.env.DB_PASSWORD).trim(),
       port: process.env.DB_PORT,
-      ssl: { require: true, rejectUnauthorized: false }
+      ssl: { require: true, rejectUnauthorized: false },
     });
 
     const client = await pool.connect();
-    console.log("✅ Conectado a PostgreSQL con SSL (Render)");
+    console.log("✅ Conectado a PostgreSQL con SSL (Supabase)");
     client.release();
   } catch (err) {
     if (err.message.includes("does not support SSL")) {
-      console.warn("⚠️ Render no acepta SSL, reintentando sin SSL...");
+      console.warn("⚠️ Supabase no acepta SSL, reintentando sin SSL...");
 
       pool = new Pool({
         user: process.env.DB_USER,
@@ -86,7 +84,7 @@ async function conectarPostgres() {
         database: process.env.DB_NAME,
         password: String(process.env.DB_PASSWORD).trim(),
         port: process.env.DB_PORT,
-        ssl: false
+        ssl: false,
       });
 
       const client = await pool.connect();
@@ -98,8 +96,7 @@ async function conectarPostgres() {
   }
 }
 
-conectarPostgres();   //ejecutar conexion al cargar el modulo
-
+conectarPostgres(); //ejecutar conexion al cargar el modulo
 
 // ==========================================================================
 // FUNCIÓN GENÉRICA DE CONSULTA
@@ -159,6 +156,25 @@ const getEstacionesPorMunicipio = async (id_municipio) => {
   return res.rows;
 };
 
+// Devuelve el diccionario de contaminantes
+const getDiccionario = async () => {
+  const sql = `
+    SELECT 
+      id_contaminante as id,
+      simbolo,
+      nombre,
+      que_es,
+      causas,
+      consecuencias,
+      color_hex
+    FROM diccionario_contaminantes
+    WHERE activo = true
+    ORDER BY orden_visualizacion;
+  `;
+  const res = await query(sql);
+  return res.rows;
+};
+
 // ==========================================================================
 // EXPORTACIÓN DEL MÓDULO
 // ==========================================================================
@@ -167,5 +183,6 @@ const getEstacionesPorMunicipio = async (id_municipio) => {
 module.exports = {
   query,
   getMunicipios,
-  getEstacionesPorMunicipio
+  getEstacionesPorMunicipio,
+  getDiccionario
 };
