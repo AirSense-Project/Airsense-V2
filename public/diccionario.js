@@ -53,11 +53,11 @@ function cambiarVista(vista) {
 
 function renderizarLista() {
   listaContaminantes.innerHTML = "";
-
+  
   contaminantes.forEach((cont) => {
     const li = document.createElement("li");
     li.className = "diccionario__item";
-    li.style.borderLeftColor = cont.color_hex; // Color distintivo
+    li.style.borderLeftColor = cont.color_hex; 
     li.style.borderLeftWidth = "4px";
     
     li.innerHTML = `
@@ -119,6 +119,7 @@ async function cargarDiccionario() {
     
     contaminantes = await response.json();
     renderizarLista();
+
   } catch (error) {
     console.error("❌ Error al cargar diccionario:", error);
     listaContaminantes.innerHTML = `
