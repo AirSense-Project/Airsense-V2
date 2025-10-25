@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AirSense</title>
 
-    <!--Estilos de leaflet-->
+    <!-- Estilos de Leaflet -->
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -16,47 +16,381 @@
   </head>
 
   <body>
-    <div class="contenedor">
-      <h1>AirSense <br> 🗺️ Visor geoespacial de calidad del aire</h1>
+    <!-- 🔹 HEADER - Encabezado global -->
+    <header class="header">
+      <div class="header__contenido">
+        <h1 class="header__titulo">🌍 AirSense</h1>
+        <button
+          id="btnModoOscuro"
+          class="btn-modo-oscuro"
+          aria-label="Alternar modo oscuro"
+        >
+          <span class="icono-sol">☀️</span>
+          <span class="icono-luna">🌙</span>
+        </button>
+      </div>
+    </header>
 
-      <label for="selectMunicipio">Selecciona un municipio:</label>
-      <select id="selectMunicipio" class="selector-municipio">
-        <option value="">-- Selecciona --</option>
-      </select>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main>
+      <div class="contenedor">
+        <h1>🗺️ Visor geoespacial sobre la calidad del aire</h1>
 
-      <div class="vista-principal">
-        <!-- Columna izquierda: Mapa -->
-        <div class="vista-principal__mapa">
-          <div id="map" class="mapa"></div>
+        <div class="filtros-contenedor">
+          <div class="filtro-item">
+            <label for="selectMunicipio">📍 Municipio:</label>
+            <select id="selectMunicipio" class="selector-municipio">
+              <option value="">-- Selecciona --</option>
+            </select>
+          </div>
+
+          <div class="filtro-item">
+            <label for="selectAnio">📅 Año:</label>
+            <select id="selectAnio" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona municipio --</option>
+            </select>
+          </div>
+
+          <div class="filtro-item">
+            <label for="selectEstacion">🏭 Estación:</label>
+            <select id="selectEstacion" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona año --</option>
+            </select>
+          </div>
+
+          <div class="filtro-item">
+            <label for="selectContaminante">⚗️ Contaminante:</label>
+            <select id="selectContaminante" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona año --</option>
+            </select>
+          </div>
+
+          <div class="filtro-item filtro-item--boton">
+            <label>&nbsp;</label> <!-- Espacio para alinear con los demás -->
+            <button id="btnLimpiarFiltros" class="btn-limpiar-filtros" title="Limpiar todos los filtros">
+              🗑️ Limpiar
+            </button>
+          </div>
         </div>
 
-        <!-- Columna derecha: Diccionario -->
-        <aside id="diccionario" class="diccionario">
-          <div
-            id="vistaLista"
-            class="diccionario__vista diccionario__vista--activa"
-          >
-            <h2 class="diccionario__titulo">Diccionario de Contaminantes</h2>
-            <p class="diccionario__intro">
-              Explora los principales contaminantes atmosféricos monitoreados en
-              el Valle del Cauca.
-            </p>
-            <ul id="listaContaminantes" class="diccionario__lista">
-              <!-- Se llena dinámicamente -->
-            </ul>
+        <div class="vista-principal">
+          <aside id="informacionContaminantes" class="panel-informacion">
+            <div style="text-align: center; padding: 25px 20px">
+              <h2 style="margin-bottom: 15px; color: #2c3e50; font-size: 24px">
+                Cómo usar la aplicación 🌍
+              </h2>
+              <p
+                style="
+                  color: #5a6c7d;
+                  margin-bottom: 30px;
+                  font-size: 14px;
+                  line-height: 1.6;
+                  max-width: 320px;
+                  margin-left: auto;
+                  margin-right: auto;
+                "
+              >
+                Explora 13 años de datos históricos (2011-2023) de calidad del
+                aire en el Valle del Cauca
+              </p>
+
+              <div
+                style="
+                  display: inline-block;
+                  text-align: left;
+                  width: 100%;
+                  max-width: 340px;
+                "
+              >
+                <div
+                  style="
+                    margin-bottom: 12px;
+                    padding: 14px 16px;
+                    background: linear-gradient(
+                      135deg,
+                      #96ac61ff 0%,
+                      #a7d16dff 100%
+                    );
+                    border-radius: 10px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(74, 124, 89, 0.2);
+                  "
+                >
+                  <div
+                    style="
+                      font-weight: bold;
+                      font-size: 13px;
+                      opacity: 0.9;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    PASO 1
+                  </div>
+                  <div style="font-size: 15px">
+                    📍 Selecciona un <b>municipio</b> del Valle del Cauca
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin-bottom: 12px;
+                    padding: 14px 16px;
+                    background: linear-gradient(
+                      135deg,
+                      #6aa1beff 0%,
+                      #73b4f1ff 100%
+                    );
+                    border-radius: 10px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(91, 138, 114, 0.2);
+                  "
+                >
+                  <div
+                    style="
+                      font-weight: bold;
+                      font-size: 13px;
+                      opacity: 0.9;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    PASO 2
+                  </div>
+                  <div style="font-size: 15px">
+                    🎯 Haz <b>clic en una estación</b> de monitoreo
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin-bottom: 12px;
+                    padding: 14px 16px;
+                    background: linear-gradient(
+                      135deg,
+                      #f36c6cff 0%,
+                      #d66576ff 100%
+                    );
+                    border-radius: 10px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(106, 158, 138, 0.2);
+                  "
+                >
+                  <div
+                    style="
+                      font-weight: bold;
+                      font-size: 13px;
+                      opacity: 0.9;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    PASO 3
+                  </div>
+                  <div style="font-size: 15px">
+                    🧪 Escoge un <b>contaminante</b> atmosférico
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    padding: 14px 16px;
+                    background: linear-gradient(
+                      135deg,
+                      #5be795ff 0%,
+                      #3ada92ff 100%
+                    );
+                    border-radius: 10px;
+                    color: white;
+                    box-shadow: 0 2px 8px rgba(120, 178, 153, 0.2);
+                  "
+                >
+                  <div
+                    style="
+                      font-weight: bold;
+                      font-size: 13px;
+                      opacity: 0.9;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    PASO 4
+                  </div>
+                  <div style="font-size: 15px">
+                    📊 Consulta <b>datos y límites OMS</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="vista-principal__mapa">
+            <div id="estadoMapa" class="estado-mapa"></div>
+            <div id="map" class="mapa"></div>
           </div>
 
-          <div id="vistaDetalle" class="diccionario__vista">
-            <button id="btnVolver" class="diccionario__btn-volver">
-              ← Volver
-            </button>
-            <article id="contenidoDetalle" class="diccionario__detalle">
-              <!-- Se llena dinámicamente -->
-            </article>
-          </div>
-        </aside>
+          <aside id="diccionario" class="panel-diccionario">
+            <div
+              id="vistaLista"
+              class="diccionario__vista diccionario__vista--activa"
+            >
+              <div class="diccionario__leyenda-compacta">
+                <h5 class="leyenda-compacta__titulo">
+                  📊 Calidad del Aire (OMS 2021)
+                </h5>
+                <div class="leyenda-compacta__grid">
+                  <div class="leyenda-compacta__item">
+                    <span
+                      class="leyenda-compacta__color"
+                      style="background: #00e400"
+                    ></span>
+                    <span class="leyenda-compacta__texto">Buena</span>
+                  </div>
+                  <div class="leyenda-compacta__item">
+                    <span
+                      class="leyenda-compacta__color"
+                      style="background: #ffff00"
+                    ></span>
+                    <span class="leyenda-compacta__texto">Regular</span>
+                  </div>
+                  <div class="leyenda-compacta__item">
+                    <span
+                      class="leyenda-compacta__color"
+                      style="background: #ff0000"
+                    ></span>
+                    <span class="leyenda-compacta__texto">Mala</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Título del diccionario (DEBAJO) -->
+              <h2 class="diccionario__titulo">Diccionario de Contaminantes</h2>
+              <p class="diccionario__intro">
+                Explora los principales contaminantes atmosféricos monitoreados
+                en el Valle del Cauca.
+              </p>
+
+              <ul id="listaContaminantes" class="diccionario__lista"></ul>
+            </div>
+
+            <div id="vistaDetalle" class="diccionario__vista">
+              <button id="btnVolver" class="diccionario__btn-volver">
+                ← Volver
+              </button>
+              <article
+                id="contenidoDetalle"
+                class="diccionario__detalle"
+              ></article>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </main>
+
+    <!-- 🔹 FOOTER - Pie de página moderno -->
+    <footer class="footer">
+      <div class="footer__contenido">
+        <!-- Columna 1: Sobre el proyecto -->
+        <div class="footer__columna">
+          <p class="footer__descripcion">
+            Plataforma interactiva para visualizar y analizar la calidad del
+            aire en el Valle del Cauca (2011-2023).
+          </p>
+          <div class="footer__github">
+            <a
+              href="https://github.com/AirSense-Project/Airsense-V2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+              >
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                />
+              </svg>
+              Ver código en GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna 2: Enlaces útiles -->
+        <div class="footer__columna">
+          <h4 class="footer__subtitulo">Enlaces</h4>
+          <ul class="footer__lista">
+            <li><a href="#sobre">Sobre el proyecto</a></li>
+            <li><a href="#metodologia">Metodología</a></li>
+            <li><a href="#fuentes">Fuentes de datos</a></li>
+            <li><a href="mailto:info@airsense.co">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 3: Institución -->
+        <div class="footer__columna">
+          <h4 class="footer__subtitulo">Desarrollado por</h4>
+          <p class="footer__institucion">
+            <strong>Universidad del Valle</strong><br />
+            Tecnologia en Desarrollo de Software
+          </p>
+          <div class="footer__equipo">
+            <h5 class="footer__equipo-titulo">Equipo:</h5>
+            <ul class="footer__equipo-lista">
+              <li>👤 Andres Mauricio Peña Lopez 👤 Katherine Lopez Unas</li>
+              <li>👤 Luz Amelia Ibarguen 👤 Nicolas Fernando Sanchez</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__logos">
+        <p class="footer__logos-titulo">Fuentes de datos:</p>
+        <div class="footer__logos-contenedor">
+          <a
+            href="https://www.univalle.edu.co"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Universidad del Valle"
+          >
+            <img
+              src="https://www.univalle.edu.co/images/Univalle/70_Rojo.jpg"
+              alt="Universidad del Valle"
+              class="footer__logo"
+            />
+          </a>
+          <a
+            href="https://www.cvc.gov.co"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="CVC"
+          >
+            <img
+              src="https://www.cvc.gov.co/themes/portal/logo.svg"
+              alt="CVC"
+              class="footer__logo"
+            />
+          </a>
+          <a
+            href="https://www.cali.gov.co/dagma"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="DAGMA"
+          >
+            <img
+              src="https://images.seeklogo.com/logo-png/43/2/dagma-logo-png_seeklogo-437405.png"
+              alt="DAGMA"
+              class="footer__logo"
+            />
+          </a>
+        </div>
+      </div>
+
+      <!-- Barra inferior -->
+      <div class="footer__inferior">
+        <p>
+          © 2025 AirSense · Proyecto académico con fines educativos · Datos
+          actualizados a 2023 · Clasificación según <strong>OMS 2021</strong>
+        </p>
+      </div>
+    </footer>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

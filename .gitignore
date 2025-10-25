@@ -1,6 +1,7 @@
 .env
 node_modules/
 .vscode/
+mis_notas.txt
 
 # Logs
 logs
