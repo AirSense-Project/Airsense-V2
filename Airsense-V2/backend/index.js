@@ -26,12 +26,30 @@ const PORT = process.env.PORT || 3000; //Usa variable de entorno PORT (producci�
 app.use(cors());                                            //permite que el fronted haga peticiones al backend desde diferente origen
 app.use(express.json());                                    //habilita el procesamiento de peticiones en formato JSON
 
-// 2. ¡AÑADIR ESTA LÍNEA! Permite servir archivos estáticos desde AirSense (para CSS, JS, imágenes del visor)
-app.use(express.static(path.join(__dirname, "../AirSense")));
+// ... CÓDIGO DE API ...
+
+// ==========================================================================
+// RUTA DE PÁGINA PRINCIPAL
+// ==========================================================================
+// 1. RUTA PRINCIPAL (/)
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
+});
+
+// 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
+app.get("/public", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+// ... CÓDIGO DE MANEJO DE ERRORES GLOBALES ...
 
 
-// 1. Permite servir archivos estáticos desde la carpeta public
+// ==========================================================================
+// CONFIGURACIÓN DE MIDDLEWARES ESTÁTICOS (Mover aquí abajo)
+// ==========================================================================
+// ¡Mover estas líneas aquí!
 app.use(express.static(path.join(__dirname, "../public"))); 
+app.use(express.static(path.join(__dirname, "../AirSense"))); 
 
 
 // ==========================================================================
@@ -311,31 +329,6 @@ app.get('/api/datos', apiHandler(
   "/api/datos"
 ));
 
-// ==========================================================================
-// RUTA DE PÁGINA PRINCIPAL
-// ==========================================================================
-
-// ==========================================================================
-// RUTA DE PÁGINA PRINCIPAL
-// ==========================================================================
-
-// 1. RUTA PRINCIPAL (/)
-// Al acceder a https://airsense-v2.onrender.com/, se carga el visor (AirSense/visor.html)
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
-});
-
-// 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
-// La página anterior ahora es accesible en https://airsense-v2.onrender.com/public
-app.get("/public", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
-// 3. RUTA DEL VISOR (/visor)
-// (Puedes dejarla si quieres, aunque es redundante si la principal ya es /)
-app.get("/visor", (req, res) => {
-  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
-});
 
 // ==========================================================================
 // MANEJO DE ERRORES GLOBALES
