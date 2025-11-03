@@ -25,8 +25,11 @@ const PORT = process.env.PORT || 3000; //Usa variable de entorno PORT (producci�
 // ==========================================================================
 app.use(cors());                                            //permite que el fronted haga peticiones al backend desde diferente origen
 app.use(express.json());                                    //habilita el procesamiento de peticiones en formato JSON
-app.use(express.static(path.join(__dirname, "../public"))); //sirve archivos al fronted desde la carpeta public
+// Servir los archivos de la carpeta public
+app.use(express.static(path.join(__dirname, "../public")));
 
+// Servir también los archivos de la carpeta AirSense (CSS, JS, imágenes, etc.)
+app.use("/AirSense", express.static(path.join(__dirname, "../AirSense")));
 // ==========================================================================
 // UTILIDAD: MANEJADOR ASÍNCRONO DE ERRORES (apiHandler)
 // ==========================================================================
@@ -310,6 +313,11 @@ app.get('/api/datos', apiHandler(
 
 // Sirve el archivo HTML principal (punto de entrada del frontend)
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+// Ruta específica para el visor: muestra visor.html dentro de AirSense
+app.get("/visor", (req, res) => {
   res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
 });
 
