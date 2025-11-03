@@ -9,9 +9,16 @@
  * @returns {Promise<any>} - Los datos de la respuesta en JSON.
  * @throws {Error} - Lanza un error estandarizado si la petición falla.
  */
+
+// Definir la URL BASE de la API (TU URL DE RENDER)
+const API_BASE_URL = 'https://airsense-v2.onrender.com'; // ¡CRÍTICO: USAR HTTPS!
+
 async function apiClient(url, options = {}) {
   try {
-    const response = await fetch(url, options);
+
+    const fullUrl = url.startsWith('http') ? url : API_BASE_URL + url;
+
+    const response = await fetch(fullUrl, options);
 
     if (!response.ok) {
       // Intenta leer el error JSON que envía el backend (ej. { error: "..." })
