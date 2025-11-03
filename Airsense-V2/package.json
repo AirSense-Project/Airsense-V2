@@ -1,0 +1,25 @@
+{
+  "name": "mapa-calidad-aire",
+  "version": "1.0.0",
+  "description": "Sistema de visualización geoespacial de la calidad del aire en el valle del cauca (2011-2023)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mapa",
+    "estaciones",
+    "leaflet",
+    "postgres"
+  ],
+  "author": "katherine Lopez",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "leaflet": "^1.9.4",
+    "pg": "^8.16.3"
+  }
+}

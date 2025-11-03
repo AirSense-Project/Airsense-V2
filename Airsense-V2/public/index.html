@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirSense</title>
+
+    <!-- Librería Leaflet para mapas interactivos -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Estilos CSS propios -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ========================= HEADER ========================= -->
+  <!-- Encabezado global de la aplicación -->
+    <header class="header">
+      <div class="header__contenido">
+        <!-- Título principal con icono -->
+        <h1 class="header__titulo">🌍 AirSense</h1>
+        
+        <!-- Botón para alternar entre modo claro y modo oscuro -->
+        <button
+          id="btnModoOscuro"
+          class="btn-modo-oscuro"
+          aria-label="Alternar modo oscuro"
+        >
+          <span class="icono-sol">☀️</span>
+          <span class="icono-luna">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================= CONTENIDO PRINCIPAL ========================= -->
+    <main>
+      <div class="contenedor">
+        <!-- Título principal de la sección -->
+        <h1>🗺️ Visor geoespacial sobre la calidad del aire</h1>
+        <!--  FILTROS: -->
+        <div class="filtros-contenedor">
+          <!-- Filtro de municipio -->
+          <div class="filtro-item">
+            <label for="selectMunicipio">📍 Municipio:</label>
+            <select id="selectMunicipio" class="selector-municipio">
+              <option value="">-- Selecciona --</option>
+            </select>
+          </div>
+           <!-- Filtro de año -->
+          <div class="filtro-item">
+            <label for="selectAnio">📅 Año:</label>
+            <select id="selectAnio" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona municipio --</option>
+            </select>
+          </div>
+          <!-- Filtro de estación -->
+          <div class="filtro-item">
+            <label for="selectEstacion">🏭 Estación:</label>
+            <select id="selectEstacion" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona año --</option>
+            </select>
+          </div>
+           <!-- Filtro de contaminante -->
+          <div class="filtro-item">
+            <label for="selectContaminante">⚗️ Contaminante:</label>
+            <select id="selectContaminante" class="selector-municipio" disabled>
+              <option value="">-- Primero selecciona año --</option>
+            </select>
+          </div>
+          <!-- Botón para limpiar los filtros -->
+          <div class="filtro-item filtro-item--boton">
+            <label>&nbsp;</label> <!-- Espacio para alinear con los demás -->
+            <button id="btnLimpiarFiltros" class="btn-limpiar-filtros" title="Limpiar todos los filtros">
+              🗑️ Limpiar
+            </button>
+          </div>
+        </div>
+         <!-- ========================= VISTA PRINCIPAL ========================= -->
+        <div class="vista-principal">
+           
+            <!-- PANEL IZQUIERDO: Instrucciones de uso -->
+            <aside class="panel-informacion">
+            
+            <div id="informacionContaminantes" class="panel-instrucciones">
+              <h2>
+                  Cómo usar la aplicación 🌍
+              </h2>
+              <p>
+                Explora 13 años de datos históricos (2011-2023) de calidad del
+                aire en el Valle del Cauca
+              </p>
+
+        <div class="pasos">
+
+          <!-- Paso 1 -->
+          <div class="paso paso1">
+            <div class="paso-numero">PASO 1</div>
+            <div class="paso-texto">
+              📍 Selecciona un <b>municipio</b> del Valle del Cauca
+            </div>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="paso paso2">
+            <div class="paso-numero">PASO 2</div>
+            <div class="paso-texto">
+              🎯 Haz <b>clic en una estación</b> de monitoreo
+            </div>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="paso paso3">
+            <div class="paso-numero">PASO 3</div>
+            <div class="paso-texto">
+              🧪 Escoge un <b>contaminante</b> atmosférico
+            </div>
+          </div>
+
+          <!-- Paso 4 -->
+          <div class="paso paso4">
+            <div class="paso-numero">PASO 4</div>
+            <div class="paso-texto">
+              📊 Consulta <b>datos y límites OMS</b>
+            </div>
+          </div>
+
+        </div> </div>
+      </aside>
+
+          <!--  MAPA CENTRAL -->
+          <div class="vista-principal__mapa">
+            <div id="estadoMapa" class="estado-mapa"></div>
+            <div id="map" class="mapa"></div>
+          </div>
+          <!-- PANEL DERECHO: Diccionario de contaminantes -->
+          <aside id="diccionario" class="panel-diccionario">
+            <div
+              id="vistaLista"
+              class="diccionario__vista diccionario__vista--activa"
+            >
+              <!-- Leyenda de colores -->
+              <div class="diccionario__leyenda-compacta">
+                <h5 class="leyenda-compacta__titulo">
+                  📊 Calidad del Aire (OMS 2021)
+                </h5>
+                <div class="leyenda-compacta__grid">
+                  <div class="leyenda-compacta__item">
+                    <span class="leyenda-compacta__color leyenda-color-buena"></span>
+                    <span class="leyenda-compacta__texto">Buena</span>
+                  </div>
+
+                  <div class="leyenda-compacta__item">
+                    <span class="leyenda-compacta__color leyenda-color-moderada"></span>
+                    <span class="leyenda-compacta__texto">Moderada</span>
+                  </div>
+
+                  <div class="leyenda-compacta__item">
+                    <span class="leyenda-compacta__color leyenda-color-mala"></span>
+                    <span class="leyenda-compacta__texto">Mala</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Título del diccionario (DEBAJO) -->
+              <h2 class="diccionario__titulo">Diccionario de Contaminantes</h2>
+              <p class="diccionario__intro">
+                Explora los principales contaminantes atmosféricos monitoreados
+                en el Valle del Cauca.
+              </p>
+
+              <!-- Lista dinámica de contaminantes -->
+              <ul id="listaContaminantes" class="diccionario__lista"></ul>
+            </div>
+
+            <!-- Vista detallada de un contaminante -->
+            <div id="vistaDetalle" class="diccionario__vista">
+              <button id="btnVolver" class="diccionario__btn-volver">
+                ← Volver
+              </button>
+              <article
+                id="contenidoDetalle"
+                class="diccionario__detalle"
+              ></article>
+            </div>
+          </aside>
+        </div><!-- FIN vista-principal -->
+      </div> <!-- FIN contenedor -->
+    </main>
+    
+     <!-- ========================= SCRIPTS ========================= -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Cliente API para obtener datos -->
+    <script src="apiClient.js" defer></script>
+    <!-- Script javascript -->
+    <script src="script.js" defer></script>
+    <!-- Script Diccionario-->
+    <script src="diccionario.js" defer></script>
+  </body>
+</html>
