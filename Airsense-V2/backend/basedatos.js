@@ -22,6 +22,7 @@ console.log("🧩 Variables cargadas:", {
   DB_HOST: process.env.DB_HOST,
   DB_NAME: process.env.DB_NAME,
   DB_PORT: process.env.DB_PORT,
+  ssl: { rejectUnauthorized: false }
 });
 
 let pool;
