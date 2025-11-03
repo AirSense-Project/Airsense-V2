@@ -309,7 +309,7 @@ app.get('/api/datos', apiHandler(
 // ==========================================================================
 
 // Sirve el archivo HTML principal (punto de entrada del frontend)
-app.get("/", (req, res) => {
+aapp.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
 });
 
