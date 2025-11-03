@@ -315,12 +315,24 @@ app.get('/api/datos', apiHandler(
 // RUTA DE PÁGINA PRINCIPAL
 // ==========================================================================
 
-// Sirve el archivo HTML principal (punto de entrada del frontend)
+// ==========================================================================
+// RUTA DE PÁGINA PRINCIPAL
+// ==========================================================================
+
+// 1. RUTA PRINCIPAL (/)
+// Al acceder a https://airsense-v2.onrender.com/, se carga el visor (AirSense/visor.html)
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
+});
+
+// 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
+// La página anterior ahora es accesible en https://airsense-v2.onrender.com/public
+app.get("/public", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
-// Ruta específica para el visor: muestra visor.html dentro de AirSense
+// 3. RUTA DEL VISOR (/visor)
+// (Puedes dejarla si quieres, aunque es redundante si la principal ya es /)
 app.get("/visor", (req, res) => {
   res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
 });
