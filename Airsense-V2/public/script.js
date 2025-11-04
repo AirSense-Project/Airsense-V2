@@ -80,7 +80,7 @@ async function cargarMunicipios() {
   try {
     mostrarEstado("Cargando municipios...");
 
-    const response = await fetch("http://localhost:3000/api/municipios");
+    const response = await fetch("https://airsense-v2.onrender.com/api/municipios");
     if (!response.ok) throw new Error("No se pudieron obtener los municipios");
 
     const municipios = await response.json();
@@ -205,7 +205,7 @@ function resetearFiltrosDependientes(nivel) {
 async function cargarAniosPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando años disponibles...");
-    const response = await fetch(`http://localhost:3000/api/anios/${idMunicipio}`);
+    const response = await fetch(`https://airsense-v2.onrender.com/api/anios/${idMunicipio}`);
     if (!response.ok) {
       if (response.status === 404) {throw new Error("No hay datos para este municipio");}
       throw new Error("Error al obtener años");
@@ -244,7 +244,7 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
     
-    const response = await fetch(`http://localhost:3000/api/estaciones/${idMunicipio}`);
+    const response = await fetch(`https://airsense-v2.onrender.com/api/estaciones/${idMunicipio}`);
     if (!response.ok) {
       throw new Error("Error al obtener estaciones");
     }
@@ -569,7 +569,8 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
   try {
     mostrarEstado("Cargando contaminantes disponibles...");
 
-    const responseContaminantes = await fetch(`http://localhost:3000/api/contaminantes/${idEstacion}/${anio}`
+    const responseContaminantes = await fetch(
+      `https://airsense-v2.onrender.com/api/contaminantes/${idEstacion}/${anio}`
     );
 
     if (!responseContaminantes.ok) {
@@ -656,7 +657,7 @@ selectAnio.addEventListener("change", async (e) => {
   try {
     mostrarEstado(`Cargando estaciones operativas en ${anio}...`);
 
-    const response = await fetch(`http://localhost:3000/api/estaciones/${idMunicipio}/${anio}`);
+    const response = await fetch(`https://airsense-v2.onrender.com/api/estaciones/${idMunicipio}/${anio}`);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -747,7 +748,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
     mostrarEstado("📊 Cargando datos del contaminante...");
 
     const response = await fetch(
-      `http://localhost:3000/api/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
+      `https://airsense-v2.onrender.com/api/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
     );
 
     if (!response.ok) {
