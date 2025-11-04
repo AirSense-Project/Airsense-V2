@@ -49,7 +49,7 @@ app.use(express.json());                                    //habilita el proces
 // ==========================================================================
 // ¡Mover estas líneas aquí!
 app.use(express.static(path.join(__dirname, "../public"))); 
-app.use(express.static(path.join(__dirname, "../AirSense"))); 
+//app.use(express.static(path.join(__dirname, "../AirSense"))); 
 
 
 // ==========================================================================
