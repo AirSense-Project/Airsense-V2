@@ -32,14 +32,14 @@ app.use(express.json());                                    //habilita el proces
 // RUTA DE PÁGINA PRINCIPAL
 // ==========================================================================
 // 1. RUTA PRINCIPAL (/)
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
-});
+//app.get("/", (req, res) => {
+//  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
+//});
 
 // 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
-app.get("/public", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+//app.get("/public", (req, res) => {
+//  res.sendFile(path.join(__dirname, "../public/index.html"));
+//});
 
 // ... CÓDIGO DE MANEJO DE ERRORES GLOBALES ...
 
