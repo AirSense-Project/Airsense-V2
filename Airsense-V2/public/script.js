@@ -45,6 +45,13 @@ let marcadoresEstaciones = {};
 let estacionSeleccionada = null;
 let capaMunicipios = L.layerGroup().addTo(map);
 
+/* ==========================================================================
+   CONFIGURACIÓN INICIAL DEL MAPA
+   ==========================================================================*/
+
+// [NUEVO] URL base de la API para todas las peticiones
+const API_BASE_URL = "https://airsense-v2.onrender.com/api"; 
+
 // ==========================================================================
 // FUNCIONES DE RETROALIMENTACIÓN VISUAL
 // ==========================================================================
@@ -80,7 +87,8 @@ async function cargarMunicipios() {
   try {
     mostrarEstado("Cargando municipios...");
 
-    const response = await fetch("https://airsense-v2.onrender.com/api/municipios");
+    const response = await fetch(`${API_BASE_URL}/municipios`);
+    
     if (!response.ok) throw new Error("No se pudieron obtener los municipios");
 
     const municipios = await response.json();
@@ -205,7 +213,7 @@ function resetearFiltrosDependientes(nivel) {
 async function cargarAniosPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando años disponibles...");
-    const response = await fetch(`https://airsense-v2.onrender.com/api/anios/${idMunicipio}`);
+    const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
     if (!response.ok) {
       if (response.status === 404) {throw new Error("No hay datos para este municipio");}
       throw new Error("Error al obtener años");
@@ -244,7 +252,8 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
     
-    const response = await fetch(`https://airsense-v2.onrender.com/api/estaciones/${idMunicipio}`);
+    const response = await fetch(`${API_BASE_URL}/estaciones/${idMunicipio}`);
+
     if (!response.ok) {
       throw new Error("Error al obtener estaciones");
     }
@@ -570,7 +579,7 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
     mostrarEstado("Cargando contaminantes disponibles...");
 
     const responseContaminantes = await fetch(
-      `https://airsense-v2.onrender.com/api/contaminantes/${idEstacion}/${anio}`
+      `${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`
     );
 
     if (!responseContaminantes.ok) {
@@ -657,7 +666,9 @@ selectAnio.addEventListener("change", async (e) => {
   try {
     mostrarEstado(`Cargando estaciones operativas en ${anio}...`);
 
-    const response = await fetch(`https://airsense-v2.onrender.com/api/estaciones/${idMunicipio}/${anio}`);
+    const response = await fetch(
+      `${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`
+    );
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -748,7 +759,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
     mostrarEstado("📊 Cargando datos del contaminante...");
 
     const response = await fetch(
-      `https://airsense-v2.onrender.com/api/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
+      `${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
     );
 
     if (!response.ok) {
