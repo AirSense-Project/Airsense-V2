@@ -1,0 +1,775 @@
+/* ==========================================================================
+   1. ESTILOS GLOBALES Y DEL HEADER
+   ========================================================================== */
+
+/* --- Header Fijo --- */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+  background-color: #006837; /* Verde institucional */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- Logo del Header --- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+}
+
+.logo h1 {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* --- Navegación del Header --- */
+.nav a {
+  color: white;
+  margin-left: 1rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #ffeb3b; /* Amarillo para hover */
+}
+
+/* --- Estilo para el enlace de la sección activa --- */
+.nav a.nav-active {
+  color: #ffeb3b; /* Mismo color amarillo del hover */
+  font-weight: 700; /* Letra más gruesa */
+  border-bottom: 2px solid #ffeb3b; /* Subrayado amarillo */
+  padding-bottom: 4px; /* Pequeño espacio para el subrayado */
+}
+
+.nav a.nav-active:hover {
+  color: #ffeb3b; /* Mantener color al pasar el mouse */
+}
+
+/* ==========================================================================
+   2. SECCIÓN: CARRUSEL DE INICIO (#inicio)
+   ========================================================================== */
+
+/* --- Contenedor Principal del Carrusel --- */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Altura de pantalla completa */
+  overflow: hidden;
+  background: transparent;
+}
+
+/* --- Contenedor de las imágenes (slides) --- */
+.slides {
+  position: relative;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  z-index: 0;
+  display: none; /* Oculto por defecto */
+}
+
+.slide.active {
+  opacity: 1;
+  display: block; /* Visible cuando está activo */
+}
+
+/* --- Capa oscura para legibilidad del texto --- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* --- Contenido de texto superpuesto --- */
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: white;
+  text-align: center;
+  max-width: 850px;
+  padding: 1.25rem;
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.content h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.content p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Botón "Ver Mapa" --- */
+.btn {
+  background-color: #22c55e; /* Verde brillante */
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn:hover {
+  background-color: #16a34a; /* Verde más oscuro */
+  transform: scale(1.05);
+}
+
+/* --- Flechas de navegación (Izquierda/Derecha) --- */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  background-color: rgba(0, 104, 55, 0.8); /* Verde institucional semi-transparente */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+.arrow:hover {
+  background-color: rgba(34, 197, 94, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow.left { left: 20px; }
+.arrow.right { right: 20px; }
+
+/* --- Puntos indicadores (Dots) --- */
+.dots {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}
+
+.dot.active {
+  opacity: 1; /* Punto activo es opaco */
+}
+
+/* ==========================================================================
+   3. ESTILOS GENERALES DE SECCIONES
+   ========================================================================== */
+
+/* --- Configuración de Scroll Suave --- */
+html {
+  scroll-behavior: smooth;
+  /* Dejar espacio para el header fijo al hacer scroll a anclas */
+  scroll-padding-top: 80px;
+}
+
+/* --- Estilo base para todas las secciones --- */
+.section {
+  padding: 5rem 1rem;
+  text-align: center;
+  /* Asegura que las secciones ancladas no queden tapadas por el header fijo */
+  scroll-margin-top: 80px;
+}
+
+.section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #006837;
+  margin-bottom: 1rem;
+}
+
+.section p {
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* ==========================================================================
+   4. SECCIÓN: MAPA GEOESPACIAL (#mapa)
+   ========================================================================== */
+#mapa {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#mapa h2,
+#mapa p {
+  margin-bottom: 8px;
+}
+
+.mapa-container {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* --- Iframe que contiene el visor del mapa --- */
+.mapa-frame {
+  width: 100%;
+  height: 1000px; /* Altura del mapa incrustado */
+  border: none;
+  display: block;
+}
+
+/* ==========================================================================
+   5. SECCIÓN: CONTAMINANTES (#contaminantes)
+   ========================================================================== */
+
+/* --- Título de la sección de contaminantes --- */
+.titulo {
+  font-size: 2em;
+  color: #00713d;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* --- Contenedor de las tarjetas (Grid) --- */
+.contenedor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 2rem;
+}
+
+/* --- Estilo individual de las tarjetas --- */
+.card {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Capa oscura para mejorar la legibilidad del texto */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: brightness(0.6);
+  backdrop-filter: brightness(0.6); /* Baja el brillo del fondo */
+  z-index: 0;
+}
+
+/* Texto siempre encima de la capa oscura */
+.card h3,
+.card p {
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9); /* Sombra para contraste */
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #f2f2f2;
+}
+
+/* Efecto al pasar el mouse */
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Colores de Título por Contaminante --- */
+.card:nth-child(1) h3 { color: #4FC3F7; } /* CO */
+.card:nth-child(2) h3 { color: #1E88E5; } /* NO */
+.card:nth-child(3) h3 { color: #E53935; } /* NO₂ */
+.card:nth-child(4) h3 { color: #FDD835; } /* SO₂ */
+.card:nth-child(5) h3 { color: #F4511E; } /* O₃ */
+.card:nth-child(6) h3 { color: #FFB300; } /* PM₁₀ */
+.card:nth-child(7) h3 { color: #E91E63; } /* PM₂.₅ */
+
+/* --- Responsive para Tarjetas de Contaminantes --- */
+@media (max-width: 600px) {
+  .titulo {
+    font-size: 1.6em;
+  }
+  .card {
+    min-height: 220px;
+  }
+  .card h3 {
+    font-size: 1.1rem;
+  }
+  .card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   6. SECCIÓN: SOBRE NOSOTROS (#nosotros)
+   ========================================================================== */
+
+.seccion-nosotros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #e8f9ef, #f5fdf6);
+  font-family: 'Lora', serif;
+}
+
+/* --- Columna de Texto --- */
+.texto-nosotros {
+  flex: 1 1 450px;
+  background-color: rgba(255, 255, 255, 0.88);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  color: #333;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s ease;
+}
+
+.texto-nosotros:hover {
+  transform: translateY(-3px);
+}
+
+.texto-nosotros h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #00713d;
+  text-align: center;
+}
+
+.texto-nosotros p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+/* --- Columna de Imagen --- */
+.imagen-nosotros {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen-nosotros img {
+  width: 65%;
+  max-width: 350px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.imagen-nosotros img:hover {
+  transform: scale(1.03);
+}
+
+/* --- Responsive para "Sobre Nosotros" --- */
+@media (max-width: 768px) {
+  .seccion-nosotros {
+    flex-direction: column;
+    text-align: center;
+  }
+  .imagen-nosotros img {
+    width: 70%; /* Un poco más grande en móvil */
+  }
+}
+
+/* ==========================================================================
+   7. PIE DE PÁGINA (FOOTER)
+   ========================================================================== */
+
+.footer {
+  background: linear-gradient(135deg, #1e3a3a 0%, #2a4f4f 100%);
+  color: #e8f4f4;
+  padding: 35px 40px 15px;
+  margin-top: 40px;
+  border-top: 3px solid rgba(91, 192, 190, 0.3);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Contenido principal del Footer (Grid de 3 columnas) --- */
+.footer__contenido {
+  max-width: 1700px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr;
+  gap: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__columna {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__subtitulo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #5bc0be;
+  border-bottom: 2px solid rgba(91, 192, 190, 0.3);
+  padding-bottom: 6px;
+}
+
+.footer__descripcion {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #b8d4d4;
+  margin: 0 0 10px 0;
+}
+
+/* --- Enlace a GitHub --- */
+.footer__github {
+  margin-top: 5px;
+}
+
+.footer__github a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(91, 192, 190, 0.15);
+  border: 2px solid rgba(91, 192, 190, 0.3);
+  border-radius: 8px;
+  color: #5bc0be;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.footer__github a:hover {
+  background: rgba(91, 192, 190, 0.25);
+  border-color: #5bc0be;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(91, 192, 190, 0.2);
+}
+
+.footer__github svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- Lista de enlaces útiles --- */
+.footer__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer__lista li a {
+  color: #b8d4d4;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer__lista li a::before {
+  content: "→";
+  color: #5bc0be;
+  transition: transform 0.3s ease;
+}
+
+.footer__lista li a:hover {
+  color: #5bc0be;
+  transform: translateX(5px);
+}
+
+.footer__lista li a:hover::before {
+  transform: translateX(3px);
+}
+
+/* --- Información de Institución y Equipo --- */
+.footer__institucion {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #b8d4d4;
+  margin: 0 0 8px 0;
+}
+
+.footer__institucion strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.footer__equipo {
+  margin-top: 12px;
+  padding-left: 15px;
+}
+
+.footer__equipo-titulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5bc0be;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer__equipo-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer__equipo-lista li {
+  font-size: 0.8rem;
+  color: #b8d4d4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  transition: all 0.3s ease;
+}
+
+.footer__equipo-lista li:hover {
+  color: #5bc0be;
+  transform: translateX(5px);
+}
+
+/* --- Sección de Logos de Fuentes de Datos --- */
+.footer__logos {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer__logos-titulo {
+  font-size: 0.8rem;
+  color: #8db0b0;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.footer__logos-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.footer__logos-contenedor a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 25px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 80px;
+  min-width: 160px;
+}
+
+.footer__logos-contenedor a:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 6px 20px rgba(91, 192, 190, 0.3);
+  background: rgba(255, 255, 255, 1);
+}
+
+.footer__logo {
+  max-height: 70px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(0%);
+  transition: filter 0.3s ease;
+}
+
+.footer__logos-contenedor a:hover .footer__logo {
+  filter: grayscale(0%) brightness(1.1);
+}
+
+/* --- Barra inferior de Copyright --- */
+.footer__inferior {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding-top: 12px;
+  text-align: center;
+}
+
+.footer__inferior p {
+  font-size: 0.75rem;
+  color: #8db0b0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.footer__inferior strong {
+  color: #5bc0be;
+}
+
+/* --- Responsive para el Footer --- */
+@media (max-width: 1024px) {
+  /* Logos en Tablets */
+  .footer__logos-contenedor {
+    gap: 30px;
+  }
+  .footer__logos-contenedor a {
+    min-width: 160px;
+    height: 90px;
+    padding: 18px 25px;
+  }
+  .footer__logo {
+    max-height: 60px;
+    max-width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Lista de equipo en Móviles */
+  .footer__equipo {
+    padding-left: 0;
+  }
+  .footer__equipo-lista li {
+    font-size: 0.8rem;
+  }
+
+  /* Logos en Móviles */
+  .footer__logos-contenedor {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .footer__logos-contenedor a {
+    width: 100%;
+    max-width: 250px;
+    height: 100px;
+  }
+  .footer__logo {
+    max-height: 70px;
+    max-width: 160px;
+  }
+}
+
+/* ==========================================================================
+   8. DEFINICIÓN DE IMÁGENES DE FONDO
+   ========================================================================== */
+
+/* --- Imágenes del Carrusel --- */
+.slide-1 {
+  background-image: url('https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=1920&q=80');
+}
+.slide-2 {
+  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80');
+}
+.slide-3 {
+  background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80');
+}
+.slide-4 {
+  background-image: url('https://cdn.pixabay.com/photo/2014/10/31/16/51/landscape-510815_1280.jpg');
+}
+
+/* --- Imágenes de las Tarjetas de Contaminantes --- */
+.card1 {
+  background-image: url('https://img.freepik.com/vector-premium/diseno-ilustraciones-vectoriales-dibujos-animados-contaminacion-aire_1221743-8866.jpg?w=2000');
+}
+.card2 {
+  background-image: url('https://img.freepik.com/vector-premium/dia-nacional-prevencion-contaminacion-campana-concientizacion-plantilla-ilustracion-dibujos-animados-dibujados-mano_2175-7840.jpg?w=2000');
+}
+.card3 {
+  background-image: url('https://img.freepik.com/fotos-premium/vector-arte-conceptual-contaminacion-ambiental-estilo-dibujos-animados_941097-44457.jpg?w=2000');
+}
+.card4 {
+  background-image: url('https://img.freepik.com/vector-premium/ilustracion-dibujos-animados-contaminacion-aire-causada-humo-fabricas-industriales_207579-1503.jpg?w=2000');
+}
+.card5 {
+  background-image: url('https://img.freepik.com/vector-premium/concepto-ilustracion-contaminacion-aire_701961-3311.jpg?w=2000');
+}
+.card6 {
+  background-image: url('https://static.vecteezy.com/system/resources/previews/008/423/949/original/flat-cartoon-illustration-working-factory-pollution-air-and-water-design-save-the-earth-concept-vector.jpg');
+}
+.card7 {
+  background-image: url('https://st3.depositphotos.com/6222352/13457/v/950/depositphotos_134574098-stock-illustration-cartoon-family-with-air-pollution.jpg');
+}
