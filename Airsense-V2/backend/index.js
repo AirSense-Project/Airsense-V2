@@ -12,7 +12,8 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const db = require("./basedatos"); // Módulo de conexión a base de datos
+const db = require("./basedatos");
+const healthRoutes = require('./health');
 
 /*Instancia principal de la aplicación Express
   Maneja todas las rutas y middlewares del servidor*/
@@ -25,8 +26,7 @@ const PORT = process.env.PORT || 3000; //Usa variable de entorno PORT (producci�
 // ==========================================================================
 app.use(cors());                                            //permite que el fronted haga peticiones al backend desde diferente origen
 app.use(express.json());                                    //habilita el procesamiento de peticiones en formato JSON
-
-// ... CÓDIGO DE API ...
+app.use('/api/health', healthRoutes);
 
 // ==========================================================================
 // RUTA DE PÁGINA PRINCIPAL
