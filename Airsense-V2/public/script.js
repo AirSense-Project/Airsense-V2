@@ -50,7 +50,10 @@ let capaMunicipios = L.layerGroup().addTo(map);
    ==========================================================================*/
 
 // [NUEVO] URL base de la API para todas las peticiones
-const API_BASE_URL = "https://airsense-v2.onrender.com/api"; 
+const API_BASE_URL = window.location.hostname.includes("localhost")
+  ? "http://localhost:3000/api"
+  : "https://airsense-backend-production.up.railway.app/api";
+
 
 // ==========================================================================
 // FUNCIONES DE RETROALIMENTACIÓN VISUAL
@@ -88,7 +91,7 @@ async function cargarMunicipios() {
     mostrarEstado("Cargando municipios...");
 
     const response = await fetch(`${API_BASE_URL}/municipios`);
-    
+
     if (!response.ok) throw new Error("No se pudieron obtener los municipios");
 
     const municipios = await response.json();
