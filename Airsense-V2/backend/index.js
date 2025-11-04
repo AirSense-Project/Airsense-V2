@@ -16,6 +16,7 @@ const db = require("./basedatos"); // Módulo de conexión a base de datos
 
 /*Instancia principal de la aplicación Express
   Maneja todas las rutas y middlewares del servidor*/
+const functions = require('firebase-functions');
 const app = express();
 const PORT = process.env.PORT || 3000; //Usa variable de entorno PORT (producción) o 3000 por defecto 
 
@@ -340,10 +341,7 @@ process.on("unhandledRejection", (reason) => {
 });
 
 // ==========================================================================
-// INICIALIZACIÓN DEL SERVIDOR
+// EXPORTACIÓN DE LA FUNCIÓN HTTP PARA FIREBASE
 // ==========================================================================
 
-// Inicia el servidor HTTP
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor backend iniciado en: http://localhost:${PORT}`);
-});
+exports.api = functions.https.onRequest(app); // ⬅️ AGREGAR ESTO

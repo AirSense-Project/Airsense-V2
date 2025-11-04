@@ -1,9 +1,0 @@
-[build]
-  publish = "AirSense"
-  command = "echo 'no build'"
-
-[[redirects]]
-  from = "/api/*" 
-  to = "${BACKEND_URL}/api/:splat" 
-  status = 200 
-  force = true
