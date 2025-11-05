@@ -773,3 +773,16 @@ html {
 .card7 {
   background-image: url('https://st3.depositphotos.com/6222352/13457/v/950/depositphotos_134574098-stock-illustration-cartoon-family-with-air-pollution.jpg');
 }
+
+
+
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}

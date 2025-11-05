@@ -1106,3 +1106,15 @@ body.dark-mode .leyenda__nota {
   color: #d0d0d0;
   background: rgba(42, 42, 42, 0.6) !important;
 }
+
+
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
