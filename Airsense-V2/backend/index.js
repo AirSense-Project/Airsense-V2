@@ -19,8 +19,7 @@ const healthRoutes = require('./health');
   Maneja todas las rutas y middlewares del servidor*/
 const app = express();
 const PORT = process.env.PORT || 3000; //Usa variable de entorno PORT (producción) o 3000 por defecto 
-
-
+ 
 // ==========================================================================
 // CONFIGURACIÓN DE MIDDLEWARES
 // ==========================================================================
