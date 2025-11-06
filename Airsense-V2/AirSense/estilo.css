@@ -71,7 +71,7 @@
 .carousel {
   position: relative;
   width: 100%;
-  min-height: 100vh; /* Altura de pantalla completa */
+  height: 100vh; /* Altura de pantalla completa */
   overflow: hidden;
   background: transparent;
 }
