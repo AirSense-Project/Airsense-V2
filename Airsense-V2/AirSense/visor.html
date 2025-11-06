@@ -44,48 +44,28 @@
   </header>
 
   <!-- ===============================
-        CARRUSEL PRINCIPAL
+       🔹 CARRUSEL PRINCIPAL
   ================================== -->
-  <section  id="inicio" 
-            class="carousel"
-            role="region"
-            aria-roledescription="Carrusel"
-            aria-label="Presentación de AirSense">
+  <section id="inicio" class="carousel">
     <!-- Slides -->
-    <div class="carousel-text-container">
-    <p id="slide-text"
-       class="carousel-text"
-       aria-live="polite">
-      </p>
-  </div>
-  
-  <div class="slides">
-    <div class="slide slide-1 active" 
-          role="img" 
-         aria-label="Ciudad con un alto nivel de contaminación atmosférica">
+    <div class="slides">
+      <div class="slide slide-1 active"></div>
+      <div class="slide slide-2"></div>
+      <div class="slide slide-3"></div>
+      <div class="slide slide-4"></div>
     </div>
-    <div  class="slide slide-2"
-          role="img" 
-          aria-label="Paisaje natural de un río claro entre montañas">
-    </div>
-    <div class="slide slide-3"
-          role="img" 
-          aria-label="Carretera solitaria atravesando un bosque verde">
-    </div>
-    <div class="slide slide-4"
-          role="img" 
-          aria-label="Paisaje montañoso con neblina al amanecer">
-    </div>
-  </div>
+
+    <!-- Capa oscura superpuesta -->
+    <div class="overlay"></div>
 
     <!-- Contenido textual sobre el carrusel -->
-     <div class="overlay"></div>
-
     <div class="content">
-      <h2 id="slide-text">¿Sabías que en Colombia mueren más de 17.000 personas cada año por culpa del aire que
-        respiran?</h2>
-      <p>AirSense transforma datos ambientales en información visual para comprender la calidad del aire en el Valle del
-        Cauca.</p>
+      <h2 id="slide-text">
+        ¿Sabías que en Colombia mueren más de 17.000 personas cada año por culpa del aire que respiran?
+      </h2>
+      <p>
+        AirSense transforma datos ambientales en información visual para comprender la calidad del aire en el Valle del Cauca.
+      </p>
       <a href="#mapa" class="btn">Ver mapa geoespacial</a>
     </div>
 
@@ -94,11 +74,11 @@
     <button id="next" class="arrow right">&#10095;</button>
 
     <!-- Indicadores del carrusel -->
-    <div class="dots-container">
-      <button class="dot active" aria-label="Ir a imagen 1"></button>
-      <button class="dot" aria-label="Ir a imagen 2"></button>
-      <button class="dot" aria-label="Ir a imagen 3"></button>
-      <button class="dot" aria-label="Ir a imagen 4"></button>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
   </section>
 
@@ -111,7 +91,7 @@
 
     <div class="mapa-container">
       <iframe 
-        src="index.html"
+        src="http://localhost:3000/index.html" 
         class="mapa-frame" 
         loading="lazy"
         title="Visor geoespacial">
@@ -146,60 +126,53 @@
   </section>
 
   <!-- ===============================
-       SECCIÓN: CONTAMINANTES
+       🔹 SECCIÓN: CONTAMINANTES
   ================================== -->
   <section id="contaminantes" class="section bg-white">
     <h2 class="titulo">🌍 Contaminantes</h2>
+
     <div class="contenedor">
-      <article class="card card1"
-          role="img"
-          aria-label="Ilustración de contaminación del aire por fábricas">
+      <!-- Tarjeta 1 -->
+      <div class="card card1">
         <h3>CO (Monóxido de carbono)</h3>
         <p>Gas tóxico e incoloro que se produce por la combustión incompleta de gasolina, madera o carbón.</p>
-      </article>
+      </div>
 
-      <article class="card card2"
-            role="img"
-            aria-label="Ilustración de campaña de prevención de la contaminación">
+      <!-- Tarjeta 2 -->
+      <div class="card card2">
         <h3>NO (Óxido nítrico)</h3>
         <p>Proviene principalmente de los vehículos y plantas industriales. Contribuye a la formación del smog.</p>
-      </article>
+      </div>
 
-      <article class="card card3"
-            role="img"
-            aria-label="Arte conceptual de contaminación ambiental">
+      <!-- Tarjeta 3 -->
+      <div class="card card3">
         <h3>NO₂ (Dióxido de nitrógeno)</h3>
         <p>Contaminante de color marrón rojizo. Se origina al quemar combustibles fósiles y afecta las vías respiratorias.</p>
-      </article>
+      </div>
 
-      <article class="card card4"
-            role="img"
-            aria-label="Dibujo de humo de fábricas industriales">
+      <!-- Tarjeta 4 -->
+      <div class="card card4">
         <h3>SO₂ (Dióxido de azufre)</h3>
         <p>Producido por la quema de petróleo y carbón. Causa lluvia ácida y problemas respiratorios.</p>
-      </article>
+      </div>
 
-      <article class="card card5"
-            role="img"
-            aria-label="Ilustración conceptual de la contaminación del aire y sus efectos">
+      <!-- Tarjeta 5 -->
+      <div class="card card5">
         <h3>O₃ (Ozono troposférico)</h3>
         <p>Se forma cuando los contaminantes reaccionan con la luz solar. Irrita ojos y pulmones.</p>
-      </article>
+      </div>
 
-      <article class="card card6"
-            role="img"
-            aria-label="Ilustración de midad del planeta norma y la otra midad con contaminación">
+      <!-- Tarjeta 6 -->
+      <div class="card card6">
         <h3>PM₁₀ (Material particulado grueso)</h3>
         <p>Pequeñas partículas sólidas del polvo, humo y hollín. Provienen del tráfico y la construcción.</p>
-      </article>
+      </div>
 
-      <article class="card card7"
-            role="img"
-            aria-label="Ilustración de partículas familia conviviendo con el humo contaminado">
+      <!-- Tarjeta 7 -->
+      <div class="card card7">
         <h3>PM₂.₅ (Material particulado fino)</h3>
         <p>Partículas microscópicas que penetran los pulmones y la sangre. Surgen de motores y combustión doméstica.</p>
-      </article>
-
+      </div>
     </div>
   </section>
 
