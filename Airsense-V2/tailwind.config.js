@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./visor.html",
-    "./rutas.js",
-    "./public/**/*.{html,js}"
+  "./public/index.html",
+  "./public/rutas.js",
+  "./public/mapa.html"
   ],
   theme: {
     extend: {},
