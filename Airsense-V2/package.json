@@ -9,6 +9,7 @@
     "build": "npx tailwindcss -i ./src/input.css -o ./public/estilo.css --minify",
     "watch": "npx tailwindcss -i ./src/input.css -o ./estilo.css --watch"
   },
+  
   "keywords": [
     "mapa",
     "estaciones",
