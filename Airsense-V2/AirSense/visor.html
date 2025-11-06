@@ -20,24 +20,20 @@
   <!-- ===============================
        🔹 ENCABEZADO FIJO (Header)
   ================================== -->
-  <header class="header" role="banner">
-  <div class="container flex items-center justify-between">
-    
-    <!-- 🔸 Identidad del sitio -->
-    <div class="logo flex items-center gap-2">
-      <a href="#inicio" class="flex items-center" aria-label="Ir al inicio de AirSense">
+  <header class="header">
+    <div class="container">
+      <!-- Logo e Identidad -->
+      <div class="logo">
         <img 
           src="https://i.postimg.cc/vZJMmcDz/Whats-App-Image-2025-10-24-at-5-14-28-PM.jpg" 
-          alt="Logo del proyecto AirSense" 
-          width="50" height="50" 
+          alt="Logo AirSense" 
         />
-        <h1 class="text-xl font-bold ml-2">AirSense</h1>
-      </a>
-    </div>
+        <h1>AirSense</h1>
+      </div>
 
       <!-- Navegación principal -->
-      <nav class="nav" aria-label="Navegación principal del sitio">
-        <a href="#inicio" aria-current="page">Inicio</a>
+      <nav class="nav">
+        <a href="#inicio">Inicio</a>
         <a href="#mapa">Mapa</a>
         <a href="#datos">Datos</a>
         <a href="#contaminantes">Contaminantes</a>
@@ -97,34 +93,18 @@
     </div>
 
     <!-- Botones de navegación -->
-    <button id="prev" class="arrow left" aria-label="Slide anterior">&#10094;</button>
-    <button id="next" class="arrow right" aria-label="Slide siguiente">&#10095;</button>
+    <button id="prev" class="arrow left">&#10094;</button>
+    <button id="next" class="arrow right">&#10095;</button>
+
     <!-- Indicadores del carrusel -->
-    <div  class="dots-container"
-          role="tablist"
-          aria-label="Navegación de slides">
-      
-      <button class="dot active" 
-              role="tab"
-              aria-selected="true"
-              aria-label="Ir a imagen 1">
-      </button>
-      <button class="dot"
-              role="tab"
-              aria-selected="false"
-              aria-label="Ir a imagen 2">
-      </button>
-      <button class="dot"
-              role="tab"
-              aria-selected="false"
-              aria-label="Ir a imagen 3">
-      </button>
-      <button class="dot"
-              role="tab"
-              aria-selected="false"
-              aria-label="Ir a imagen 4">
-      </button>
+    <div class="dots-container">
+      <button class="dot active" aria-label="Ir a imagen 1"></button>
+      <button class="dot" aria-label="Ir a imagen 2"></button>
+      <button class="dot" aria-label="Ir a imagen 3"></button>
+      <button class="dot" aria-label="Ir a imagen 4"></button>
     </div>
+  </section>
+
   <!-- ===============================
        🔹 SECCIÓN: MAPA GEOESPACIAL
   ================================== -->
@@ -273,121 +253,117 @@
   </section>
 
   <!-- ===============================
-      PIE DE PÁGINA (Footer)
+       🔹 PIE DE PÁGINA (Footer)
   ================================== -->
- <footer class="footer" role="contentinfo" aria-label="Información del sitio AirSense">
-  <div class="footer__contenido" role="group" aria-label="Secciones del pie de página">
+  <footer class="footer">
+    <div class="footer__contenido">
 
-    <!-- Columna 1: Sobre el proyecto -->
-    <section class="footer__columna" aria-label="Sobre el proyecto AirSense">
-      <p class="footer__descripcion">
-        Plataforma interactiva para visualizar y analizar la calidad del aire en el Valle del Cauca (2011–2023).
-      </p>
-      <div class="footer__github">
-        <a 
-          href="https://github.com/AirSense-Project/Airsense-V2" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="Ver código fuente del proyecto AirSense en GitHub">
-          <!-- Ícono accesible -->
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
-            <path
-              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-              0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94
-              -.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53
-              .63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-              .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-              0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-              0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
-              .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82
-              .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-              0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-              0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38
-              A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-          </svg>
-          Ver código en GitHub
-        </a>
+      <!-- Columna 1: Sobre el proyecto -->
+      <div class="footer__columna">
+        <p class="footer__descripcion">
+          Plataforma interactiva para visualizar y analizar la calidad del aire en el Valle del Cauca (2011-2023).
+        </p>
+        <div class="footer__github">
+          <a 
+            href="https://github.com/AirSense-Project/Airsense-V2" 
+            target="_blank" 
+            rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94
+                -.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53
+                .63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+                .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82
+                .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38
+                A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+            Ver código en GitHub
+          </a>
+        </div>
       </div>
-    </section>
 
-    <!-- Columna 2: Enlaces útiles -->
-    <nav class="footer__columna" aria-label="Enlaces útiles">
-      <h4 class="footer__subtitulo">Enlaces</h4>
-      <ul class="footer__lista">
-        <li><a href="#sobre">Sobre el proyecto</a></li>
-        <li><a href="#metodologia">Metodología</a></li>
-        <li><a href="#fuentes">Fuentes de datos</a></li>
-        <li><a href="mailto:info@airsense.co">Contacto</a></li>
-      </ul>
-    </nav>
-
-    <!-- Columna 3: Institución y equipo -->
-    <section class="footer__columna" aria-label="Información institucional">
-      <h4 class="footer__subtitulo">Desarrollado por</h4>
-      <p class="footer__institucion">
-        <strong>Universidad del Valle</strong><br />
-        Tecnología en Desarrollo de Software
-      </p>
-
-      <div class="footer__equipo">
-        <h5 class="footer__equipo-titulo">Equipo:</h5>
-        <ul class="footer__equipo-lista">
-          <li>👤 Andres Mauricio Peña López</li>
-          <li>👤 Katherine López Unas</li>
-          <li>👤 Luz Amelia Ibargüen</li>
-          <li>👤 Nicolás Fernando Sánchez</li>
+      <!-- Columna 2: Enlaces útiles -->
+      <div class="footer__columna">
+        <h4 class="footer__subtitulo">Enlaces</h4>
+        <ul class="footer__lista">
+          <li><a href="#sobre">Sobre el proyecto</a></li>
+          <li><a href="#metodologia">Metodología</a></li>
+          <li><a href="#fuentes">Fuentes de datos</a></li>
+          <li><a href="mailto:info@airsense.co">Contacto</a></li>
         </ul>
       </div>
-    </section>
-  </div>
 
-  <!-- Logos institucionales -->
-  <section class="footer__logos" aria-label="Logos de fuentes de datos e instituciones colaboradoras">
-    <p class="footer__logos-titulo">Fuentes de datos:</p>
-    <div class="footer__logos-contenedor">
-      <a 
-        href="https://www.univalle.edu.co" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        aria-label="Sitio oficial de la Universidad del Valle">
-        <img 
-          src="https://www.univalle.edu.co/images/Univalle/70_Rojo.jpg" 
-          alt="Logotipo de la Universidad del Valle"
-          class="footer__logo" />
-      </a>
+      <!-- Columna 3: Institución -->
+      <div class="footer__columna">
+        <h4 class="footer__subtitulo">Desarrollado por</h4>
+        <p class="footer__institucion">
+          <strong>Universidad del Valle</strong><br />
+          Tecnología en Desarrollo de Software
+        </p>
 
-      <a 
-        href="https://www.cvc.gov.co" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        aria-label="Sitio oficial de la CVC">
-        <img 
-          src="https://www.cvc.gov.co/themes/portal/logo.svg" 
-          alt="Logotipo de la CVC" 
-          class="footer__logo" />
-      </a>
-
-      <a 
-        href="https://www.cali.gov.co/dagma" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        aria-label="Sitio oficial de DAGMA">
-        <img 
-          src="https://images.seeklogo.com/logo-png/43/2/dagma-logo-png_seeklogo-437405.png" 
-          alt="Logotipo de DAGMA"
-          class="footer__logo" />
-      </a>
+        <div class="footer__equipo">
+          <h5 class="footer__equipo-titulo">Equipo:</h5>
+          <ul class="footer__equipo-lista">
+            <li>👤 Andres Mauricio Peña Lopez 👤 Katherine Lopez Unas</li>
+            <li>👤 Luz Amelia Ibarguen 👤 Nicolas Fernando Sanchez</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- Barra inferior -->
-  <div class="footer__inferior">
-    <p>
-      © 2025 AirSense · Proyecto académico con fines educativos · Datos
-      actualizados a 2023 · Clasificación según <strong>OMS 2021</strong>.
-    </p>
-  </div>
-</footer>
+    <!-- Logos institucionales -->
+    <div class="footer__logos">
+      <p class="footer__logos-titulo">Fuentes de datos:</p>
+      <div class="footer__logos-contenedor">
+        <a 
+          href="https://www.univalle.edu.co" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="Universidad del Valle">
+          <img 
+            src="https://www.univalle.edu.co/images/Univalle/70_Rojo.jpg" 
+            alt="Universidad del Valle"
+            class="footer__logo" />
+        </a>
+
+        <a 
+          href="https://www.cvc.gov.co" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="CVC">
+          <img 
+            src="https://www.cvc.gov.co/themes/portal/logo.svg" 
+            alt="CVC" 
+            class="footer__logo" />
+        </a>
+
+        <a 
+          href="https://www.cali.gov.co/dagma" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="DAGMA">
+          <img 
+            src="https://images.seeklogo.com/logo-png/43/2/dagma-logo-png_seeklogo-437405.png" 
+            alt="DAGMA"
+            class="footer__logo" />
+        </a>
+      </div>
+    </div>
+
+    <!-- Barra inferior -->
+    <div class="footer__inferior">
+      <p>
+        © 2025 AirSense · Proyecto académico con fines educativos · Datos
+        actualizados a 2023 · Clasificación según <strong>OMS 2021</strong>
+      </p>
+    </div>
+  </footer>
 
   <!-- ===============================
        🔹 SCRIPTS

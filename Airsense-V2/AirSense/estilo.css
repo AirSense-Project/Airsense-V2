@@ -791,6 +791,10 @@ select:focus-visible {
    ESTILOS DE ACCESIBILIDAD (FOCO VISIBLE)
    ========================================================================== */
 
+/* Esto añade un "anillo" claro a CUALQUIER elemento
+  que sea enfocado usando el teclado (Tab).
+  No aparecerá si solo se hace clic con el mouse.
+*/
 :focus-visible {
   outline: 3px solid #006837; /* Usa un color verde de tu marca */
   outline-offset: 2px;        /* Un pequeño espacio para que respire */
@@ -798,6 +802,9 @@ select:focus-visible {
   box-shadow: 0 0 0 5px rgba(0, 104, 55, 0.3); /* Un "resplandor" suave */
 }
 
+/* Estilo específico para los "dots" del carrusel,
+  ya que son pequeños.
+*/
 .dot:focus-visible {
   outline-offset: 4px; /* Más espacio para que se note */
 }
