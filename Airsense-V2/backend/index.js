@@ -32,7 +32,7 @@ app.use('/api/health', healthRoutes);
 // ==========================================================================
 // 1. RUTA PRINCIPAL (/)
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../AirSense/visor.html"));
+  res.sendFile(path.join(__dirname, "../public/visor.html"));
 });
 
 // 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
