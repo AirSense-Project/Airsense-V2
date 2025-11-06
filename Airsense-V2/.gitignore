@@ -3,6 +3,9 @@ node_modules/
 .vscode/
 mis_notas.txt
 
+# NUEVA LÍNEA - Archivo CSS compilado por Tailwind
+estilo.css
+
 # Logs
 logs
 *.log
