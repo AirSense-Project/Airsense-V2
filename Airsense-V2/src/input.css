@@ -810,3 +810,29 @@ select:focus-visible {
 .dot:focus-visible {
   outline-offset: 4px; /* Más espacio para que se note */
 }
+
+
+.carousel .overlay {
+  /* ¡ESTA ES LA LÍNEA MÁGICA! */
+  background-color: rgba(0, 0, 0, 0.4); /* Un tinte negro al 40% */
+
+  /* --- Posicionamiento --- */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Capa 1 (entre el fondo y el texto) */
+  z-index: 1; 
+}
+
+.carousel .content {
+  position: relative; /* O 'absolute', lo que ya tengas */
+  z-index: 2; /* Capa 2 (encima del overlay) */
+}
+
+.carousel .slides {
+  position: relative; /* O 'absolute', lo que ya tengas */
+  z-index: 0; /* Capa 0 (detrás de todo) */
+}

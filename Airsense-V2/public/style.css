@@ -644,13 +644,16 @@ details[open] summary {
 
 /* Colores de la leyenda (movidos desde el final) */
 .leyenda-color-buena {
-  background-color: #00e400; /* Verde */
+  background-color: #00e400; 
+  color: #000;
 }
 .leyenda-color-moderada {
-  background-color: #ffff00; /* Amarillo */
+  background-color: #ffc400;
+  color: #000;
 }
 .leyenda-color-mala {
-  background-color: #ff0000; /* Rojo */
+  background-color: #ff0000; 
+  color: #000;
 }
 
 /* Leyenda completa (dentro del detalle) */

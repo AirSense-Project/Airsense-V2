@@ -846,7 +846,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
   } catch (error) {
     console.error("❌ Error al cargar datos históricos:", error);
     mostrarEstado(`❌ ${error.message}`);
-    ocultarEstado(3000);
+    ocultarEstado(2000);
 
     // Mostrar error en el panel
     mostrarErrorEnPanel(error.message);
