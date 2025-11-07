@@ -134,22 +134,19 @@
 
           <!-- PANEL DERECHO: Diccionario de contaminantes -->
           <aside id="diccionario" class="panel-diccionario" role="region" aria-labelledby="titulo-diccionario">
-  
+ 
             <h2 class="diccionario__titulo" id="titulo-diccionario"> Diccionario de Contaminantes
             </h2>
             
-            <div id="vistaLista" class="diccionario__vista diccionario__vista--activa">
-              
+            <div id="vistaLista" class="diccionario__vista diccionario__vista--activa" aria-hidden="false">
               <p class="diccionario__intro">
-                Explora los principales contaminantes atmosféricos monitoreados...
+                Explora los principales contaminantes...
               </p>
-
               <ul id="listaContaminantes" class="diccionario__lista"></ul>
             </div>
 
-            <div id="vistaDetalle" ...>
-              </div>
-          </aside>
+            <div id="vistaDetalle" class="diccionario__vista" aria-hidden="true">
+
               <!-- Leyenda de colores -->
               <div class="diccionario__leyenda-compacta">
                 <h5 class="leyenda-compacta__titulo">

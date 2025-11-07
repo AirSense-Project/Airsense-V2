@@ -61,15 +61,25 @@ async function apiClient(url, options = {}) {
  * Cambia entre las vistas de lista y detalle con transición suave
  * @param {'lista' | 'detalle'} vista - La vista a la que se desea cambiar
  */
+// (Tu función "mejorada" con ARIA)
 function cambiarVista(vista) {
-  if (vista === "lista") {
-    vistaDetalle.classList.remove("diccionario__vista--activa");
-    vistaLista.classList.add("diccionario__vista--activa");
-  } else {
+  if (vista === "detalle") {
+    // Oculta la lista
     vistaLista.classList.remove("diccionario__vista--activa");
+    vistaLista.setAttribute("aria-hidden", "true"); 
+
+    // Muestra el detalle
     vistaDetalle.classList.add("diccionario__vista--activa");
-    // Opcional: scroll al inicio del detalle
-    vistaDetalle.scrollTop = 0;
+    vistaDetalle.setAttribute("aria-hidden", "false"); 
+    
+  } else { // "lista"
+    // Oculta el detalle
+    vistaDetalle.classList.remove("diccionario__vista--activa");
+    vistaDetalle.setAttribute("aria-hidden", "true"); 
+    
+    // Muestra la lista
+    vistaLista.classList.add("diccionario__vista--activa");
+    vistaLista.setAttribute("aria-hidden", "false"); 
   }
 }
 
