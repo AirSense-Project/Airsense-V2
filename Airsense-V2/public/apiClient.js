@@ -10,8 +10,6 @@
  * @throws {Error} - Lanza un error estandarizado si la petición falla.
  */
 
-const API_BASE_URL = "https://airsense-v2-1.onrender.com";
-
 async function apiClient(url, options = {}) {
   try {
     const fullUrl = `${API_BASE_URL}${url}`;
