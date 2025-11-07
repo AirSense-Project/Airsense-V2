@@ -358,12 +358,6 @@ h1 {
   position: relative;
 }
 
-/* Panel Derecho: Diccionario */
-.panel-diccionario {
-  /*position: relative;
-  /* Se quitó 'overflow: hidden' que ocultaba la lista */
-}
-
 /* --------------------------------------
    6. Panel Izquierdo (Instrucciones e Info Contaminante)
    -------------------------------------- */
