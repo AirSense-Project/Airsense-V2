@@ -1184,15 +1184,18 @@ function actualizarCapaMapa(estaEnModoOscuro) {
 /**
  * Función que activa o desactiva el modo oscuro en TODO el sitio
  */
+// (Tu función "mejorada" con ARIA)
 function setModoOscuro(activado) {
   if (activado) {
     document.body.classList.add('dark-mode');
     localStorage.setItem('modoOscuro', 'activado');
     actualizarCapaMapa(true);
+    btnModoOscuro.setAttribute('aria-pressed', 'true'); // ¡ROBUSTO!
   } else {
     document.body.classList.remove('dark-mode');
     localStorage.setItem('modoOscuro', 'desactivado');
     actualizarCapaMapa(false);
+    btnModoOscuro.setAttribute('aria-pressed', 'false'); // ¡ROBUSTO!
   }
 }
 
