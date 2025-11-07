@@ -153,6 +153,9 @@ async function cargarMunicipios() {
     // ¡Tu propia lógica de error en el select! ¡Perfecta!
     selectMunicipio.innerHTML = `<option value="">⚠️ ${error.message}</option>`;
     selectMunicipio.style.color = '#d9534f';
+  }finally {
+    // Se ejecuta SIEMPRE (en éxito o error)
+    selectMunicipio.setAttribute('aria-busy', 'false'); 
   }
 }
 

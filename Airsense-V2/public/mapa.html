@@ -41,7 +41,7 @@
         <!-- Título principal de la sección -->
         <h1>🗺️ Visor geoespacial sobre la calidad del aire</h1>
         <!--  FILTROS: -->
-        <div class="filtros-contenedor">
+        <div class="filtros-contenedor" role="search" aria-label="Filtros del mapa">
           <!-- Filtro de municipio -->
           <div class="filtro-item">
             <label for="selectMunicipio">📍 Municipio:</label>
@@ -73,7 +73,9 @@
           <!-- Botón para limpiar los filtros -->
           <div class="filtro-item filtro-item--boton">
             <label>&nbsp;</label> <!-- Espacio para alinear con los demás -->
-            <button id="btnLimpiarFiltros" class="btn-limpiar-filtros" title="Limpiar todos los filtros">
+            <button id="btnLimpiarFiltros" class="btn-limpiar-filtros" 
+                title="Limpiar todos los filtros" 
+                aria-label="Limpiar todos los filtros y reiniciar el mapa">
               🗑️ Limpiar
             </button>
           </div>
@@ -82,12 +84,10 @@
         <div class="vista-principal">
            
             <!-- PANEL IZQUIERDO: Instrucciones de uso -->
-            <aside class="panel-informacion">
-            
-            <div id="informacionContaminantes" class="panel-instrucciones">
-              <h2>
-                  Cómo usar la aplicación 🌍
-              </h2>
+            <aside class="panel-informacion" role="region" aria-labelledby="titulo-instrucciones">
+              <div id="informacionContaminantes" class="panel-instrucciones">
+                <h2 id="titulo-instrucciones"> Cómo usar la aplicación 🌍
+                </h2>
               <p>
                 Explora 13 años de datos históricos (2011-2023) de calidad del
                 aire en el Valle del Cauca
@@ -131,12 +131,18 @@
       </aside>
 
           <!--  MAPA CENTRAL -->
-          <div class="vista-principal__mapa">
-            <div id="estadoMapa" class="estado-mapa"></div>
-            <div id="map" class="mapa"></div>
+
+        <div class="vista-principal__mapa">
+          
+          <div id="estadoMapa" class="estado-mapa" role="status" aria-live="polite"> </div>
+          
+          <div id="map" class="mapa" role="application" aria-label="Mapa interactivo de calidad del aire">
           </div>
+
           <!-- PANEL DERECHO: Diccionario de contaminantes -->
-          <aside id="diccionario" class="panel-diccionario">
+          <aside id="diccionario" class="panel-diccionario" role="region" aria-labelledby="titulo-diccionario">
+            <h2 class="diccionario__titulo" id="titulo-diccionario"> Diccionario de Contaminantes
+            </h2>
             <div
               id="vistaLista"
               class="diccionario__vista diccionario__vista--activa"
@@ -177,7 +183,7 @@
 
             <!-- Vista detallada de un contaminante -->
             <div id="vistaDetalle" class="diccionario__vista">
-              <button id="btnVolver" class="diccionario__btn-volver">
+              <button id="btnVolver" class="diccionario__btn-volver" aria-label="Volver a la lista de contaminantes">
                 ← Volver
               </button>
               <article
