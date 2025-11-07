@@ -55,11 +55,36 @@
     <button id="prev" class="arrow left">&#10094;</button>
     <button id="next" class="arrow right">&#10095;</button>
 
-    <div class="dots-container">
-      <button class="dot active" aria-label="Ir a imagen 1"></button>
-      <button class="dot" aria-label="Ir a imagen 2"></button>
-      <button class="dot" aria-label="Ir a imagen 3"></button>
-      <button class="dot" aria-label="Ir a imagen 4"></button>
+    <div class="ddots-container" role="tablist" aria-label="Navegación del carrusel">
+      
+      <button 
+        class="dot active" 
+        onclick="showSlide(0)" 
+        role="tab" 
+        aria-label="Ir a la diapositiva 1">
+      </button>
+      
+      <button 
+        class="dot" 
+        onclick="showSlide(1)" 
+        role="tab" 
+        aria-label="Ir a la diapositiva 2">
+      </button>
+      
+      <button 
+        class="dot" 
+        onclick="showSlide(2)" 
+        role="tab" 
+        aria-label="Ir a la diapositiva 3">
+      </button>
+
+      <button 
+        class="dot" 
+        onclick="showSlide(3)" 
+        role="tab" 
+        aria-label="Ir a la diapositiva 4">
+      </button>
+
     </div>
   </section>
 
