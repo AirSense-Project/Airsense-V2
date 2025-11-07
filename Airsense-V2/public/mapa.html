@@ -25,11 +25,10 @@
         
         <!-- Botón para alternar entre modo claro y modo oscuro -->
         <button
-        id="btnModoOscuro"
-        class="btn-modo-oscuro"
-        aria-label="Alternar modo oscuro"
-        aria-pressed="false" 
-      >
+          id="btnModoOscuro"
+          class="btn-modo-oscuro"
+          aria-label="Alternar modo oscuro"
+        >
           <span class="icono-sol">☀️</span>
           <span class="icono-luna">🌙</span>
         </button>
@@ -135,12 +134,14 @@
 
           <!-- PANEL DERECHO: Diccionario de contaminantes -->
           <aside id="diccionario" class="panel-diccionario" role="region" aria-labelledby="titulo-diccionario">
- 
+
             <h2 class="diccionario__titulo" id="titulo-diccionario"> Diccionario de Contaminantes
             </h2>
-            
-            <div id="vistaLista" class="diccionario__vista diccionario__vista--activa" aria-hidden="false">
 
+            <div id="vistaLista" ...>
+              <p class="diccionario__vista diccionario__vista--activa">
+                Explora los principales contaminantes...
+              </p>
               <!-- Leyenda de colores -->
               <div class="diccionario__leyenda-compacta">
                 <h5 class="leyenda-compacta__titulo">
