@@ -137,12 +137,9 @@
 
             <h2 class="diccionario__titulo" id="titulo-diccionario"> Diccionario de Contaminantes
             </h2>
-
-            <div id="vistaLista" ...>
-              <p class="diccionario__vista diccionario__vista--activa">
-                Explora los principales contaminantes...
-              </p>
-              <!-- Leyenda de colores -->
+            
+            <div id="vistaLista" class="diccionario__vista diccionario__vista--activa" aria-hidden="false">
+              
               <div class="diccionario__leyenda-compacta">
                 <h5 class="leyenda-compacta__titulo">
                   📊 Calidad del Aire (OMS 2021)
@@ -152,32 +149,24 @@
                     <span class="leyenda-compacta__color leyenda-color-buena"></span>
                     <span class="leyenda-compacta__texto">Buena</span>
                   </div>
-
                   <div class="leyenda-compacta__item">
                     <span class="leyenda-compacta__color leyenda-color-moderada"></span>
                     <span class="leyenda-compacta__texto">Moderada</span>
                   </div>
-
                   <div class="leyenda-compacta__item">
                     <span class="leyenda-compacta__color leyenda-color-mala"></span>
                     <span class="leyenda-compacta__texto">Mala</span>
                   </div>
                 </div>
-              </div>
-
-              <!-- Título del diccionario (DEBAJO) -->
-              <h2 class="diccionario__titulo">Diccionario de Contaminantes</h2>
-              <p class="diccionario__intro">
+              </div> <p class="diccionario__intro">
                 Explora los principales contaminantes atmosféricos monitoreados
                 en el Valle del Cauca.
               </p>
-
-              <!-- Lista dinámica de contaminantes -->
               <ul id="listaContaminantes" class="diccionario__lista"></ul>
             </div>
 
-            <!-- Vista detallada de un contaminante -->
-            <div id="vistaDetalle" class="diccionario__vista">
+            <div id="vistaDetalle" class="diccionario__vista" aria-hidden="true">
+              
               <button id="btnVolver" class="diccionario__btn-volver" aria-label="Volver a la lista de contaminantes">
                 ← Volver
               </button>
@@ -186,7 +175,8 @@
                 class="diccionario__detalle"
               ></article>
             </div>
-          </aside>
+            
+            </aside>
         </div><!-- FIN vista-principal -->
       </div> <!-- FIN contenedor -->
     </main>
