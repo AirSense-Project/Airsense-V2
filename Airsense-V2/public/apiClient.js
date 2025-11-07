@@ -10,10 +10,12 @@
  * @throws {Error} - Lanza un error estandarizado si la petición falla.
  */
 
+const API_BASE_URL = "https://airsense-v2-1.onrender.com";
+
 async function apiClient(url, options = {}) {
   try {
-    const response = await fetch(Url, options);
-
+    const fullUrl = `${API_BASE_URL}${url}`;
+    const response = await fetch(fullUrl, options);
     if (!response.ok) {
       // Intenta leer el error JSON que envía el backend (ej. { error: "..." })
       const errorData = await response.json().catch(() => ({})); 
@@ -23,7 +25,7 @@ async function apiClient(url, options = {}) {
       throw new Error(errorMsg);
     }
 
-    // Si todo ok, devuelve el JSON
+    // elve el JSON
     return await response.json();
 
   } catch (error) {

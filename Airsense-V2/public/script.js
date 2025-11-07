@@ -36,6 +36,11 @@ statusMsg.style.fontStyle = "italic";
 statusMsg.style.transition = "opacity 0.4s ease";
 document.getElementById("estadoMapa").appendChild(statusMsg);
 
+
+
+const btnModoOscuro = document.getElementById('btnModoOscuro');
+
+
 // ==========================================================================
 // VARIABLES GLOBALES
 // ==========================================================================
@@ -51,6 +56,34 @@ let capaMunicipios = L.layerGroup().addTo(map);
 
 // [NUEVO] URL base de la API para todas las peticiones
 const API_BASE_URL = "https://airsense-v2.onrender.com/api"; 
+
+// =========================================================================
+// FUNCIONES DE UTILIDAD 
+// =========================================================================
+
+/**
+ * Muestra un mensaje de error dentro de un elemento <select>
+ * @param {HTMLSelectElement} selectElement - El <select> donde mostrar el error
+ * @param {string} mensaje - El mensaje de error
+ */
+function mostrarErrorEnSelector(selectElement, mensaje) {
+  // Limpia cualquier opción anterior
+  selectElement.innerHTML = ''; 
+  
+  // Deshabilita el selector
+  selectElement.disabled = true;
+
+  // Crea y añade la opción de error
+  const opcionError = document.createElement('option');
+  opcionError.value = "";
+  opcionError.textContent = `⚠️ ${mensaje}`;
+  
+  // (Opcional) Añade un poco de estilo para que se vea como un error
+  selectElement.style.color = '#d9534f'; // Rojo
+  
+  selectElement.appendChild(opcionError);
+}
+
 
 // ==========================================================================
 // FUNCIONES DE RETROALIMENTACIÓN VISUAL
@@ -82,23 +115,44 @@ function ocultarEstado(delay = 300) {
 // CARGA Y VISUALIZACIÓN DE MUNICIPIOS
 // ==========================================================================
 
-//Carga inicial: Obtiene los municipios de la API y los muestra.
 async function cargarMunicipios() {
+  // 1. Lógica de UI 
+  selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
+  selectMunicipio.disabled = true;
+  selectMunicipio.style.color = ''; // Resetear el color de error
+
   try {
+    // 2. Lógica de UI (¡tuyo y perfecto!)
     mostrarEstado("Cargando municipios...");
 
-    const response = await fetch(`${API_BASE_URL}/municipios`);
-    
-    if (!response.ok) throw new Error("No se pudieron obtener los municipios");
+    const data = await apiClient("/api/municipios"); 
 
-    const municipios = await response.json();
-    llenarSelectMunicipios(municipios);
-    mostrarMunicipiosEnMapa(municipios);
+    // 4. Lógica de ÉXITO 
+    if (!data || data.length === 0) {
+      throw new Error("No se encontraron municipios");
+    }
 
-    ocultarEstado(800);
+    selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
+    data.forEach((m) => {
+      const option = document.createElement("option");
+      option.value = m.id_municipio;
+      option.textContent = m.nombre_municipio;
+      selectMunicipio.appendChild(option);
+    });
+    selectMunicipio.disabled = false;
+    mostrarEstado("Municipios cargados", "exito");
+    ocultarEstado(2000);
+
   } catch (error) {
-    console.error("❌ Error al cargar municipios:", error);
-    mostrarEstado("❌ Error al conectar con el servidor.");
+    // 5. Lógica de ERROR (¡tuyo y perfecto!)
+    // Este catch atrapa CUALQUIER error que 'apiClient' le lance.
+    console.error("❌ Error cargando municipios:", error);
+    mostrarEstado(`❌ ${error.message}`);
+    ocultarEstado(3000);
+    
+    // ¡Tu propia lógica de error en el select! ¡Perfecta!
+    selectMunicipio.innerHTML = `<option value="">⚠️ ${error.message}</option>`;
+    selectMunicipio.style.color = '#d9534f';
   }
 }
 
@@ -211,6 +265,9 @@ function resetearFiltrosDependientes(nivel) {
  * @param {string} idMunicipio - El ID del municipio a consultar.
  */
 async function cargarAniosPorMunicipio(idMunicipio) {
+  selectAnio.innerHTML = '<option value="">Cargando años...</option>';
+  selectAnio.disabled = true;
+  selectAnio.style.color = ''; 
   try {
     mostrarEstado("Cargando años disponibles...");
     const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
@@ -234,9 +291,15 @@ async function cargarAniosPorMunicipio(idMunicipio) {
     );
     ocultarEstado(2500);
   } catch (error) {
-    console.error("❌ Error al cargar años:", error);
+    // 1. Muestra tu "toast" de error (¡Perfecto!)
     mostrarEstado(`❌ ${error.message}`);
     ocultarEstado(3000);
+    
+    // 2. (¡LA MEJORA!) Actualiza el <select> para que no se quede "cargando"
+    selectAnio.innerHTML = '<option value="">⚠️ Error al cargar</option>';
+    selectAnio.style.color = '#d9534f'; // Rojo
+    selectAnio.disabled = true;
+
   }
 }
 
@@ -248,27 +311,26 @@ async function cargarAniosPorMunicipio(idMunicipio) {
  * Obtiene las estaciones de un municipio y las muestra en el mapa.
  * @param {string} idMunicipio - El ID del municipio.
  */
+// ASÍ QUEDA (Limpio y "Comprensible")
+
 async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
     
-    const response = await fetch(`${API_BASE_URL}/estaciones/${idMunicipio}`);
+    const estaciones = await apiClient(`/api/estaciones/${idMunicipio}`);
 
-    if (!response.ok) {
-      throw new Error("Error al obtener estaciones");
-    }
-    
-    const estaciones = await response.json();
-    
-    // Llama a la función que las dibuja
+    // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
     mostrarEstacionesEnMapa(estaciones, null, false); 
     
     mostrarEstado(`${estaciones.length} estaciones encontradas.`);
     ocultarEstado(2500);
 
   } catch (error) {
+    // 4. Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error al cargar estaciones:", error);
-    mostrarEstado("❌ No se pudieron cargar las estaciones.");
+    // Ahora muestra el error real de la API.
+    mostrarEstado(`❌ ${error.message}`); 
+    ocultarEstado(3000); 
   }
 }
 
@@ -1091,8 +1153,6 @@ selectContaminante.addEventListener('change', actualizarBotonLimpiar);
 // MODO OSCURO (CON CAMBIO DE MAPA)
 // ==========================================================================
 
-const btnModoOscuro = document.getElementById('btnModoOscuro');
-
 /**
  * Función que cambia la capa del mapa (tiles) según el modo oscuro.
  */
@@ -1137,18 +1197,18 @@ function setModoOscuro(activado) {
 
 // Verificar si ya hay preferencia guardada
 const modoGuardado = localStorage.getItem('modoOscuro');
-if (modoGuardado === 'activado') {
-  setModoOscuro(true);
-} else {
-  // Cargar el mapa claro por defecto si no hay nada guardado
-  setModoOscuro(false); 
-}
+  if (modoGuardado === 'activado') {
+    setModoOscuro(true);
+  } else {
+    // Cargar el mapa claro por defecto si no hay nada guardado
+    setModoOscuro(false); 
+  }
 
-// Listener del botón
-btnModoOscuro.addEventListener('click', () => {
-  // Invertir el estado actual
-  const estaActivadoAhora = document.body.classList.contains('dark-mode');
-  setModoOscuro(!estaActivadoAhora);
+  // Listener del botón
+  btnModoOscuro.addEventListener('click', () => {
+    // Invertir el estado actual
+    const estaActivadoAhora = document.body.classList.contains('dark-mode');
+    setModoOscuro(!estaActivadoAhora);
 });
 
 // ==========================================================================\
@@ -1157,6 +1217,7 @@ btnModoOscuro.addEventListener('click', () => {
 
 /** Función principal que inicia el visor */
 function inicializarVisor() {
+  console.log("🚀 Aplicación inicializada");
   cargarMunicipios();
   actualizarBotonLimpiar(); // Estado inicial del botón
 }
