@@ -863,19 +863,11 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
 
-  const color = clasificacion.color?.toLowerCase() || "";
-  
-  let nivel = "Sin definir ⚪"; 
+  // Usa directamente lo que viene del backend
+  const nivel = clasificacion.nivel || "Sin definir ⚪";
+  const descripcion = clasificacion.descripcion || "Sin descripción disponible";
 
-  if (color.includes("28a745") || color.includes("verde")) {
-    nivel = "Buena 🟢";
-  } else if (color.includes("ff8800") || color.includes("naranja")) {
-    nivel = "Moderada 🟠";
-  } else if (color.includes("ff4444") || color.includes("rojo")) {
-    nivel = "Mala 🔴";
-  }
-
-  return `📊 Calidad del Aire (OMS 2021): ${nivel}`;
+  return `📊 Calidad del Aire (OMS 2021): ${nivel} — ${descripcion}`;
 }
 
 // ================================================================
