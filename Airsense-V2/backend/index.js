@@ -15,6 +15,38 @@ const path = require("path");
 const db = require("./basedatos");
 const healthRoutes = require('./health');
 
+// ==========================================================================
+// UTILIDAD: MANEJADOR ASÍNCRONO DE ERRORES (apiHandler)
+// ==========================================================================
+
+/**
+ * Manejador genérico para las rutas de la API (Controlador Asíncrono).
+ * Ejecuta una función 'controladora' y captura cualquier error asíncrono,
+ * enviando una respuesta 500 estandarizada en JSON.
+ *
+ * @param {function} controller - La función (req, res) que contiene la lógica del endpoint.
+ * @param {string} [endpointName="la ruta"] - Nombre del endpoint para los logs de error.
+ * @returns {function} Un nuevo middleware de Express.
+ */
+const apiHandler = (controller, endpointName = "la ruta") => {
+  
+  return async (req, res) => {
+    try {
+      // Ejecuta toda tu lógica (validaciones, BBDD, etc.)
+      await controller(req, res);
+      
+    } catch (error) {
+      // Si ALGO falla (un error en db.get... o cualquier otro)
+      // esto lo captura.
+      console.error(`❌ Error en ${endpointName}:`, error.message);
+      res.status(500).json({ 
+        error: `Error interno del servidor al procesar ${endpointName}` 
+      });
+    }
+  };
+};
+
+
 /*Instancia principal de la aplicación Express
   Maneja todas las rutas y middlewares del servidor*/
 const app = express();
@@ -51,36 +83,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.static(path.join(__dirname, "../AirSense"))); 
 
 
-// ==========================================================================
-// UTILIDAD: MANEJADOR ASÍNCRONO DE ERRORES (apiHandler)
-// ==========================================================================
-
-/**
- * Manejador genérico para las rutas de la API (Controlador Asíncrono).
- * Ejecuta una función 'controladora' y captura cualquier error asíncrono,
- * enviando una respuesta 500 estandarizada en JSON.
- *
- * @param {function} controller - La función (req, res) que contiene la lógica del endpoint.
- * @param {string} [endpointName="la ruta"] - Nombre del endpoint para los logs de error.
- * @returns {function} Un nuevo middleware de Express.
- */
-const apiHandler = (controller, endpointName = "la ruta") => {
-  
-  return async (req, res) => {
-    try {
-      // Ejecuta toda tu lógica (validaciones, BBDD, etc.)
-      await controller(req, res);
-      
-    } catch (error) {
-      // Si ALGO falla (un error en db.get... o cualquier otro)
-      // esto lo captura.
-      console.error(`❌ Error en ${endpointName}:`, error.message);
-      res.status(500).json({ 
-        error: `Error interno del servidor al procesar ${endpointName}` 
-      });
-    }
-  };
-};
 
 /* ==========================================================================
    ENDPOINTS DE LA API
@@ -327,30 +329,6 @@ app.get('/api/datos', apiHandler(
   // 2do Argumento: Nombre del endpoint para el log de errores
   "/api/datos"
 ));
-
-// ==========================================================================
-// RUTAS DE LA API (AÑADIR ESTO)
-// ==========================================================================
-
-// Ruta para obtener la lista de municipios
-app.get("/api/municipios", asyncHandler(async (req, res) => {
-    // 1. Llama a la función de la base de datos para obtener los municipios
-    const municipios = await db.getMunicipios(); 
-    
-    // 2. Respuesta exitosa
-    res.status(200).json(municipios);
-}, "/api/municipios"));
-
-
-// Ruta para obtener el diccionario de contaminantes
-app.get("/api/diccionario", asyncHandler(async (req, res) => {
-    // 1. Llama a la función de la base de datos para obtener el diccionario
-    const diccionario = await db.getDiccionario();
-    
-    // 2. Respuesta exitosa
-    res.status(200).json(diccionario);
-}, "/api/diccionario"));
-
 
 
 // ==========================================================================
