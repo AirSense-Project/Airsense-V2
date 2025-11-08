@@ -860,9 +860,6 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ================================================================
 // Función auxiliar 1: Obtener texto de calidad del aire
 // ================================================================
-// ================================================================
-// 🔹 Función auxiliar 1: Obtener texto de calidad del aire (CORREGIDA)
-// ================================================================
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
 
