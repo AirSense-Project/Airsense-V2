@@ -119,7 +119,7 @@ function mostrarDetalle(contaminante) {
 
 async function cargarDiccionario() {
   try {
-    contaminantes = await apiClient("/api/diccionario");
+    contaminantes = await apiClient("/diccionario");
     // Si todo sale bien, renderiza la lista
     renderizarLista();
 
