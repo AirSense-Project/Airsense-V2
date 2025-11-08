@@ -15,6 +15,11 @@
   </head>
 
   <body>
+    <!-- saltar directamente al mapa sin pasar por el header o filtros -->
+    <a href="#map" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-green-700 text-white p-2 rounded">
+      Saltar al contenido principal
+    </a>
+
     <!-- ========================= HEADER ========================= -->
     <!-- Encabezado global de la aplicación -->
     <header class="header" role="banner" aria-labelledby="titulo-sitio">
@@ -41,18 +46,22 @@
         <!-- Título principal de la sección -->
         <h1>🗺️ Visor geoespacial sobre la calidad del aire</h1>
          <!-- ========================= FILTROS ========================= -->
-        <div class="filtros-contenedor" role="search" aria-labelledby="titulo-filtros">
+        <div class="filtros-contenedor" role="search" aria-labelledby="titulo-filtros"
+          aria-describedby="instruccion-filtros"></div>
           <h2 id="titulo-filtros" class="sr-only">Filtros del mapa geoespacial</h2>
+          <p id="instruccion-filtros" class="sr-only">
+            Usa estos filtros para elegir municipio, año, estación y contaminante. Los controles se habilitarán progresivamente.
+          </p>
 
           <!-- Filtro de municipio -->
           <div class="filtro-item">
             <label for="selectMunicipio">📍 Municipio:</label>
             <select id="selectMunicipio" class="selector-municipio" aria-describedby="ayuda-municipio">
-              <p id="ayuda-municipio" class="sr-only">
-                Selecciona un municipio para habilitar los demás filtros.
-              </p>
               <option value="">-- Selecciona --</option>
             </select>
+            <p id="ayuda-municipio" class="sr-only">
+              Selecciona un municipio para habilitar los demás filtros.
+            </p>
           </div>
 
           <!-- Filtro de año -->
@@ -61,10 +70,10 @@
             <select id="selectAnio" class="selector-municipio" disabled aria-describedby="ayuda-anio">
               <option value="">-- Primero selecciona municipio --</option>
             </select>
-          </div>
           <p id="ayuda-anio" class="sr-only">
             Selecciona un año después de elegir el municipio.
           </p>
+          </div>
 
           <!-- Filtro de estación -->
           <div class="filtro-item">
@@ -72,10 +81,10 @@
             <select id="selectEstacion" class="selector-municipio" disabled aria-describedby="ayuda-estacion">
               <option value="">-- Primero selecciona año --</option>
             </select>
-          </div>
           <p id="ayuda-estacion" class="sr-only">
             Selecciona una estación de monitoreo después de elegir el año.
           </p>
+          </div>
 
            <!-- Filtro de contaminante -->
           <div class="filtro-item">
@@ -83,10 +92,10 @@
             <select id="selectContaminante" class="selector-municipio" disabled aria-describedby="ayuda-contaminante">
               <option value="">-- Primero selecciona año --</option>
             </select>
-          </div>
           <p id="ayuda-contaminante" class="sr-only">
             Selecciona un contaminante disponible después de elegir la estación.
           </p>
+          </div>
 
           <!-- Botón para limpiar los filtros -->
           <div class="filtro-item filtro-item--boton">
@@ -150,8 +159,9 @@
             <div id="estadoMapa" class="estado-mapa" role="status" aria-live="polite"> 
               Cargando mapa, por favor esperar </div>
             
-            <div id="map" class="mapa" role="application" aria-label="Mapa interactivo de calidad del aire en el Valle del Cauca"
-              aria-describedby="mapa-descripcion"> </div>
+            <div id="map" class="mapa" role="application"  tabindex="0" 
+              aria-label="Mapa interactivo de calidad del aire en el Valle del Cauca"
+              aria-describedby="mapa-descripcion "> </div>
               
             <p id="mapa-descripcion" class="sr-only">
               Mapa interactivo que muestra estaciones de monitoreo del aire. 
@@ -160,7 +170,7 @@
             </div> 
           
           <!-- Panel derecho: Diccionario -->
-          <aside id="diccionario" class="panel-diccionario" role="region" 
+          <aside id="diccionario" class="panel-diccionario" role="complementary"
             aria-labelledby="titulo-diccionario" aria-describedby="descripcion-diccionario">
 
             <p id="descripcion-diccionario" class="sr-only">
@@ -200,7 +210,8 @@
             <div id="vistaDetalle" class="diccionario__vista" aria-hidden="true" aria-live="polite">
               
               <button id="btnVolver" class="diccionario__btn-volver" 
-                aria-label="Volver a la lista de contaminantes" aria-controls="vistaLista">
+                aria-label="Volver a la lista de contaminantes" aria-controls="vistaLista"
+                aria-expanded="false">
                 ← Volver
               </button>
               <article
@@ -217,11 +228,12 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Cliente API para obtener datos -->
-    <script src="apiClient.js" defer></script>
+    <script src="js/apiClient.js" defer></script>
     <!-- Script javascript -->
-    <script src="script.js" defer></script>
+    <script src="js/script.js" defer></script>
     <!-- Script Diccionario-->
-    <script src="diccionario.js" defer></script>
-    <script src="accesibilidad.js" defer></script>
+    <script src="js/diccionario.js" defer></script>
+    <script src="js/accesibilidad.js" defer></script>
+
   </body>
 </html>

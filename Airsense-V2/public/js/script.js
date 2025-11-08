@@ -1154,6 +1154,7 @@ btnLimpiarFiltros.addEventListener('click', () => {
   // 6. Mostrar mensaje
   mostrarEstado("✨ Filtros limpiados - Vista general");
   ocultarEstado(2000);
+  selectMunicipio.focus(); 
 });
 
 // Actualizar el estado del botón cuando cambie cualquier filtro
@@ -1195,18 +1196,23 @@ function actualizarCapaMapa(estaEnModoOscuro) {
  * Función que activa o desactiva el modo oscuro en TODO el sitio
  */
 function setModoOscuro(activado) {
+  const textoModo = document.getElementById("estado-modo");
+
   if (activado) {
     document.body.classList.add('dark-mode');
     localStorage.setItem('modoOscuro', 'activado');
     actualizarCapaMapa(true);
-    btnModoOscuro.setAttribute('aria-pressed', 'true'); // ¡ROBUSTO!
+    btnModoOscuro.setAttribute('aria-pressed', 'true');
+    textoModo.textContent = "Modo oscuro activo"; // ← accesible
   } else {
     document.body.classList.remove('dark-mode');
     localStorage.setItem('modoOscuro', 'desactivado');
     actualizarCapaMapa(false);
-    btnModoOscuro.setAttribute('aria-pressed', 'false'); // ¡ROBUSTO!
+    btnModoOscuro.setAttribute('aria-pressed', 'false');
+    textoModo.textContent = "Modo claro activo"; // ← accesible
   }
 }
+
 
 // --- Lógica de Inicialización del Modo Oscuro ---
 
@@ -1238,4 +1244,9 @@ function inicializarVisor() {
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", inicializarVisor);
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarVisor();
+  const mapa = document.getElementById("map");
+  mapa.setAttribute("tabindex", "0"); // ya en HTML
+  mapa.focus({ preventScroll: true });
+});
