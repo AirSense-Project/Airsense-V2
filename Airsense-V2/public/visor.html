@@ -11,14 +11,14 @@
 
 <body class="bg-gray-100 font-sans text-gray-800">
 
-  <header class="header">
+  <header class="header"  role="banner">
     <div class="container">
       <div class="logo">
         <img 
           src="https://i.postimg.cc/vZJMmcDz/Whats-App-Image-2025-10-24-at-5-14-28-PM.jpg" 
           alt="Logo AirSense" 
         />
-        <h1>AirSense</h1>
+        <h1 id="titulo-sitio">AirSense</h1>
       </div>
 
       <nav class="nav" aria-label="Navegación principal del sitio">
@@ -144,11 +144,25 @@
     </div>
   </section>
 
+  <section 
+    id="datos" 
+    class="section bg-gray-100"
+    role="region"
+    aria-labelledby="titulo-datos"
+    aria-describedby="descripcion-datos">
+    
+    <!-- Título principal -->
+    <h2 id="titulo-datos">Datos Abiertos</h2>
 
-  <section id="datos" class="section bg-gray-100">
-    <h2>Datos Abiertos</h2>
+    <!-- Descripción visible -->
     <p>
       Visualiza la información histórica de la calidad del aire del Valle del Cauca (2011–2023).
+    </p>
+
+    <!-- Descripción oculta para lectores de pantalla -->
+    <p id="descripcion-datos" class="sr-only">
+      Sección que contiene información sobre el acceso a datos históricos de la calidad del aire,
+      almacenados en una base de datos Supabase con PostgreSQL.
     </p>
 
     <p class="mt-3">
@@ -162,11 +176,13 @@
         href="https://app.supabase.com/" 
         target="_blank" 
         rel="noopener noreferrer" 
-        class="link-bd">
+        class="link-bd"
+        aria-label="Ir a la plataforma Supabase para ver la base de datos">
         🔗 Supabase (Plataforma de la Base de Datos)
       </a>
     </p>
   </section>
+
 
   <section 
       id="contaminantes" 
