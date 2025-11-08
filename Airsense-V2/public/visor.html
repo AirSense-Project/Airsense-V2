@@ -44,7 +44,7 @@
       <div class="slide slide-1 active"
           role="group"
           aria-roledescription="diapositiva"
-          aria-label="Imagen de una hoja seca en un terreno rocoso"
+          aria-label="diapositiva 1 de 4: Imagen de una hoja seca en un terreno rocoso"
           aria-hidden="false">
       </div>
 
@@ -52,7 +52,7 @@
       <div class="slide slide-2"
           role="group"
           aria-roledescription="diapositiva"
-          aria-label="Imagen de un paisaje con un rio y un cielo despejado"
+          aria-label="diapositiva 2 de 4: Imagen de un paisaje con un rio y un cielo despejado"
           aria-hidden="true">
       </div>
 
@@ -60,7 +60,7 @@
       <div class="slide slide-3"
           role="group"
           aria-roledescription="diapositiva"
-          aria-label="Imagen de un desierto con una carretera y un cielo despejado"
+          aria-label="diapositiva 3 de 4: Imagen de un desierto con una carretera y un cielo despejado"
           aria-hidden="true">
       </div>
 
@@ -68,7 +68,7 @@
       <div class="slide slide-4"
           role="group"
           aria-roledescription="diapositiva"
-          aria-label="Imagen de una pradera con cielo despejado"
+          aria-label="diapositiva 4 de 4: Imagen de una pradera con cielo despejado"
           aria-hidden="true">
       </div>
     </div>
@@ -96,28 +96,28 @@
         class="dot active" 
         onclick="showSlide(0)" 
         role="tab" 
-        aria-label="Ir a la diapositiva 1">
+        aria-label="Ir a la diapositiva 1 de 4">
       </button>
       
       <button 
         class="dot" 
         onclick="showSlide(1)" 
         role="tab" 
-        aria-label="Ir a la diapositiva 2">
+        aria-label="Ir a la diapositiva 2 de 4">
       </button>
       
       <button 
         class="dot" 
         onclick="showSlide(2)" 
         role="tab" 
-        aria-label="Ir a la diapositiva 3">
+        aria-label="Ir a la diapositiva 3 de 4">
       </button>
 
       <button 
         class="dot" 
         onclick="showSlide(3)" 
         role="tab" 
-        aria-label="Ir a la diapositiva 4">
+        aria-label="Ir a la diapositiva 4 de 4">
       </button>
 
     </div>
@@ -161,46 +161,82 @@
     </p>
   </section>
 
-  <section id="contaminantes" class="section bg-white">
-    <h2 class="titulo">🌍 Contaminantes</h2>
+  <section 
+      id="contaminantes" 
+      class="section bg-white"
+      role="region"
+      aria-labelledby="titulo-contaminantes"
+      aria-describedby="descripcion-contaminantes">
 
-    <div class="contenedor">
-      <div class="card card1">
-        <h3>CO (Monóxido de carbono)</h3>
-        <p>Gas tóxico e incoloro que se produce por la combustión incompleta de gasolina, madera o carbón.</p>
-      </div>
+      <!-- Título de la sección -->
+      <h2 id="titulo-contaminantes" class="titulo">
+        🌍 Contaminantes
+      </h2>
 
-      <div class="card card2">
-        <h3>NO (Óxido nítrico)</h3>
-        <p>Proviene principalmente de los vehículos y plantas industriales. Contribuye a la formación del smog.</p>
-      </div>
+      <!-- Descripción oculta solo para lectores de pantalla -->
+      <p id="descripcion-contaminantes" class="sr-only">
+        Lista de principales contaminantes atmosféricos y su descripción.
+      </p>
 
-      <div class="card card3">
-        <h3>NO₂ (Dióxido de nitrógeno)</h3>
-        <p>Contaminante de color marrón rojizo. Se origina al quemar combustibles fósiles y afecta las vías respiratorias.</p>
-      </div>
+      <!-- Contenedor de las tarjetas -->
+      <div 
+        class="contenedor"
+        role="list"
+        aria-label="Lista de contaminantes atmosféricos">
 
-      <div class="card card4">
-        <h3>SO₂ (Dióxido de azufre)</h3>
-        <p>Producido por la quema de petróleo y carbón. Causa lluvia ácida y problemas respiratorios.</p>
-      </div>
+        <!-- Cada tarjeta -->
+        <article class="card card1" role="listitem" aria-labelledby="Imagen de una ciudad contaminada">
+          <h3 id="cont-co">CO (Monóxido de carbono)</h3>
+          <p>
+            Gas tóxico e incoloro que se produce por la combustión incompleta de gasolina, madera o carbón.
+          </p>
+        </article>
 
-      <div class="card card5">
-        <h3>O₃ (Ozono troposférico)</h3>
-        <p>Se forma cuando los contaminantes reaccionan con la luz solar. Irrita ojos y pulmones.</p>
-      </div>
+        <article class="card card2" role="listitem" aria-labelledby="Imagen del planeta tierra contaminado">
+          <h3 id="cont-no">NO (Óxido nítrico)</h3>
+          <p>
+            Proviene principalmente de los vehículos y plantas industriales. Contribuye a la formación del smog.
+          </p>
+        </article>
 
-      <div class="card card6">
-        <h3>PM₁₀ (Material particulado grueso)</h3>
-        <p>Pequeñas partículas sólidas del polvo, humo y hollín. Provienen del tráfico y la construcción.</p>
-      </div>
+        <article class="card card3" role="listitem" aria-labelledby="Imagen de un señor en un area verde, viendo a la distancia una ciudad contaminada">
+          <h3 id="cont-no2">NO₂ (Dióxido de nitrógeno)</h3>
+          <p>
+            Contaminante de color marrón rojizo. Se origina al quemar combustibles fósiles y afecta las vías respiratorias.
+          </p>
+        </article>
 
-      <div class="card card7">
-        <h3>PM₂.₅ (Material particulado fino)</h3>
-        <p>Partículas microscópicas que penetran los pulmones y la sangre. Surgen de motores y combustión doméstica.</p>
+        <article class="card card4" role="listitem" aria-labelledby="Imagen de una fabrica emanando contaminacióm">
+          <h3 id="cont-so2">SO₂ (Dióxido de azufre)</h3>
+          <p>
+            Producido por la quema de petróleo y carbón. Causa lluvia ácida y problemas respiratorios.
+          </p>
+        </article>
+
+        <article class="card card5" role="listitem" aria-labelledby="Imagen de una familia caminando por una zona contaminadad">
+          <h3 id="cont-o3">O₃ (Ozono troposférico)</h3>
+          <p>
+            Se forma cuando los contaminantes reaccionan con la luz solar. Irrita ojos y pulmones.
+          </p>
+        </article>
+
+        <article class="card card6" role="listitem" aria-labelledby="Imagen de planeta con la mitad normal y la otra mitad con contaminación">
+          <h3 id="cont-pm10">PM₁₀ (Material particulado grueso)</h3>
+          <p>
+            Pequeñas partículas sólidas del polvo, humo y hollín. Provienen del tráfico y la construcción.
+          </p>
+        </article>
+
+        <article class="card card7" role="listitem" aria-labelledby="Imagen de una familia estando en medio de un humo toxico">
+          <h3 id="cont-pm25">PM₂.₅ (Material particulado fino)</h3>
+          <p>
+            Partículas microscópicas que penetran los pulmones y la sangre. Surgen de motores y combustión doméstica.
+          </p>
+        </article>
+
       </div>
-    </div>
-  </section>
+    </section>
+
 
   <section id="nosotros" class="section bg-gray-100">
     <div class="contenido-nosotros">
