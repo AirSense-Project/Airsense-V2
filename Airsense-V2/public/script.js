@@ -125,7 +125,7 @@ async function cargarMunicipios() {
     // 2. Lógica de UI (¡tuyo y perfecto!)
     mostrarEstado("Cargando municipios...");
 
-    const data = await apiClient("/api/municipios"); 
+    const data = await apiClient("/municipios"); 
 
     // 4. Lógica de ÉXITO 
     if (!data || data.length === 0) {
