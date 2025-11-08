@@ -21,13 +21,13 @@
         <h1>AirSense</h1>
       </div>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegación principal del sitio">
         <a href="#inicio">Inicio</a>
         <a href="#mapa">Mapa</a>
         <a href="#datos">Datos</a>
         <a href="#contaminantes">Contaminantes</a>
         <a href="#nosotros">Sobre Nosotros</a>
-        <a href="#contacto">Contáctenos</a>
+        <a href="#contacto" aria-label="Ir a la sección de contacto en esta página">Contáctenos</a>
       </nav>
     </div>
   </header>
@@ -42,7 +42,7 @@
 
     <div class="overlay"></div>
 
-    <div class="content">
+    <div class="content" aria-live="polite">
       <h2 id="slide-text">
         ¿Sabías que en Colombia mueren más de 17.000 personas cada año por culpa del aire que respiran?
       </h2>
@@ -52,8 +52,9 @@
       <a href="#mapa" class="btn">Ver mapa geoespacial</a>
     </div>
 
-    <button id="prev" class="arrow left">&#10094;</button>
-    <button id="next" class="arrow right">&#10095;</button>
+    <button id="prev" class="arrow left" aria-label="Diapositiva anterior">&#10094;</button>
+    <button id="next" class="arrow right" aria-label="Siguiente diapositiva">&#10095;</button>
+
 
     <div class="ddots-container" role="tablist" aria-label="Navegación del carrusel">
       
@@ -97,7 +98,8 @@
         src="mapa.html" 
         class="mapa-frame" 
         loading="lazy"
-        title="Visor geoespacial">
+        title="Visor geoespacial"
+        aria-describedby="Descripcion de lo que hace el mapa">
       </iframe>
     </div>
   </section>

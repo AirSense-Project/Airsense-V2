@@ -330,6 +330,7 @@ html {
   position: relative;
   z-index: 1;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9); /* Sombra para contraste */
+  color: #ffffff;
 }
 
 .card h3 {
@@ -808,6 +809,7 @@ select:focus-visible {
   ya que son pequeños.
 */
 .dot:focus-visible {
+  outline: 3px solid #ffeb3b;
   outline-offset: 4px; /* Más espacio para que se note */
 }
 

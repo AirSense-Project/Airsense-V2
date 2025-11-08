@@ -1006,6 +1006,9 @@ function mostrarInformacionContaminante(datos) {
 
       // Actualiza color e ícono
       marcador.setIcon(crearIconoColor(color, true));
+      // popup adicional de calidad del aire
+      // const popupHTML = crearPopupCalidad(datos, textoCalidad);
+      // marcador.bindPopup(popupHTML).openPopup();
     }
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
