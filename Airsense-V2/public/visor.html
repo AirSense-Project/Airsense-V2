@@ -37,8 +37,8 @@
     <div class="slides" 
         role="region" 
         aria-roledescription="carrusel"
-        aria-label="Galería de imágenes de AirSense"
-        aria-live="polite">
+        aria-label="Galería de imágenes de AirSense. Usa las flechas o los puntos para cambiar de imagen."
+        aria-live="off">
 
       <!-- Diapositiva 1 -->
       <div class="slide slide-1 active"
@@ -86,8 +86,8 @@
       <a href="#mapa" class="btn">Ver mapa geoespacial</a>
     </div>
 
-    <button id="prev" class="arrow left" aria-label="Diapositiva anterior">&#10094;</button>
-    <button id="next" class="arrow right" aria-label="Siguiente diapositiva">&#10095;</button>
+    <button id="prev" class="arrow left" aria-label="Diapositiva anterior" aria-controls="slide-text">&#10094;</button>
+    <button id="next" class="arrow right" aria-label="Siguiente diapositiva" aria-controls="slide-text">&#10095;</button>
 
 
     <div class="ddots-container" role="tablist" aria-label="Navegación del carrusel">
@@ -123,20 +123,27 @@
     </div>
   </section>
 
-  <section id="mapa" class="section bg-white">
-    <h2>Mapa Geoespacial</h2>
+  <section id="mapa" class="section bg-white" role="region" aria-labelledby="titulo-mapa">
+    <h2 id="titulo-mapa">Mapa Geoespacial</h2>
     <p>Visualiza las estaciones de monitoreo del aire en el Valle del Cauca.</p>
+
+    <!-- Descripción oculta solo para lectores de pantalla -->
+    <p id="descripcion-mapa" class="sr-only">
+      Mapa interactivo que muestra la ubicación de las estaciones de monitoreo de la calidad del aire en el Valle del Cauca.
+      Puedes hacer zoom y seleccionar puntos para ver información detallada.
+    </p>
 
     <div class="mapa-container">
       <iframe 
         src="mapa.html" 
         class="mapa-frame" 
         loading="lazy"
-        title="Visor geoespacial"
-        aria-describedby="Descripcion de lo que hace el mapa">
+        title="Visor geoespacial del Valle del Cauca"
+        aria-describedby="descripcion-mapa">
       </iframe>
     </div>
   </section>
+
 
   <section id="datos" class="section bg-gray-100">
     <h2>Datos Abiertos</h2>
@@ -185,49 +192,49 @@
         aria-label="Lista de contaminantes atmosféricos">
 
         <!-- Cada tarjeta -->
-        <article class="card card1" role="listitem" aria-labelledby="Imagen de una ciudad contaminada">
+        <article class="card card1" role="listitem" aria-label="Imagen de una ciudad contaminada">
           <h3 id="cont-co">CO (Monóxido de carbono)</h3>
           <p>
             Gas tóxico e incoloro que se produce por la combustión incompleta de gasolina, madera o carbón.
           </p>
         </article>
 
-        <article class="card card2" role="listitem" aria-labelledby="Imagen del planeta tierra contaminado">
+        <article class="card card2" role="listitem" aria-label="Imagen del planeta tierra contaminado">
           <h3 id="cont-no">NO (Óxido nítrico)</h3>
           <p>
             Proviene principalmente de los vehículos y plantas industriales. Contribuye a la formación del smog.
           </p>
         </article>
 
-        <article class="card card3" role="listitem" aria-labelledby="Imagen de un señor en un area verde, viendo a la distancia una ciudad contaminada">
+        <article class="card card3" role="listitem" aria-label="Imagen de un señor en un area verde, viendo a la distancia una ciudad contaminada">
           <h3 id="cont-no2">NO₂ (Dióxido de nitrógeno)</h3>
           <p>
             Contaminante de color marrón rojizo. Se origina al quemar combustibles fósiles y afecta las vías respiratorias.
           </p>
         </article>
 
-        <article class="card card4" role="listitem" aria-labelledby="Imagen de una fabrica emanando contaminacióm">
+        <article class="card card4" role="listitem" aria-label="Imagen de una fabrica emanando contaminacióm">
           <h3 id="cont-so2">SO₂ (Dióxido de azufre)</h3>
           <p>
             Producido por la quema de petróleo y carbón. Causa lluvia ácida y problemas respiratorios.
           </p>
         </article>
 
-        <article class="card card5" role="listitem" aria-labelledby="Imagen de una familia caminando por una zona contaminadad">
+        <article class="card card5" role="listitem" aria-label="Imagen de una familia caminando por una zona contaminadad">
           <h3 id="cont-o3">O₃ (Ozono troposférico)</h3>
           <p>
             Se forma cuando los contaminantes reaccionan con la luz solar. Irrita ojos y pulmones.
           </p>
         </article>
 
-        <article class="card card6" role="listitem" aria-labelledby="Imagen de planeta con la mitad normal y la otra mitad con contaminación">
+        <article class="card card6" role="listitem" aria-label="Imagen de planeta con la mitad normal y la otra mitad con contaminación">
           <h3 id="cont-pm10">PM₁₀ (Material particulado grueso)</h3>
           <p>
             Pequeñas partículas sólidas del polvo, humo y hollín. Provienen del tráfico y la construcción.
           </p>
         </article>
 
-        <article class="card card7" role="listitem" aria-labelledby="Imagen de una familia estando en medio de un humo toxico">
+        <article class="card card7" role="listitem" aria-label="Imagen de una familia estando en medio de un humo toxico">
           <h3 id="cont-pm25">PM₂.₅ (Material particulado fino)</h3>
           <p>
             Partículas microscópicas que penetran los pulmones y la sangre. Surgen de motores y combustión doméstica.
@@ -238,89 +245,94 @@
     </section>
 
 
-  <section id="nosotros" class="section bg-gray-100">
+  <section 
+    id="nosotros" 
+    class="section bg-gray-100" 
+    role="region" 
+    aria-labelledby="titulo-nosotros"
+    aria-describedby="descripcion-nosotros">
+
     <div class="contenido-nosotros">
-      <h2>🌍 Sobre Nosotros 💚💚</h2>
+      <h2 id="titulo-nosotros">🌍 Sobre Nosotros 💚💚</h2>
+
+      <!-- Descripción oculta solo para lectores de pantalla -->
+      <p id="descripcion-nosotros" class="sr-only">
+        Sección que describe el propósito, valores y motivación del proyecto AirSense.
+      </p>
+
       <p>No somos expertos. No somos científicos reconocidos. Somos estudiantes. Personas que aprendemos mientras caminamos, que respiramos el mismo aire que queremos proteger.</p>
       <p>Este proyecto nació en las aulas, pero no se queda allí. Nació de preguntas sinceras: ¿Qué estamos respirando? ¿Cómo afecta a quienes amamos? ¿Qué podemos hacer, aunque sea poco?</p>
-      <p>Cada dato que mostramos, cada imagen que elegimos, cada palabra que escribimos, tiene un propósito: despertar conciencia. Porque detrás de cada contaminante hay una historia, una ciudad, una familia, un niño que juega, una abuela que camina, un árbol que resiste.</p>
-      <p>No queremos que este sitio sea solo informativo. Queremos que sea humano. Que invite a mirar el cielo con otros ojos, a entender que el aire no es invisible: es vida, es vínculo, es responsabilidad compartida.</p>
-      <p>Somos estudiantes, sí. Pero también somos ciudadanos, soñadores, y defensores de un futuro más limpio. Este es nuestro aporte. Y ojalá, también sea el comienzo de algo más grande.</p>
+      <p>Cada dato que mostramos, cada imagen que elegimos, cada palabra que escribimos, tiene un propósito: despertar conciencia.</p>
+      <p>No queremos que este sitio sea solo informativo. Queremos que sea humano. Que invite a mirar el cielo con otros ojos.</p>
+      <p>Somos estudiantes, sí. Pero también somos ciudadanos, soñadores, y defensores de un futuro más limpio.</p>
     </div>
 
     <div class="imagen-nosotros">
       <img 
         src="https://img.freepik.com/vector-premium/animales-dibujos-animados-jugando-bosque-vibrante-rodeado-arboles-altos-flores-colores_642161-4423.jpg?w=2000" 
-        alt="Bosque con animales felices"
-        loading="lazy" /> </div>
+        alt="Ilustración de animales jugando en un bosque vibrante con árboles y flores de colores"
+        loading="lazy" />
+    </div>
   </section>
 
-  <section id="contacto" class="section bg-gray-100 py-16">
+  <section 
+    id="contacto" 
+    class="section bg-gray-100 py-16"
+    role="form"
+    aria-labelledby="titulo-contacto"
+    aria-describedby="descripcion-contacto">
+
     <div class="container mx-auto max-w-3xl text-center px-4">
-      
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">Contáctenos</h2>
-      
-      <p class="text-xl text-gray-600 mb-12">
-        ¿Tienes preguntas o sugerencias? Escríbenos y te responderemos lo antes posible.
+      <h2 id="titulo-contacto" class="text-4xl font-bold text-gray-900 mb-4">
+        Contáctenos
+      </h2>
+
+      <p id="descripcion-contacto" class="text-xl text-gray-600 mb-12">
+        Sección para enviar consultas o sugerencias al equipo de AirSense mediante correo electrónico.
       </p>
-      
-      <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-lg mx-auto text-left">
-        
+
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-lg mx-auto text-left" role="group" aria-label="Información de contacto">
         <div class="bg-green-700 p-6">
-          <h3 class="text-2xl font-bold text-white">
-            Información de Contacto
-          </h3>
+          <h3 class="text-2xl font-bold text-white">Información de Contacto</h3>
         </div>
-        
+
         <div class="p-8">
           <p class="text-lg text-gray-700 mb-8">
             <strong>Correo:</strong> airsenseproyecto@gmail.com
           </p>
-          
+
           <a href="mailto:airsenseproyecto@gmail.com"
-             class="block w-full text-center bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 ease-in-out hover:bg-green-700 hover:shadow-lg transform hover:-translate-y-1">
+            class="block w-full text-center bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 ease-in-out hover:bg-green-700 hover:shadow-lg transform hover:-translate-y-1"
+            aria-label="Enviar un correo al equipo de AirSense">
             Enviar Correo
           </a>
         </div>
-        
       </div>
-      
     </div>
   </section>
 
-  <footer class="footer">
+  <footer class="footer" role="contentinfo" aria-label="Información del sitio AirSense">
     <div class="footer__contenido">
-
       <div class="footer__columna">
         <p class="footer__descripcion">
           Plataforma interactiva para visualizar y analizar la calidad del aire en el Valle del Cauca (2011-2023).
         </p>
+
         <div class="footer__github">
           <a 
-            href="https://github.com/AirSense-Project/Airsense-V2" 
-            target="_blank" 
-            rel="noopener noreferrer">
-            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-              <path
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-                0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94
-                -.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53
-                .63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-                0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-                0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
-                .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82
-                .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-                0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-                0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38
-                A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            href="https://github.com/AirSense-Project/Airsense-V2"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ver el código fuente del proyecto AirSense en GitHub">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58..." />
             </svg>
             Ver código en GitHub
           </a>
         </div>
       </div>
 
-      <div class="footer__columna">
+      <div class="footer__columna" role="navigation" aria-label="Enlaces del pie de página">
         <h4 class="footer__subtitulo">Enlaces</h4>
         <ul class="footer__lista">
           <li><a href="#sobre">Sobre el proyecto</a></li>
@@ -337,7 +349,7 @@
           Tecnología en Desarrollo de Software
         </p>
 
-        <div class="footer__equipo">
+        <div class="footer__equipo" aria-label="Equipo de desarrollo">
           <h5 class="footer__equipo-titulo">Equipo:</h5>
           <ul class="footer__equipo-lista">
             <li>👤 Andres Mauricio Peña Lopez 👤 Katherine Lopez Unas</li>
@@ -347,41 +359,20 @@
       </div>
     </div>
 
-    <div class="footer__logos">
+    <div class="footer__logos" aria-label="Logos de fuentes de datos">
       <p class="footer__logos-titulo">Fuentes de datos:</p>
       <div class="footer__logos-contenedor">
-        <a 
-          href="https://www.univalle.edu.co" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          title="Universidad del Valle">
-          <img 
-            src="https://www.univalle.edu.co/images/Univalle/70_Rojo.jpg" 
-            alt="Universidad del Valle"
-            class="footer__logo"
-            loading="lazy" /> </a>
+        <a href="https://www.univalle.edu.co" target="_blank" rel="noopener noreferrer" title="Universidad del Valle">
+          <img src="https://www.univalle.edu.co/images/Univalle/70_Rojo.jpg" alt="Logo de la Universidad del Valle" class="footer__logo" loading="lazy" />
+        </a>
 
-        <a 
-          href="https://www.cvc.gov.co" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          title="CVC">
-          <img 
-            src="https://www.cvc.gov.co/themes/portal/logo.svg" 
-            alt="CVC" 
-            class="footer__logo"
-            loading="lazy" /> </a>
+        <a href="https://www.cvc.gov.co" target="_blank" rel="noopener noreferrer" title="CVC">
+          <img src="https://www.cvc.gov.co/themes/portal/logo.svg" alt="Logo de la CVC" class="footer__logo" loading="lazy" />
+        </a>
 
-        <a 
-          href="https://www.cali.gov.co/dagma" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          title="DAGMA">
-          <img 
-            src="https://images.seeklogo.com/logo-png/43/2/dagma-logo-png_seeklogo-437405.png" 
-            alt="DAGMA"
-            class="footer__logo"
-            loading="lazy" /> </a>
+        <a href="https://www.cali.gov.co/dagma" target="_blank" rel="noopener noreferrer" title="DAGMA">
+          <img src="https://images.seeklogo.com/logo-png/43/2/dagma-logo-png_seeklogo-437405.png" alt="Logo del DAGMA" class="footer__logo" loading="lazy" />
+        </a>
       </div>
     </div>
 
@@ -392,6 +383,7 @@
       </p>
     </div>
   </footer>
+
 
   <script src="rutas.js" defer></script> 
 </body>
