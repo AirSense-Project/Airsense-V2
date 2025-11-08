@@ -1131,3 +1131,18 @@ select:focus-visible {
 body.dark-mode .popup-calidad {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/*Esto oculta el texto visualmente, pero sigue siendo leído por lectores de pantalla*/
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+

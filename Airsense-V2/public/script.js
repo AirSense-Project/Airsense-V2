@@ -1226,8 +1226,6 @@ const modoGuardado = localStorage.getItem('modoOscuro');
     setModoOscuro(!estaActivadoAhora);
 });
 
-
-
 // ==========================================================================\
 // INICIALIZACIÓN DE LA APLICACIÓN
 // ==========================================================================\
