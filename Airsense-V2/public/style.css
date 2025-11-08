@@ -1117,3 +1117,17 @@ select:focus-visible {
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
+
+/* Estilo para el nuevo texto de calidad del aire en el popup */
+.popup-calidad {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 10px 0 0 0; /* Añade un poco de espacio arriba */
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1); /* Una línea separadora */
+}
+
+/* En modo oscuro, la línea separadora debe ser más clara */
+body.dark-mode .popup-calidad {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

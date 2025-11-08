@@ -298,7 +298,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
     mostrarEstado(`❌ ${error.message}`);
     ocultarEstado(3000);
     
-    // 2. (¡LA MEJORA!) Actualiza el <select> para que no se quede "cargando"
+    // 2. Actualiza el <select> para que no se quede "cargando"
     selectAnio.innerHTML = '<option value="">⚠️ Error al cargar</option>';
     selectAnio.style.color = '#d9534f'; // Rojo
     selectAnio.disabled = true;
@@ -853,44 +853,88 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
   }
 }
 
+// Función auxiliar para obtener texto de calidad del aire
+function obtenerTextoCalidad(clasificacion) {
+  if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
+
+  const color = clasificacion.color?.toLowerCase() || "";
+  let nivel = clasificacion.descripcion || "Sin definir ⚪";
+
+  if (color.includes("28a745") || color.includes("verde")) {
+    nivel = "Buena 🟢";
+  } else if (color.includes("ff8800") || color.includes("naranja")) {
+    nivel = "Moderada 🟠";
+  } else if (color.includes("ff4444") || color.includes("rojo")) {
+    nivel = "Mala 🔴";
+  }
+
+  return `📊 Calidad del Aire (OMS 2021): ${nivel}`;
+}
+
 // ==========================================================================
 // RENDERIZAR INFORMACIÓN DEL CONTAMINANTE
 // ==========================================================================
 
-function mostrarInformacionContaminante(datos) {
-  
-  // --- Modificado ---
-  try {
-    if (estacionSeleccionada && marcadoresEstaciones[estacionSeleccionada]) {
-      const colorDeClasificacion = datos.clasificacion.color;
-      const marcador = marcadoresEstaciones[estacionSeleccionada];
-      marcador.setIcon(crearIconoColor(colorDeClasificacion, true));
-      
-    }
-  } catch (error) {
-    console.error("Error al actualizar el ícono del marcador:", error);
-  }
-  // --- FIN DEL BLOQUE A AÑADIR ---
-  // Ocultar instrucciones
-  const instrucciones = document.querySelector("panel-resultados");
-  if (instrucciones) {
-    instrucciones.classList.add("oculto");
-  }
-  const panel = document.getElementById("informacionContaminantes");
+// ================================================================
+// Función auxiliar 1: Obtener texto de calidad del aire
+// ================================================================
+function obtenerTextoCalidad(clasificacion) {
+  if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
 
-  // Construir HTML con la estructura de 3 niveles que diseñamos antes
-  const html = `
+  const color = clasificacion.color?.toLowerCase() || "";
+  let nivel = clasificacion.descripcion || "Sin definir ⚪";
+
+  if (color.includes("28a745") || color.includes("verde")) {
+    nivel = "Buena 🟢";
+  } else if (color.includes("ff8800") || color.includes("naranja")) {
+    nivel = "Moderada 🟠";
+  } else if (color.includes("ff4444") || color.includes("rojo")) {
+    nivel = "Mala 🔴";
+  }
+
+  return `📊 Calidad del Aire (OMS 2021): ${nivel}`;
+}
+
+// ================================================================
+// Función auxiliar 2: Crear HTML del popup del marcador
+// ================================================================
+function crearPopupCalidad(datos, textoCalidad) {
+  const color = datos.clasificacion.color;
+  return `
+    <div style="min-width: 200px; font-family: 'Segoe UI', sans-serif;">
+      <div style="background: #fff; padding: 10px; border-left: 5px solid ${color}; border-radius: 6px;">
+        <strong style="display: block; font-size: 1.1em; color: #2a5d67; margin-bottom: 5px;">
+          ${datos.contaminante.simbolo} (${datos.contaminante.tiempo_exposicion.texto})
+        </strong>
+        <div style="color: ${color}; font-weight: 600; margin-bottom: 6px;">
+          ${textoCalidad}
+        </div>
+        <div style="font-size: 0.85em; color: #555;">
+          Promedio: <strong>${datos.estadisticas.promedio.toFixed(2)}</strong> ${datos.contaminante.unidades}<br>
+          Máximo: <strong>${datos.estadisticas.maximo.toFixed(2)}</strong> ${datos.contaminante.unidades}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ================================================================
+// Función auxiliar 3: Crear HTML del panel lateral
+// ================================================================
+function crearPanelInformacion(datos, textoCalidad) {
+  return `
     <div class="informacion-contaminante">
       
       <!-- NIVEL 1: Hero Card -->
-      <div class="info-hero" style="background-color: ${
-        datos.clasificacion.color
-      }; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+      <div class="info-hero" style="background-color: ${datos.clasificacion.color}; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
         <h2 style="margin: 0 0 10px 0; color: #000; font-size: 1.8em;">
           ${datos.contaminante.simbolo}
         </h2>
         <p style="margin: 0; font-size: 1.2em; font-weight: 600; color: #000;">
           ${datos.contaminante.tiempo_exposicion.texto}
+        </p>
+        <p style="margin-top: 10px; font-weight: bold; color: #000;">
+          ${textoCalidad}
         </p>
       </div>
 
@@ -906,9 +950,7 @@ function mostrarInformacionContaminante(datos) {
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #2a5d67;">
               ${datos.estadisticas.promedio.toFixed(2)}
             </p>
-            <p style="margin: 0; font-size: 0.75em; color: #888;">${
-              datos.contaminante.unidades
-            }</p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
           
           <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
@@ -916,9 +958,7 @@ function mostrarInformacionContaminante(datos) {
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #ff4444;">
               ${datos.estadisticas.maximo.toFixed(2)}
             </p>
-            <p style="margin: 0; font-size: 0.75em; color: #888;">${
-              datos.contaminante.unidades
-            }</p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
           
           <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
@@ -926,9 +966,7 @@ function mostrarInformacionContaminante(datos) {
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #414141ff;">
               ${datos.estadisticas.minimo.toFixed(2)}
             </p>
-            <p style="margin: 0; font-size: 0.75em; color: #888;">${
-              datos.contaminante.unidades
-            }</p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
           
           <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
@@ -939,7 +977,7 @@ function mostrarInformacionContaminante(datos) {
             <p style="margin: 0; font-size: 0.75em; color: #888;">días</p>
           </div>
         </div>
-        
+
         ${
           datos.clasificacion.limites_oms
             ? `
@@ -958,40 +996,9 @@ function mostrarInformacionContaminante(datos) {
             `
             : ""
         }
-
-        <div style="margin-top: 15px; padding: 12px; background: #e8f4f8; border-radius: 6px; border-left: 4px solid #2a5d67;">
-          <p style="margin: 0; font-size: 0.9em; color: #2a5d67;">
-            <strong>Fecha del pico máximo:</strong><br>
-            ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
-          </p>
-        </div>
       </div>
 
-      <!-- NIVEL 3: Detalles Técnicos (Colapsable) -->
-      <details class="info-detalles" style="margin-bottom: 20px;">
-        <summary style="cursor: pointer; padding: 12px; background: #e9ecef; border-radius: 6px; font-weight: 600; color: #2a5d67;">
-          🔍 Ver detalles técnicos
-        </summary>
-        <div style="padding: 15px; background: #f8f9fa; border-radius: 0 0 6px 6px;">
-          <p style="margin: 8px 0;"><strong>Mediana:</strong> ${datos.estadisticas.mediana.toFixed(
-            2
-          )} ${datos.contaminante.unidades}</p>
-          <p style="margin: 8px 0;"><strong>Percentil 98:</strong> ${datos.estadisticas.percentil_98.toFixed(
-            2
-          )} ${datos.contaminante.unidades}</p>
-          <p style="margin: 8px 0;"><strong>Excedencias del límite actual:</strong> ${
-            datos.excedencias.excedencias_limite_actual
-          }</p>
-          <p style="margin: 8px 0;"><strong>% de excedencias:</strong> ${datos.excedencias.porcentaje_excedencias.toFixed(
-            2
-          )}%</p>
-          <p style="margin: 8px 0;"><strong>Representatividad temporal:</strong> ${datos.calidad_datos.representatividad_temporal.toFixed(
-            1
-          )}%</p>
-        </div>
-      </details>
-
-      <!-- Footer: Interpretación -->
+      <!-- NIVEL 3: Interpretación -->
       <div class="info-interpretacion" style="background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%); padding: 15px; border-radius: 8px; border: 2px solid #d1e7ec;">
         <h4 style="margin: 0 0 10px 0; color: #2a5d67; display: flex; align-items: center; gap: 8px;">
           <span>💡</span> Interpretación
@@ -1006,9 +1013,35 @@ function mostrarInformacionContaminante(datos) {
       </div>
     </div>
   `;
-
-  panel.innerHTML = html;
 }
+
+// ================================================================
+// FUNCIÓN PRINCIPAL: mostrarInformacionContaminante(datos)
+// ================================================================
+function mostrarInformacionContaminante(datos) {
+  const textoCalidad = obtenerTextoCalidad(datos.clasificacion);
+
+  try {
+    if (estacionSeleccionada && marcadoresEstaciones[estacionSeleccionada]) {
+      const marcador = marcadoresEstaciones[estacionSeleccionada];
+      const color = datos.clasificacion.color;
+
+      // Actualiza color e ícono
+      marcador.setIcon(crearIconoColor(color, true));
+
+      // Crea y muestra popup
+      const popupHTML = crearPopupCalidad(datos, textoCalidad);
+      marcador.bindPopup(popupHTML).openPopup();
+    }
+  } catch (error) {
+    console.error("Error al actualizar marcador o popup:", error);
+  }
+
+  // Inserta el panel lateral
+  const panel = document.getElementById("informacionContaminantes");
+  panel.innerHTML = crearPanelInformacion(datos, textoCalidad);
+}
+
 
 // ==========================================================================
 // FUNCIONES AUXILIARES PARA PANEL DE INFORMACIÓN
@@ -1184,7 +1217,6 @@ function actualizarCapaMapa(estaEnModoOscuro) {
 /**
  * Función que activa o desactiva el modo oscuro en TODO el sitio
  */
-// (Tu función "mejorada" con ARIA)
 function setModoOscuro(activado) {
   if (activado) {
     document.body.classList.add('dark-mode');
@@ -1216,6 +1248,8 @@ const modoGuardado = localStorage.getItem('modoOscuro');
     const estaActivadoAhora = document.body.classList.contains('dark-mode');
     setModoOscuro(!estaActivadoAhora);
 });
+
+
 
 // ==========================================================================\
 // INICIALIZACIÓN DE LA APLICACIÓN
