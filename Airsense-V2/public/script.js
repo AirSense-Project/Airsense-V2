@@ -320,7 +320,7 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
     
-    const estaciones = await apiClient(`/api/estaciones/${idMunicipio}`);
+    const estaciones = await apiClient(`/estaciones/${idMunicipio}`);
 
     // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
     mostrarEstacionesEnMapa(estaciones, null, false); 
