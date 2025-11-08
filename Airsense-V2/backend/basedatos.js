@@ -412,7 +412,7 @@ function clasificarCalidadAire(contaminante, valor, tiempoHoras) {
   } else if (valor <= limiteRegular) {
     resultado = {
       nivel: "Regular",
-      color: "ff8800",
+      color: "#ff8800",
       descripcion: "La calidad del aire supera las recomendaciones de la OMS. Puede afectar a personas sensibles (niños, ancianos, personas con enfermedades respiratorias)"
     };
   } else {

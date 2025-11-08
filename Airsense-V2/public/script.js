@@ -860,11 +860,15 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ================================================================
 // Función auxiliar 1: Obtener texto de calidad del aire
 // ================================================================
+// ================================================================
+// 🔹 Función auxiliar 1: Obtener texto de calidad del aire (CORREGIDA)
+// ================================================================
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
 
   const color = clasificacion.color?.toLowerCase() || "";
-  let nivel = clasificacion.descripcion || "Sin definir ⚪";
+  
+  let nivel = "Sin definir ⚪"; 
 
   if (color.includes("28a745") || color.includes("verde")) {
     nivel = "Buena 🟢";
