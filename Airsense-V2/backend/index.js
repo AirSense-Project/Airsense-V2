@@ -328,6 +328,30 @@ app.get('/api/datos', apiHandler(
   "/api/datos"
 ));
 
+// ==========================================================================
+// RUTAS DE LA API (AÑADIR ESTO)
+// ==========================================================================
+
+// Ruta para obtener la lista de municipios
+app.get("/api/municipios", asyncHandler(async (req, res) => {
+    // 1. Llama a la función de la base de datos para obtener los municipios
+    const municipios = await db.getMunicipios(); 
+    
+    // 2. Respuesta exitosa
+    res.status(200).json(municipios);
+}, "/api/municipios"));
+
+
+// Ruta para obtener el diccionario de contaminantes
+app.get("/api/diccionario", asyncHandler(async (req, res) => {
+    // 1. Llama a la función de la base de datos para obtener el diccionario
+    const diccionario = await db.getDiccionario();
+    
+    // 2. Respuesta exitosa
+    res.status(200).json(diccionario);
+}, "/api/diccionario"));
+
+
 
 // ==========================================================================
 // MANEJO DE ERRORES GLOBALES
