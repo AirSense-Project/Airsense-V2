@@ -858,29 +858,30 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ==========================================================================
 
 // ================================================================
-// Función auxiliar 1: Obtener texto de calidad del aire
-// ================================================================
-// ================================================================
-// 🔹 Función auxiliar 1: Obtener texto de calidad del aire (CORREGIDA)
+// Función auxiliar 1: Obtener texto de calidad del aire 
 // ================================================================
 function obtenerTextoCalidad(clasificacion) {
-  if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
+    if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
 
-  const color = clasificacion.color?.toLowerCase() || "";
-  
-  let nivel = "Sin definir ⚪"; 
+    const color = clasificacion.color?.toLowerCase() || "";
+    
+    // 1. Prioriza la detección de problemas (Mala y Moderada)
+    if (color.includes("ff4444") || color.includes("rojo")) {
+        return "📊 Calidad del Aire (OMS 2021): Mala 🔴";
+    } else if (color.includes("ff8800") || color.includes("naranja")) {
+        return "📊 Calidad del Aire (OMS 2021): Moderada 🟠";
+    } 
+    
+    // 2. Si el objeto de clasificación existe, pero no tiene un color de alarma, 
+    //    asumimos que la calidad es BUENA (el estado base).
+    //    Esto corrige el error 'Sin definir ⚪' cuando el backend no envía el color 'verde'.
+    if (clasificacion.color) { // Si el campo 'color' existe y no es ni rojo ni naranja
+         return "📊 Calidad del Aire (OMS 2021): Buena 🟢";
+    }
 
-  if (color.includes("28a745") || color.includes("verde")) {
-    nivel = "Buena 🟢";
-  } else if (color.includes("ff8800") || color.includes("naranja")) {
-    nivel = "Moderada 🟠";
-  } else if (color.includes("ff4444") || color.includes("rojo")) {
-    nivel = "Mala 🔴";
-  }
-
-  return `📊 Calidad del Aire (OMS 2021): ${nivel}`;
+    // 3. Fallback si el campo 'clasificacion' existe pero 'color' está vacío/nulo y no se pudo asumir 'Buena'.
+    return "📊 Calidad del Aire (OMS 2021): Sin definir ⚪";
 }
-
 // ================================================================
 // Función auxiliar 2: Crear HTML del popup del marcador
 // ================================================================
