@@ -860,14 +860,19 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ================================================================
 // Función auxiliar 1: Obtener texto de calidad del aire
 // ================================================================
+// ================================================================
+// 🔹 Función auxiliar 1: Obtener texto de calidad del aire (solo el nivel)
+// ================================================================
 function obtenerTextoCalidad(clasificacion) {
-  if (!clasificacion) return "📊 Calidad del Aire (OMS 2021): Sin datos ⚪";
+  if (!clasificacion) return "Sin datos ⚪";
 
-  // Usa directamente lo que viene del backend
   const nivel = clasificacion.nivel || "Sin definir ⚪";
-  const descripcion = clasificacion.descripcion || "Sin descripción disponible";
 
-  return `📊 Calidad del Aire (OMS 2021): ${nivel} — ${descripcion}`;
+  if (nivel.toLowerCase().includes("buena")) return "Buena 🟢";
+  if (nivel.toLowerCase().includes("regular")) return "Moderada 🟠";
+  if (nivel.toLowerCase().includes("mala")) return "Mala 🔴";
+
+  return nivel;
 }
 
 // ================================================================
