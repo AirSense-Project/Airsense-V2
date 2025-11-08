@@ -94,9 +94,17 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
  * @param {string} texto - El mensaje a mostrar.
  */
 function mostrarEstado(texto) {
+  const estadoMapa = document.getElementById("estadoMapa");
+
+  // Actualiza visualmente el mensaje
   statusMsg.textContent = texto;
-  document.getElementById("estadoMapa").classList.add("visible");
+  estadoMapa.classList.add("visible");
+
+  // 🟩 Mejora de accesibilidad: anuncio para lectores de pantalla
+  estadoMapa.setAttribute("aria-live", "polite");
+  estadoMapa.textContent = texto; 
 }
+
 
 /**
  * Oculta el mensaje de estado después de un tiempo.
@@ -117,6 +125,7 @@ function ocultarEstado(delay = 300) {
 
 async function cargarMunicipios() {
   // 1. Lógica de UI 
+  selectMunicipio.setAttribute('aria-busy', 'true');
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
   selectMunicipio.style.color = ''; // Resetear el color de error
@@ -1241,6 +1250,9 @@ function inicializarVisor() {
   console.log("🚀 Aplicación inicializada");
   cargarMunicipios();
   actualizarBotonLimpiar(); // Estado inicial del botón
+  // Mensaje accesible cuando el mapa está listo
+  const estadoMapa = document.getElementById("estadoMapa");
+  estadoMapa.textContent = " Mapa cargado correctamente.";
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
