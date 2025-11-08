@@ -33,12 +33,46 @@
   </header>
 
   <section id="inicio" class="carousel">
-    <div class="slides">
-      <div class="slide slide-1 active"></div>
-      <div class="slide slide-2"></div>
-      <div class="slide slide-3"></div>
-      <div class="slide slide-4"></div>
+    <!-- Contenedor principal del carrusel -->
+    <div class="slides" 
+        role="region" 
+        aria-roledescription="carrusel"
+        aria-label="Galería de imágenes de AirSense"
+        aria-live="polite">
+
+      <!-- Diapositiva 1 -->
+      <div class="slide slide-1 active"
+          role="group"
+          aria-roledescription="diapositiva"
+          aria-label="Imagen de una hoja seca en un terreno rocoso"
+          aria-hidden="false">
+      </div>
+
+      <!-- Diapositiva 2 -->
+      <div class="slide slide-2"
+          role="group"
+          aria-roledescription="diapositiva"
+          aria-label="Imagen de un paisaje con un rio y un cielo despejado"
+          aria-hidden="true">
+      </div>
+
+      <!-- Diapositiva 3 -->
+      <div class="slide slide-3"
+          role="group"
+          aria-roledescription="diapositiva"
+          aria-label="Imagen de un desierto con una carretera y un cielo despejado"
+          aria-hidden="true">
+      </div>
+
+      <!-- Diapositiva 4 -->
+      <div class="slide slide-4"
+          role="group"
+          aria-roledescription="diapositiva"
+          aria-label="Imagen de una pradera con cielo despejado"
+          aria-hidden="true">
+      </div>
     </div>
+
 
     <div class="overlay"></div>
 
