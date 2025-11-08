@@ -860,17 +860,15 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ================================================================
 // Función auxiliar 1: Obtener texto de calidad del aire
 // ================================================================
-// ================================================================
-// 🔹 Función auxiliar 1: Obtener texto de calidad del aire (solo el nivel)
-// ================================================================
+
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "Sin datos ⚪";
 
   const nivel = clasificacion.nivel || "Sin definir ⚪";
 
-  if (nivel.toLowerCase().includes("buena")) return "Buena 🟢";
-  if (nivel.toLowerCase().includes("regular")) return "Moderada 🟠";
-  if (nivel.toLowerCase().includes("mala")) return "Mala 🔴";
+  if (nivel.toLowerCase().includes("buena")) return "Calidad del aire: Buena 🟢";
+  if (nivel.toLowerCase().includes("regular")) return " Calidad del aire: Moderada 🟠";
+  if (nivel.toLowerCase().includes("mala")) return "Calidad del aire: Mala 🔴";
 
   return nivel;
 }
