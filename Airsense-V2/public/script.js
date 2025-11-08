@@ -1006,10 +1006,6 @@ function mostrarInformacionContaminante(datos) {
 
       // Actualiza color e ícono
       marcador.setIcon(crearIconoColor(color, true));
-
-      // Crea y muestra popup
-      const popupHTML = crearPopupCalidad(datos, textoCalidad);
-      marcador.bindPopup(popupHTML).openPopup();
     }
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
