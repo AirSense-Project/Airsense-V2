@@ -94,10 +94,11 @@ app.use(express.static(path.join(__dirname, "../AirSense")));
  */
 app.get("/api/municipios", apiHandler(
   async (req, res) => {
-    const municipios = await db.getMunicipios();
+    // La función db.getMunicipios() debe existir en tu basedatos.js
+    const municipios = await db.getMunicipios(); 
     res.json(municipios);
   }, 
-  "Error al obtener municipios"
+  "/api/municipios"
 ));
 
 /**
@@ -118,10 +119,14 @@ app.get("/api/estaciones/:id_municipio", apiHandler(
  * Ruta para obtener el listado completo de contaminantes y su descripción.
  * @returns {Array<Object>} Lista de objetos del diccionario de contaminantes.
  */
-app.get("/api/diccionario", apiHandler(async (req, res) => {
-  const diccionario = await db.getDiccionario();
-  res.json(diccionario);
-}, "/api/diccionario"));
+app.get("/api/diccionario", apiHandler(
+  async (req, res) => {
+    // Llama a la función de la base de datos para obtener el diccionario
+    const diccionario = await db.getDiccionario(); 
+    res.json(diccionario);
+  }, 
+  "/api/diccionario" // Nombre del endpoint para el log
+));
 
 /**
  * @route GET /api/anios/:id_municipio
