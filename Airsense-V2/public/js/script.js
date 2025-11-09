@@ -328,10 +328,9 @@ async function cargarAniosPorMunicipio(idMunicipio) {
  */
 
 async function cargarEstacionesPorMunicipio(idMunicipio) {
-  selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
   try {
     mostrarEstado("Cargando estaciones...");
-    
+     selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
     const estaciones = await apiClient(`/estaciones/${idMunicipio}`);
 
     // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
@@ -380,9 +379,7 @@ function mostrarEstacionesEnMapa(
   estaciones.forEach((est) => {
     if (est.latitud && est.longitud) {
       const esSeleccionada = estacionSeleccionada === est.id_estacion;
-
       const colorPorDefecto = "#9E9E9E"; //Gris
-
       const marker = L.marker(
         [parseFloat(est.latitud), parseFloat(est.longitud)],
         {
@@ -400,10 +397,7 @@ function mostrarEstacionesEnMapa(
       }
 
       marker.bindTooltip(est.nombre_estacion, {
-        permanent: false,
-        direction: "top",
-        offset: [0, -5],
-        opacity: 0.9,
+        permanent: false, direction: "top", offset: [0, -5], opacity: 0.9,
       });
 
       marcadoresEstaciones[est.id_estacion] = marker;
@@ -1207,6 +1201,10 @@ function limpiarPanelInformacion() {
 
 function mostrarErrorEnPanel(mensaje) {
   const panel = document.getElementById("informacionContaminantes");
+  if (!panel) {
+    console.warn("⚠️ No se encontró el panel de información para mostrar el error");
+    return;
+  }
   panel.innerHTML = `
     <div style="padding: 20px; text-align: center;">
       <div style="font-size: 3em; margin-bottom: 10px;">⚠️</div>
