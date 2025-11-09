@@ -913,78 +913,89 @@ function crearPanelInformacion(datos, textoCalidad) {
   return `
     <div class="informacion-contaminante">
 
-      <!-- 🟩 NIVEL 1: Encabezado principal -->
-      <div class="info-hero" style="background: ${datos.clasificacion.color}; padding: 18px; border-radius: 10px; margin-bottom: 18px;">
-        <h2>${datos.contaminante.simbolo}</h2>
-        <p><strong>${datos.contaminante.tiempo_exposicion.texto}</strong></p>
-        <p style="font-weight: bold;">${textoCalidad}</p>
+      <!-- 🟩 NIVEL 1: Hero principal -->
+      <div class="info-hero" style="background-color: ${datos.clasificacion.color}; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h2 style="margin: 0 0 10px 0; color: #000; font-size: 1.8em;">
+          ${datos.contaminante.simbolo}
+        </h2>
+        <p style="margin: 0; font-size: 1.2em; font-weight: 600; color: #000;">
+          ${datos.contaminante.tiempo_exposicion.texto}
+        </p>
+        <p style="margin: 5px 0 0 0; font-weight: bold; color: #333;">${textoCalidad}</p>
       </div>
 
       <!-- 📊 NIVEL 2: Estadísticas principales -->
-      <div class="info-estadisticas">
-        <h3>📊 Estadísticas principales</h3>
+      <div class="info-estadisticas" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin: 0 0 15px 0; color: #2a5d67; border-bottom: 2px solid #a8d0da; padding-bottom: 8px;">
+          📊 Estadísticas Principales
+        </h3>
 
         <div class="stat-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-          <div class="stat-item">
-            <p>Promedio</p>
-            <p><strong>${datos.estadisticas.promedio.toFixed(2)}</strong> ${datos.contaminante.unidades}</p>
+          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+            <p style="margin: 0; font-size: 0.85em; color: #666;">Promedio</p>
+            <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #2a5d67;">
+              ${datos.estadisticas.promedio.toFixed(2)}
+            </p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item">
-            <p>Máximo</p>
-            <p style="color: #ff4444;"><strong>${datos.estadisticas.maximo.toFixed(2)}</strong> ${datos.contaminante.unidades}</p>
+          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+            <p style="margin: 0; font-size: 0.85em; color: #666;">Máximo</p>
+            <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #ff4444;">
+              ${datos.estadisticas.maximo.toFixed(2)}
+            </p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item">
-            <p>Mínimo</p>
-            <p><strong>${datos.estadisticas.minimo.toFixed(2)}</strong> ${datos.contaminante.unidades}</p>
+          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+            <p style="margin: 0; font-size: 0.85em; color: #666;">Mínimo</p>
+            <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #414141ff;">
+              ${datos.estadisticas.minimo.toFixed(2)}
+            </p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item">
-            <p>Días con excedencias</p>
-            <p style="color: #ff8800;"><strong>${datos.excedencias.dias_excendecias}</strong></p>
+          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+            <p style="margin: 0; font-size: 0.85em; color: #666;">Días con excedencias</p>
+            <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #ff8800;">
+              ${datos.excedencias.dias_excendecias}
+            </p>
+            <p style="margin: 0; font-size: 0.75em; color: #888;">días</p>
           </div>
         </div>
 
         ${
           datos.clasificacion.limites_oms
             ? `
-              <div class="info-limites" style="background: #eef9f3; border-left: 4px solid #28a745; padding: 12px; border-radius: 8px; margin-top: 18px;">
-                <p><strong>🌍 Límites según OMS (${datos.clasificacion.limites_oms.tiempo_horas}h)</strong></p>
-                <p>
+              <div style="margin-top: 18px; padding: 12px; background: #eef9f3; border-radius: 6px; border-left: 4px solid #28a745;">
+                <p style="margin: 0 0 6px 0; font-size: 0.95em; color: #155724; font-weight: bold;">
+                  🌍 Límites según OMS (${datos.clasificacion.limites_oms.tiempo_horas}h)
+                </p>
+                <p style="margin: 0; font-size: 0.85em; color: #155724;">
                   Buena ≤ <strong>${datos.clasificacion.limites_oms.buena}</strong> ${datos.contaminante.unidades}<br>
                   Regular ≤ <strong>${datos.clasificacion.limites_oms.regular}</strong> ${datos.contaminante.unidades}
                 </p>
-                <p class="nota-fuente"><em>Fuente: ${datos.clasificacion.limites_oms.fuente}</em></p>
+                <p style="margin: 6px 0 0 0; font-size: 0.75em; color: #666; font-style: italic;">
+                  Fuente: ${datos.clasificacion.limites_oms.fuente}
+                </p>
               </div>
             `
             : ""
         }
 
-        <!-- 📅 FECHA DEL PICO MÁXIMO -->
-        <div class="info-pico">
-          <strong>📅 Fecha del pico máximo:</strong><br>
-          ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
+        <div style="margin-top: 15px; padding: 12px; background: #e8f4f8; border-radius: 6px; border-left: 4px solid #2a5d67;">
+          <p style="margin: 0; font-size: 0.9em; color: #2a5d67;">
+            <strong>📅 Fecha del pico máximo:</strong><br>
+            ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
+          </p>
         </div>
 
-        <script>
-          // 🔧 Ajuste dinámico para modo oscuro
-          const infoPico = document.querySelector('.info-pico');
-          if (document.body.classList.contains('dark-mode')) {
-            infoPico.style.background = '#2b3a3f';
-            infoPico.style.color = '#e6f7ff';
-            infoPico.style.borderLeft = '4px solid #56c0e0';
-          } else {
-            infoPico.style.background = '#f2fbff';
-            infoPico.style.color = '#2a5d67';
-            infoPico.style.borderLeft = '4px solid #3da3b0';
-          }
-        </script>
-
-        <!-- 🔍 DETALLES TÉCNICOS -->
-        <details class="info-detalles" style="margin-top: 15px;">
-          <summary>🔍 Ver detalles técnicos</summary>
-          <div style="padding: 10px 6px 15px 6px;">
+        <!-- 🔍 Detalles técnicos -->
+        <details class="info-detalles" style="margin-top: 18px;">
+          <summary style="cursor: pointer; padding: 12px; background: #e9ecef; border-radius: 6px; font-weight: 600; color: #2a5d67;">
+            🔍 Ver detalles técnicos
+          </summary>
+          <div style="padding: 15px; background: #f8f9fa; border-radius: 0 0 6px 6px;">
             <p><strong>Mediana:</strong> ${datos.estadisticas.mediana.toFixed(2)} ${datos.contaminante.unidades}</p>
             <p><strong>Percentil 98:</strong> ${datos.estadisticas.percentil_98.toFixed(2)} ${datos.contaminante.unidades}</p>
             <p><strong>Excedencias del límite actual:</strong> ${datos.excedencias.excedencias_limite_actual}</p>
@@ -995,16 +1006,21 @@ function crearPanelInformacion(datos, textoCalidad) {
       </div>
 
       <!-- 💡 NIVEL 3: Interpretación -->
-      <div class="info-interpretacion" style="margin-top: 20px;">
-        <h4>💡 Interpretación</h4>
-        <p>${datos.clasificacion.descripcion}</p>
-        <p style="font-style: italic; font-size: 0.85em;">
-          ℹ️ Basado en las <strong>Guías de Calidad del Aire de la OMS 2021</strong>.
+      <div class="info-interpretacion" style="background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%); padding: 15px; border-radius: 8px; border: 2px solid #d1e7ec;">
+        <h4 style="margin: 0 0 10px 0; color: #2a5d67; display: flex; align-items: center; gap: 8px;">
+          <span>💡</span> Interpretación
+        </h4>
+        <p style="margin: 0; line-height: 1.6; color: #555;">
+          ${datos.clasificacion.descripcion}
+        </p>
+        <p style="margin: 8px 0 0 0; font-size: 0.85em; color: #666; font-style: italic; border-top: 1px solid #e0e0e0; padding-top: 8px;">
+          ℹ️ Clasificación basada en las <strong>Guías de Calidad del Aire de la OMS 2021</strong>, más estrictas que la normativa colombiana vigente (Resolución 2254 de 2017).
         </p>
       </div>
     </div>
   `;
 }
+
 
 
 
