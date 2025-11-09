@@ -962,10 +962,24 @@ function crearPanelInformacion(datos, textoCalidad) {
         }
 
         <!-- 📅 FECHA DEL PICO MÁXIMO -->
-        <div class="info-pico" style="background: #f2fbff; border-left: 4px solid #3da3b0; padding: 12px 15px; border-radius: 8px; margin-top: 16px;">
+        <div class="info-pico">
           <strong>📅 Fecha del pico máximo:</strong><br>
           ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
         </div>
+
+        <script>
+          // 🔧 Ajuste dinámico para modo oscuro
+          const infoPico = document.querySelector('.info-pico');
+          if (document.body.classList.contains('dark-mode')) {
+            infoPico.style.background = '#2b3a3f';
+            infoPico.style.color = '#e6f7ff';
+            infoPico.style.borderLeft = '4px solid #56c0e0';
+          } else {
+            infoPico.style.background = '#f2fbff';
+            infoPico.style.color = '#2a5d67';
+            infoPico.style.borderLeft = '4px solid #3da3b0';
+          }
+        </script>
 
         <!-- 🔍 DETALLES TÉCNICOS -->
         <details class="info-detalles" style="margin-top: 15px;">

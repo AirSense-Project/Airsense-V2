@@ -1145,6 +1145,26 @@ body.dark-mode .popup-calidad {
   white-space: nowrap;
 }
 
+/* 📅 Bloque de Fecha del Pico Máximo */
+
+/* Modo claro */
+.info-pico {
+  background: #f2fbff;
+  color: #2a5d67;
+  border-left: 4px solid #3da3b0;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+/* 🌙 Modo oscuro */
+body.dark-mode .info-pico {
+  background: #2b3a3f;
+  color: #e6f7ff;
+  border-left: 4px solid #56c0e0;
+}
 
 
 
