@@ -129,10 +129,9 @@ async function cargarMunicipios() {
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
   selectMunicipio.style.color = ''; // Resetear el color de error
-  selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
 
   try {
-    // 2. Lógica de UI (¡tuyo y perfecto!)
+    // 2. Lógica de UI 
     mostrarEstado("Cargando municipios...");
 
     const data = await apiClient("/municipios"); 
@@ -141,7 +140,7 @@ async function cargarMunicipios() {
     if (!data || data.length === 0) {
       throw new Error("No se encontraron municipios");
     }
-
+    selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
     selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
     data.forEach((m) => {
       const option = document.createElement("option");
@@ -155,13 +154,12 @@ async function cargarMunicipios() {
     ocultarEstado(2000);
     habilitarLecturaSelect("selectMunicipio", "estado-municipio");
   } catch (error) {
-    // 5. Lógica de ERROR (¡tuyo y perfecto!)
-    // Este catch atrapa CUALQUIER error que 'apiClient' le lance.
+    // 5. Lógica de ERROR Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error cargando municipios:", error);
     mostrarEstado(`❌ ${error.message}`);
     ocultarEstado(3000);
     
-    // ¡Tu propia lógica de error en el select! ¡Perfecta!
+    // Lógica de error en el select
     selectMunicipio.innerHTML = `<option value="">⚠️ ${error.message}</option>`;
     selectMunicipio.style.color = '#d9534f';
   }finally {
