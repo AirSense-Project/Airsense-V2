@@ -1,12 +1,12 @@
 /* ============================================================
-   🌿 Módulo de Accesibilidad Unificado - AirSense
+  Módulo de Accesibilidad Unificado - AirSense
    ------------------------------------------------------------
    Este archivo se puede usar tanto en "mapa.html" como en
    "visor.html". Solo se ejecutan las funciones que correspondan
    según los elementos presentes en el DOM.
    ============================================================ */
 
-/* 🧭 Navegación accesible (para visor.html) */
+/* Navegación accesible (para visor.html) */
 function configurarNavegacionAccesible() {
   const secciones = document.querySelectorAll("section[id]");
   const enlaces = document.querySelectorAll(".nav a");
@@ -36,7 +36,7 @@ function configurarNavegacionAccesible() {
   });
 }
 
-/* 🌙 Modo oscuro accesible (para mapa.html) */
+/* Modo oscuro accesible (para mapa.html) */
 function configurarModoOscuroAccesible() {
   const boton = document.getElementById("btnModoOscuro");
   const textoModo = document.getElementById("estado-modo");
@@ -59,7 +59,7 @@ function configurarModoOscuroAccesible() {
   });
 }
 
-/* 🔄 Mensaje accesible al limpiar filtros (para mapa.html) */
+/* Mensaje accesible al limpiar filtros (para mapa.html) */
 function configurarMensajeLimpieza() {
   const btnLimpiar = document.getElementById("btnLimpiarFiltros");
   const mensaje = document.getElementById("mensaje-limpieza");
@@ -72,9 +72,44 @@ function configurarMensajeLimpieza() {
   });
 }
 
-/* 🚀 Inicialización automática */
+// =======================================================
+// ACCESIBILIDAD: Anunciar cambios en los filtros
+// =======================================================
+//Para el maoa.html
+function activarLecturaFiltrosAccesibles() {
+  const filtros = [
+    { id: "selectMunicipio", estado: "estado-municipio" },
+    { id: "selectAnio", estado: "estado-anio" },
+    { id: "selectEstacion", estado: "estado-estacion" },
+    { id: "selectContaminante", estado: "estado-contaminante" }
+  ];
+
+  filtros.forEach(filtro => {
+    const select = document.getElementById(filtro.id);
+    const estado = document.getElementById(filtro.estado);
+
+    if (select && estado) {
+      select.addEventListener("change", () => {
+        const texto = select.options[select.selectedIndex]?.text || "sin selección";
+        estado.textContent = `Seleccionado: ${texto}`;
+      });
+    }
+  });
+
+  // Anunciar cuando se limpian los filtros
+  const btnLimpiar = document.getElementById("btnLimpiarFiltros");
+  const estadoLimpiar = document.getElementById("estado-limpiar");
+  if (btnLimpiar && estadoLimpiar) {
+    btnLimpiar.addEventListener("click", () => {
+      estadoLimpiar.textContent = "Filtros restablecidos correctamente.";
+    });
+  }
+}
+
+/* Inicialización automática */
 document.addEventListener("DOMContentLoaded", () => {
   configurarNavegacionAccesible();
   configurarModoOscuroAccesible();
   configurarMensajeLimpieza();
+  activarLecturaFiltrosAccesibles();
 });

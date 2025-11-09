@@ -46,72 +46,71 @@
         <!-- Título principal de la sección -->
         <h1>🗺️ Visor geoespacial sobre la calidad del aire</h1>
          <!-- ========================= FILTROS ========================= -->
-        <div class="filtros-contenedor" role="search" aria-labelledby="titulo-filtros"
-          aria-describedby="instruccion-filtros">
+        <div class="filtros-contenedor" role="search" aria-labelledby="titulo-filtros" aria-describedby="instruccion-filtros">
           <h2 id="titulo-filtros" class="sr-only">Filtros del mapa geoespacial</h2>
           <p id="instruccion-filtros" class="sr-only">
             Usa estos filtros para elegir municipio, año, estación y contaminante. Los controles se habilitarán progresivamente.
           </p>
 
-          <!-- Filtro de municipio -->
+          <!-- 📍 MUNICIPIO -->
           <div class="filtro-item">
             <label for="selectMunicipio">📍 Municipio:</label>
-            <select id="selectMunicipio" class="selector-municipio" aria-describedby="ayuda-municipio">
-              <option value="">-- Selecciona --</option>
+            <select id="selectMunicipio" class="selector-municipio"
+                    aria-describedby="ayuda-municipio estado-municipio" aria-busy="false">
+              <option value="">-- Selecciona un municipio --</option>
             </select>
-            <p id="ayuda-municipio" class="sr-only">
-              Selecciona un municipio para habilitar los demás filtros.
-            </p>
+            <p id="ayuda-municipio" class="sr-only">Selecciona un municipio para habilitar los demás filtros.</p>
+            <div id="estado-municipio" class="sr-only" aria-live="polite"></div>
           </div>
 
-          <!-- Filtro de año -->
+          <!-- 📅 AÑO -->
           <div class="filtro-item">
             <label for="selectAnio">📅 Año:</label>
-            <select id="selectAnio" class="selector-municipio" disabled aria-describedby="ayuda-anio">
+            <select id="selectAnio" class="selector-municipio"
+                    aria-describedby="ayuda-anio estado-anio" disabled>
               <option value="">-- Primero selecciona municipio --</option>
             </select>
-          <p id="ayuda-anio" class="sr-only">
-            Selecciona un año después de elegir el municipio.
-          </p>
+            <p id="ayuda-anio" class="sr-only">Selecciona un año después de elegir el municipio.</p>
+            <div id="estado-anio" class="sr-only" aria-live="polite"></div>
           </div>
 
-          <!-- Filtro de estación -->
+          <!-- 🏭 ESTACIÓN -->
           <div class="filtro-item">
             <label for="selectEstacion">🏭 Estación:</label>
-            <select id="selectEstacion" class="selector-municipio" disabled aria-describedby="ayuda-estacion">
+            <select id="selectEstacion" class="selector-municipio"
+                    aria-describedby="ayuda-estacion estado-estacion" disabled>
               <option value="">-- Primero selecciona año --</option>
             </select>
-          <p id="ayuda-estacion" class="sr-only">
-            Selecciona una estación de monitoreo después de elegir el año.
-          </p>
+            <p id="ayuda-estacion" class="sr-only">Selecciona una estación de monitoreo después de elegir el año.</p>
+            <div id="estado-estacion" class="sr-only" aria-live="polite"></div>
           </div>
 
-           <!-- Filtro de contaminante -->
+          <!-- ⚗️ CONTAMINANTE -->
           <div class="filtro-item">
             <label for="selectContaminante">⚗️ Contaminante:</label>
-            <select id="selectContaminante" class="selector-municipio" disabled aria-describedby="ayuda-contaminante">
-              <option value="">-- Primero selecciona año --</option>
+            <select id="selectContaminante" class="selector-municipio"
+                    aria-describedby="ayuda-contaminante estado-contaminante" disabled>
+              <option value="">-- Primero selecciona estación --</option>
             </select>
-          <p id="ayuda-contaminante" class="sr-only">
-            Selecciona un contaminante disponible después de elegir la estación.
-          </p>
+            <p id="ayuda-contaminante" class="sr-only">Selecciona un contaminante después de elegir la estación.</p>
+            <div id="estado-contaminante" class="sr-only" aria-live="polite"></div>
           </div>
 
-          <!-- Botón para limpiar los filtros -->
+          <!-- 🗑️ LIMPIAR -->
           <div class="filtro-item filtro-item--boton">
-              <label aria-hidden="true">&nbsp;</label> <!-- Espacio para alinear con los demás -->
-              <button id="btnLimpiarFiltros" class="btn-limpiar-filtros" 
-                      title="Limpiar todos los filtros" 
-                      aria-label="Limpiar todos los filtros y reiniciar el mapa"
-                      aria-describedby="ayuda-limpiar">
-                🗑️ Limpiar
-              </button>
-              <p id="ayuda-limpiar" class="sr-only">
-                Restablece todos los filtros a su valor predeterminado y limpia el mapa.
-              </p>
-              <div id="mensaje-limpieza" class="sr-only" aria-live="polite"></div>
-            </div>
+            <label aria-hidden="true">&nbsp;</label>
+            <button id="btnLimpiarFiltros" class="btn-limpiar-filtros"
+                    title="Limpiar todos los filtros"
+                    aria-label="Limpiar todos los filtros y reiniciar el mapa"
+                    aria-describedby="ayuda-limpiar">
+              🗑️ Limpiar
+            </button>
+            <p id="ayuda-limpiar" class="sr-only">
+              Restablece todos los filtros a su valor predeterminado y limpia el mapa.
+            </p>
+            <div id="estado-limpiar" class="sr-only" aria-live="polite"></div>
           </div>
+        </div>
 
          <!-- ========================= VISTA PRINCIPAL ========================= -->
         <div class="vista-principal">
