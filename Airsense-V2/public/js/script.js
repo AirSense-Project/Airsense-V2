@@ -280,7 +280,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
   selectAnio.innerHTML = '<option value="">Cargando años...</option>';
   selectAnio.disabled = true;
   selectAnio.style.color = ''; 
-  selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
+
   try {
     mostrarEstado("Cargando años disponibles...");
     const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
@@ -289,6 +289,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
       throw new Error("Error al obtener años");
     }
     const data = await response.json();
+    selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
     selectAnio.innerHTML = '<option value="">-- Selecciona año --</option>';
     data.anios_disponibles.forEach((anio) => {
       const option = document.createElement("option");
@@ -461,19 +462,8 @@ function crearPopupInteractivo(est, anio) {
       ${anio ? `
         <button 
           onclick="window.centrarMapaEnEstacion(${est.id_estacion})"
-          style="
-            width: 100%;
-            padding: 10px 12px;
-            background: #2a5d67;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95em;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(42, 93, 103, 0.2);
-          "
+          style=" width: 100%; padding: 10px 12px; background: #2a5d67; color: white; border: none; border-radius: 
+            6px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(42, 93, 103, 0.2);"
           onmouseover="this.style.background='#1e4a54'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(42, 93, 103, 0.3)'"
           onmouseout="this.style.background='#2a5d67'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(42, 93, 103, 0.2)'"
         >
@@ -554,47 +544,21 @@ function crearPanelInformacion(datos, textoCalidad) {
         }
 
         <!-- 📅 FECHA DEL PICO MÁXIMO -->
-        <div style="
-          background: #f2fbff;
-          border-left: 4px solid #3da3b0;
-          padding: 12px 15px;
-          border-radius: 8px;
-          margin-top: 16px;
-          font-size: 0.95em;
-          color: #2a5d67;
-        ">
+        <div style="background: #f2fbff; border-left: 4px solid #3da3b0; padding: 12px 15px; border-radius: 8px; 
+          margin-top: 16px; font-size: 0.95em; color: #2a5d67;">
           <strong>📅 Fecha del pico máximo:</strong><br>
           ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
         </div>
 
         <!-- 🔍 DETALLES TÉCNICOS -->
-        <details style="
-          background: #ffffff;
-          border: 1px solid #d5e4e9;
-          border-radius: 10px;
-          margin-top: 15px;
-          padding: 0 14px;
-          transition: all 0.3s ease;
-        ">
-          <summary style="
-            cursor: pointer;
-            list-style: none;
-            padding: 12px 0;
-            font-weight: 600;
-            color: #2a5d67;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-          ">
+        <details style=" background: #ffffff; border: 1px solid #d5e4e9;
+          border-radius: 10px; margin-top: 15px; padding: 0 14px; transition: all 0.3s ease;">
+          <summary style="cursor: pointer; list-style: none; padding: 12px 0; font-weight: 600; color: #2a5d67;
+            display: flex; align-items: center; gap: 6px;">
             <span style="font-size: 1.1em;">🔍</span> Ver detalles técnicos
           </summary>
 
-          <div style="
-            padding: 10px 6px 15px 6px;
-            font-size: 0.9em;
-            color: #333;
-            line-height: 1.6;
-          ">
+          <div style="padding: 10px 6px 15px 6px; font-size: 0.9em; color: #333; line-height: 1.6;">
             <p><strong>Mediana:</strong> ${datos.estadisticas.mediana.toFixed(2)} ${datos.contaminante.unidades}</p>
             <p><strong>Percentil 98:</strong> ${datos.estadisticas.percentil_98.toFixed(2)} ${datos.contaminante.unidades}</p>
             <p><strong>Excedencias del límite actual:</strong> ${datos.excedencias.excedencias_limite_actual}</p>
