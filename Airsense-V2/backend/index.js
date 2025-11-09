@@ -67,22 +67,13 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/visor.html"));
 });
 
-// 2. RUTA DE LA ANTIGUA PÁGINA PRINCIPAL (/public)
-app.get("/public", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
 // ... CÓDIGO DE MANEJO DE ERRORES GLOBALES ...
 
+// ==========================================================================
+// CONFIGURACIÓN DE MIDDLEWARES ESTÁTICOS 
+// ==========================================================================
 
-// ==========================================================================
-// CONFIGURACIÓN DE MIDDLEWARES ESTÁTICOS (Mover aquí abajo)
-// ==========================================================================
-// ¡Mover estas líneas aquí!
 app.use(express.static(path.join(__dirname, "../public"))); 
-app.use(express.static(path.join(__dirname, "../AirSense"))); 
-
-
 
 /* ==========================================================================
    ENDPOINTS DE LA API
