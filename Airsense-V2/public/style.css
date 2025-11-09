@@ -102,25 +102,23 @@ h1 {
 
 .filtros-contenedor {
   display: flex;
-  flex-wrap: wrap;              /* 🔁 Permite varias filas si no cabe */
-  justify-content: center;      /* 🔹 Centra todo horizontalmente */
-  align-items: flex-end;        /* 🔹 Alinea selects y botón por la base */
-  gap: 1.2rem;                  /* 🔹 Espacio entre elementos */
-  margin: 1.5rem auto 2rem;
-  padding: 10px 20px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
   background: transparent;
   border: none;
-  max-width: 100%;
-  box-sizing: border-box;
+  box-shadow: none;
 }
 
 .filtro-item {
+  flex: 0 0 auto;
+  width: 200px;
   display: flex;
-  flex-direction: column;       /* 🔹 Label arriba, select abajo */
-  align-items: stretch;
-  min-width: 180px;
-  max-width: 220px;
-  flex: 1 1 auto;               /* 🔹 Se adapta al ancho disponible */
+  flex-direction: column;
+  align-items: center;
 }
 
 .filtro-item label {
@@ -168,8 +166,6 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-width: 150px;
-  max-width: 180px;
 }
 
 .btn-limpiar-filtros {
