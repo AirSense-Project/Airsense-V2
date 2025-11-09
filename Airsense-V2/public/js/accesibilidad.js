@@ -83,9 +83,61 @@ function activarLecturaFiltrosAccesibles() {
   }
 }
 
+/**
+ * Activa la lectura accesible de un <select> por ARIA.
+ * @param {string} idSelect - ID del elemento <select>
+ * @param {string} idEstado - ID del elemento aria-live donde se anunciarán cambios
+ */
+function habilitarLecturaSelect(idSelect, idEstado) {
+  const select = document.getElementById(idSelect);
+  const estado = document.getElementById(idEstado);
+
+  if (!select || !estado) return;
+
+  // Anunciar cambio de opción
+  select.addEventListener("change", () => {
+    const texto = select.options[select.selectedIndex].text;
+    estado.textContent = texto
+      ? `Seleccionaste ${texto}.`
+      : "No se ha seleccionado ninguna opción.";
+  });
+
+  // Anunciar al navegar con flechas
+  select.addEventListener("focus", () => {
+    const texto = select.options[select.selectedIndex]?.text || "";
+    estado.textContent = texto
+      ? `Actualmente estás parado en ${texto}.`
+      : "Selecciona una opción para continuar.";
+  });
+}
+
+/**
+ * Envía mensajes accesibles a los lectores de pantalla
+ * sin mostrarlos visualmente (usa .sr-only y aria-live).
+ * @param {string} mensaje - Texto que se anunciará por ARIA.
+ */
+function anunciarAccesibilidad(mensaje) {
+  const region = document.getElementById("aria-live-region");
+  if (!region) return;
+  
+  // Limpia el contenido anterior para forzar lectura
+  region.textContent = "";
+  setTimeout(() => {
+    region.textContent = mensaje;
+  }, 100); // pequeño retardo para asegurar que el lector lo detecte
+}
+
+
 /* Inicialización automática */
 document.addEventListener("DOMContentLoaded", () => {
   configurarNavegacionAccesible();
   configurarMensajeLimpieza();
   activarLecturaFiltrosAccesibles();
+
+  
+  // Activar lectura de selects individuales (si ya están en DOM)
+  habilitarLecturaSelect("selectMunicipio", "estado-municipio");
+  habilitarLecturaSelect("selectAnio", "estado-anio");
+  habilitarLecturaSelect("selectEstacion", "estado-estacion");
+  habilitarLecturaSelect("selectContaminante", "estado-contaminante");
 });

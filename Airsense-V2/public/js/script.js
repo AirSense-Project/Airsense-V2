@@ -129,6 +129,7 @@ async function cargarMunicipios() {
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
   selectMunicipio.style.color = ''; // Resetear el color de error
+  selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
 
   try {
     // 2. Lógica de UI (¡tuyo y perfecto!)
@@ -150,8 +151,9 @@ async function cargarMunicipios() {
     });
     selectMunicipio.disabled = false;
     mostrarEstado("Municipios cargados", "exito");
+    anunciarAccesibilidad(`${data.length} municipios disponibles para seleccionar.`);
     ocultarEstado(2000);
-
+    habilitarLecturaSelect("selectMunicipio", "estado-municipio");
   } catch (error) {
     // 5. Lógica de ERROR (¡tuyo y perfecto!)
     // Este catch atrapa CUALQUIER error que 'apiClient' le lance.
@@ -280,6 +282,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
   selectAnio.innerHTML = '<option value="">Cargando años...</option>';
   selectAnio.disabled = true;
   selectAnio.style.color = ''; 
+  selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
   try {
     mostrarEstado("Cargando años disponibles...");
     const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
@@ -302,6 +305,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
       `${data.anios_disponibles.length} años disponibles para ${data.municipio}.`
     );
     ocultarEstado(2500);
+    habilitarLecturaSelect("selectAnio", "estado-anio");
   } catch (error) {
     // 1. Muestra tu "toast" de error (¡Perfecto!)
     mostrarEstado(`❌ ${error.message}`);
@@ -323,9 +327,9 @@ async function cargarAniosPorMunicipio(idMunicipio) {
  * Obtiene las estaciones de un municipio y las muestra en el mapa.
  * @param {string} idMunicipio - El ID del municipio.
  */
-// ASÍ QUEDA (Limpio y "Comprensible")
 
 async function cargarEstacionesPorMunicipio(idMunicipio) {
+  selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
   try {
     mostrarEstado("Cargando estaciones...");
     
@@ -336,7 +340,7 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
     
     mostrarEstado(`${estaciones.length} estaciones encontradas.`);
     ocultarEstado(2500);
-
+    habilitarLecturaSelect("selectEstacion", "estado-estacion");
   } catch (error) {
     // 4. Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error al cargar estaciones:", error);
@@ -667,7 +671,8 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
 
     selectContaminante.innerHTML =
       '<option value="">-- Selecciona contaminante --</option>';
-
+    
+    selectContaminante.setAttribute("aria-label", `Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
     dataContaminantes.contaminantes.forEach((cont) => {
       cont.tiempos_exposicion.forEach((tiempo) => {
         const option = document.createElement("option");
@@ -685,6 +690,7 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
       `${dataContaminantes.total_contaminantes} contaminantes disponibles.`
     );
     ocultarEstado(2500);
+    habilitarLecturaSelect("selectContaminante", "estado-contaminante");
   } catch (error) {
     console.error("❌ Error al cargar contaminantes:", error);
     mostrarEstado(`❌ ${error.message}`);
@@ -699,7 +705,9 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
 
 selectMunicipio.addEventListener("change", async (e) => {
   const idMunicipio = e.target.value;
+  const municipioTexto = e.target.options[e.target.selectedIndex]?.text;
 
+  anunciarAccesibilidad(`Seleccionaste ${municipioTexto || "ningún municipio"}`);
   console.log("🏙️ Cambio de municipio:", idMunicipio);
 
   // Limpieza general
@@ -710,6 +718,7 @@ selectMunicipio.addEventListener("change", async (e) => {
   if (!idMunicipio) {
     map.setView([4, -76.55], 8.5);
     mostrarEstado("Vista general del Valle del Cauca");
+        anunciarAccesibilidad("Vista general del Valle del Cauca cargada.");
     ocultarEstado(2000);
     return;
   }
@@ -725,6 +734,7 @@ selectMunicipio.addEventListener("change", async (e) => {
 
 selectAnio.addEventListener("change", async (e) => {
   const anio = e.target.value;
+  anunciarAccesibilidad(`Año seleccionado: ${anio || "ninguno"}`);
   const idMunicipio = selectMunicipio.value;
 
   console.log("📅 Cambio de año:", anio);
@@ -783,6 +793,9 @@ selectAnio.addEventListener("change", async (e) => {
 
 selectEstacion.addEventListener("change", async (e) => {
   const idEstacion = e.target.value;
+  const estacionTexto = e.target.options[e.target.selectedIndex]?.text;
+  anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
+
   const anio = selectAnio.value;
 
   console.log("🏭 Cambio de estación:", idEstacion);
@@ -811,6 +824,9 @@ selectEstacion.addEventListener("change", async (e) => {
 
 selectContaminante.addEventListener("change", async (e) => {
   const idExposicion = e.target.value;
+  const contaminanteTexto = e.target.options[e.target.selectedIndex]?.text;
+  anunciarAccesibilidad(`Seleccionaste el contaminante ${contaminanteTexto || "ninguno"}`);
+
   if (!idExposicion) {
     limpiarPanelInformacion(); // Limpia el panel si deselecciona
     return;
@@ -1162,6 +1178,7 @@ btnLimpiarFiltros.addEventListener('click', () => {
 
   // 6. Mostrar mensaje
   mostrarEstado("✨ Filtros limpiados - Vista general");
+  anunciarAccesibilidad("Filtros reiniciados. Mapa actualizado a vista general.");
   ocultarEstado(2000);
   selectMunicipio.focus(); 
 });

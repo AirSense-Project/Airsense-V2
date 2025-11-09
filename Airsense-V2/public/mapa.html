@@ -15,6 +15,7 @@
   </head>
 
   <body>
+
     <!-- saltar directamente al mapa sin pasar por el header o filtros -->
     <a href="#map" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-green-700 text-white p-2 rounded">
       Saltar al contenido principal
@@ -23,7 +24,7 @@
     <!-- ========================= HEADER ========================= -->
     <!-- Encabezado global de la aplicación -->
     <header class="header" role="banner" aria-labelledby="titulo-sitio">
-          <div class="header__contenido">
+      <div class="header__contenido">
         <h1 class="header__titulo" id="titulo-sitio">🌍 AirSense</h1>
 
         <!-- Botón para alternar entre modo claro y modo oscuro -->
@@ -222,6 +223,10 @@
       </div> <!-- FIN contenedor -->
     </main>
     
+    <!-- Zona invisible para mensajes de lector de pantalla -->
+    <div id="aria-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+
      <!-- ========================= SCRIPTS ========================= -->
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
