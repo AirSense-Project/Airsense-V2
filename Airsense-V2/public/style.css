@@ -102,11 +102,10 @@ h1 {
 
 .filtros-contenedor {
   display: flex;
-  flex-direction: row;         /* ✅ Horizontal por defecto */
-  flex-wrap: nowrap;           /* No se rompen a otra línea */
-  justify-content: center;     /* Centrado horizontal */
-  align-items: flex-end;       /* Alinear verticalmente los selectores */
-  gap: 20px;                   /* Espaciado entre filtros */
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
   margin-bottom: 20px;
   padding: 20px;
   background: transparent;
@@ -114,17 +113,14 @@ h1 {
   box-shadow: none;
 }
 
-/* Cada filtro individual (Municipio, Año, etc.) */
 .filtro-item {
   flex: 0 0 auto;
-  width: auto;                 /* Se adapta al contenido */
-  min-width: 180px;            /* Evita que sea demasiado pequeño */
+  width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Etiquetas de los filtros */
 .filtro-item label {
   font-weight: 600;
   margin-bottom: 8px;
@@ -167,7 +163,6 @@ h1 {
 }
 
 .filtro-item--boton {
-  align-self: flex-end;        /* ✅ Alinea con el resto de selectores */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -776,8 +771,7 @@ details[open] summary {
   }
 
   .filtros-contenedor {
-    flex-direction: column;    /* ✅ Vertical */
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
     padding: 15px;
   }
