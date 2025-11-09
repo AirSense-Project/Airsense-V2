@@ -36,29 +36,6 @@ function configurarNavegacionAccesible() {
   });
 }
 
-/* Modo oscuro accesible (para mapa.html) */
-function configurarModoOscuroAccesible() {
-  const boton = document.getElementById("btnModoOscuro");
-  const textoModo = document.getElementById("estado-modo");
-
-  if (!boton) return; // ← Solo si existe
-
-  boton.addEventListener("click", () => {
-    const modoOscuroActivo = document.body.classList.toggle("dark-mode");
-    boton.setAttribute("aria-pressed", modoOscuroActivo);
-    boton.setAttribute(
-      "aria-label",
-      modoOscuroActivo ? "Modo oscuro activado" : "Modo claro activado"
-    );
-
-    if (textoModo) {
-      textoModo.textContent = modoOscuroActivo
-        ? "Modo oscuro activo"
-        : "Modo claro activo";
-    }
-  });
-}
-
 /* Mensaje accesible al limpiar filtros (para mapa.html) */
 function configurarMensajeLimpieza() {
   const btnLimpiar = document.getElementById("btnLimpiarFiltros");
@@ -109,7 +86,6 @@ function activarLecturaFiltrosAccesibles() {
 /* Inicialización automática */
 document.addEventListener("DOMContentLoaded", () => {
   configurarNavegacionAccesible();
-  configurarModoOscuroAccesible();
   configurarMensajeLimpieza();
   activarLecturaFiltrosAccesibles();
 });
