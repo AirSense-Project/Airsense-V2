@@ -280,7 +280,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
   selectAnio.innerHTML = '<option value="">Cargando años...</option>';
   selectAnio.disabled = true;
   selectAnio.style.color = ''; 
-  selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
+
   try {
     mostrarEstado("Cargando años disponibles...");
     const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
@@ -289,6 +289,7 @@ async function cargarAniosPorMunicipio(idMunicipio) {
       throw new Error("Error al obtener años");
     }
     const data = await response.json();
+      selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
     selectAnio.innerHTML = '<option value="">-- Selecciona año --</option>';
     data.anios_disponibles.forEach((anio) => {
       const option = document.createElement("option");
