@@ -32,22 +32,40 @@ let contaminantes = [];  // Almacena los datos cargados desde el backend
 // (Tu función "mejorada" con ARIA)
 function cambiarVista(vista) {
   if (vista === "detalle") {
-    // Oculta la lista
+    // Oculta la lista (inaccesible y sin foco)
     vistaLista.classList.remove("diccionario__vista--activa");
-    vistaLista.setAttribute("aria-hidden", "true"); 
+    vistaLista.setAttribute("aria-hidden", "true");
+    vistaLista.inert = true; // Evita que reciba foco o eventos
 
     // Muestra el detalle
     vistaDetalle.classList.add("diccionario__vista--activa");
-    vistaDetalle.setAttribute("aria-hidden", "false"); 
-    
-  } else { // "lista"
-    // Oculta el detalle
+    vistaDetalle.setAttribute("aria-hidden", "false");
+    vistaDetalle.inert = false;
+
+    // Mueve el foco al botón "Volver"
+    requestAnimationFrame(() => btnVolver.focus());
+  } 
+  else if (vista === "lista") {
+    // Quita el foco actual antes de ocultar la vista detalle
+    if (document.activeElement === btnVolver) {
+      document.activeElement.blur();
+    }
+
+    // Oculta el detalle (inaccesible y sin foco)
     vistaDetalle.classList.remove("diccionario__vista--activa");
-    vistaDetalle.setAttribute("aria-hidden", "true"); 
-    
+    vistaDetalle.setAttribute("aria-hidden", "true");
+    vistaDetalle.inert = true;
+
     // Muestra la lista
     vistaLista.classList.add("diccionario__vista--activa");
-    vistaLista.setAttribute("aria-hidden", "false"); 
+    vistaLista.setAttribute("aria-hidden", "false");
+    vistaLista.inert = false;
+
+    // Devuelve el foco a la lista de contaminantes
+    requestAnimationFrame(() => {
+      const primerItem = listaContaminantes.querySelector(".diccionario__item");
+      if (primerItem) primerItem.focus();
+    });
   }
 }
 

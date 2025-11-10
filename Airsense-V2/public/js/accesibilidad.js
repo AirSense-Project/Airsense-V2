@@ -127,6 +127,32 @@ function anunciarAccesibilidad(mensaje) {
   }, 100); // pequeño retardo para asegurar que el lector lo detecte
 }
 
+/**
+ * Notifica la carga de opciones de un <select> y actualiza accesibilidad.
+ * @param {Object} params
+ * @param {number} params.cantidad - Cantidad de elementos cargados.
+ * @param {string} params.tipo - Tipo de elemento (ej. "municipios", "estaciones", "contaminantes").
+ * @param {string} params.selectId - ID del <select> a habilitar para lectura ARIA.
+ * @param {HTMLElement} [params.selectElement] - Opcional: el <select> HTML para actualizar aria-label.
+ * @param {string} [params.textoLabel] - Opcional: texto a usar en aria-label. Si no se pasa, se usa "cantidad tipo".
+ */
+function notificarCarga({ cantidad, tipo, selectId, selectElement = null, textoLabel = null }) {
+  // Mensaje visual
+  mostrarEstado(`${cantidad} ${tipo} cargados.`, "exito");
+  ocultarEstado(2500);
+
+  // Accesibilidad
+  anunciarAccesibilidad(`${cantidad} ${tipo} disponibles para seleccionar.`);
+  habilitarLecturaSelect(selectId, `estado-${tipo}`);
+
+  // Actualizar aria-label si se pasa el select
+  if (selectElement) {
+    const label = textoLabel || `${cantidad} ${tipo} disponibles`;
+    selectElement.setAttribute("aria-label", label);
+  }
+}
+
+
 
 /* Inicialización automática */
 document.addEventListener("DOMContentLoaded", () => {

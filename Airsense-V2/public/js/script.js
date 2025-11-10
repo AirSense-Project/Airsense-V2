@@ -131,14 +131,11 @@ async function cargarMunicipios() {
   try {
     // 2. Lógica de UI 
     mostrarEstado("Cargando municipios...");
-
     const data = await apiClient("/municipios"); 
 
     // 4. Lógica de ÉXITO 
-    if (!data || data.length === 0) {
-      throw new Error("No se encontraron municipios");
-    }
-    selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
+    if (!data || data.length === 0) {throw new Error("No se encontraron municipios");}
+
     selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
     data.forEach((m) => {
       const option = document.createElement("option");
@@ -146,22 +143,24 @@ async function cargarMunicipios() {
       option.textContent = m.nombre_municipio;
       selectMunicipio.appendChild(option);
     });
+
     selectMunicipio.disabled = false;
-    mostrarEstado("Municipios cargados", "exito");
-    anunciarAccesibilidad(`${data.length} municipios disponibles para seleccionar.`);
-    ocultarEstado(2000);
-    habilitarLecturaSelect("selectMunicipio", "estado-municipio");
+
+     notificarCarga({
+      cantidad: data.length, tipo: "municipios",
+      selectId: "selectMunicipio", selectElement: selectMunicipio,
+      textoLabel: `Municipio (${data.length} opciones disponibles)`
+    });
+
   } catch (error) {
     // 5. Lógica de ERROR Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error cargando municipios:", error);
     mostrarEstado(`❌ ${error.message}`);
     ocultarEstado(3000);
-    
     // Lógica de error en el select
     selectMunicipio.innerHTML = `<option value="">⚠️ ${error.message}</option>`;
     selectMunicipio.style.color = '#d9534f';
   }finally {
-    // Se ejecuta SIEMPRE (en éxito o error)
     selectMunicipio.setAttribute('aria-busy', 'false'); 
   }
 }
@@ -304,7 +303,6 @@ async function cargarAniosPorMunicipio(idMunicipio) {
     ocultarEstado(2500);
     habilitarLecturaSelect("selectAnio", "estado-anio");
   } catch (error) {
-    // 1. Muestra tu "toast" de error (¡Perfecto!)
     mostrarEstado(`❌ ${error.message}`);
     ocultarEstado(3000);
     
@@ -333,17 +331,16 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
     // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
     mostrarEstacionesEnMapa(estaciones, null, false); 
     
-    mostrarEstado(`${estaciones.length} estaciones encontradas.`);
-    ocultarEstado(2500);
-    mostrarEstado(`${estaciones.length} estaciones encontradas.`, { tipo: "exito" });
-    anunciarAccesibilidad(`${estaciones.length} estaciones disponibles para seleccionar.`);
-    habilitarLecturaSelect("selectEstacion", "estado-estacion");
+    notificarCarga({
+      cantidad: estaciones.length, tipo: "estaciones",
+      selectId: "selectEstacion", selectElement: selectEstacion,
+      textoLabel: `Estación (${estaciones.length} opciones disponibles)`
+    });
   } catch (error) {
     // 4. Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error al cargar estaciones:", error);
-    // Ahora muestra el error real de la API.
     mostrarEstado(`❌ ${error.message}`); 
-    ocultarEstado(3000); 
+    ocultarEstado(3000);
   }
 }
 
@@ -420,6 +417,7 @@ function mostrarEstacionesEnMapa(
       window.sincronizarEstacionConSelector(estaciones[0].id_estacion);
     }, 500); // Pequeño delay para que se vea la animación
   }
+    notificarCarga({ cantidad: estaciones.length, tipo: "estaciones", selectId: "selectEstacion" });
 }
 
 // ==========================================================================
@@ -577,9 +575,7 @@ window.centrarMapaEnEstacion = function (idEstacion) {
     map.setView(latlng, 15, { animate: true, duration: 1 });
 
     // Cerrar el popup después de centrar
-    setTimeout(() => {
-      marker.closePopup();
-    }, 1500);
+    setTimeout(() => { marker.closePopup(); }, 1500);
 
     mostrarEstado("📍 Mapa centrado en la estación");
     ocultarEstado(2000);
@@ -595,15 +591,12 @@ window.seleccionarMunicipioDesdeMarkador = async function (idMunicipio) {
 
   // 1. Actualizar el selector
   selectMunicipio.value = idMunicipio;
-
   // 2. Limpiar filtros dependientes
   resetearFiltrosDependientes(1);
   limpiarEstacionesDelMapa();
   limpiarInfoBox();
-
   // 3. Cargar años disponibles
   await cargarAniosPorMunicipio(idMunicipio);
-
   // 4. Cargar estaciones del municipio
   await cargarEstacionesPorMunicipio(idMunicipio);
 };
@@ -637,10 +630,8 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
   try {
     mostrarEstado("Cargando contaminantes disponibles...");
 
-    const responseContaminantes = await fetch(
-      `${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`
-    );
-
+    const responseContaminantes = await fetch(`${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`);
+    
     if (!responseContaminantes.ok) {
       if (responseContaminantes.status === 404) {
         throw new Error("No hay contaminantes medidos en este período");
@@ -650,10 +641,8 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
 
     const dataContaminantes = await responseContaminantes.json();
 
-    selectContaminante.innerHTML =
-      '<option value="">-- Selecciona contaminante --</option>';
+    selectContaminante.innerHTML = '<option value="">-- Selecciona contaminante --</option>';
     
-    selectContaminante.setAttribute("aria-label", `Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
     dataContaminantes.contaminantes.forEach((cont) => {
       cont.tiempos_exposicion.forEach((tiempo) => {
         const option = document.createElement("option");
@@ -667,11 +656,12 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
 
     selectContaminante.disabled = false;
 
-    mostrarEstado(
-      `${dataContaminantes.total_contaminantes} contaminantes disponibles.`
-    );
-    ocultarEstado(2500);
-    habilitarLecturaSelect("selectContaminante", "estado-contaminante");
+    notificarCarga({
+      cantidad: dataContaminantes.total_contaminantes,
+      tipo: "contaminantes", selectId: "selectContaminante",
+      selectElement: selectContaminante,
+      textoLabel: `Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`
+    });
   } catch (error) {
     console.error("❌ Error al cargar contaminantes:", error);
     mostrarEstado(`❌ ${error.message}`);
@@ -719,7 +709,6 @@ selectAnio.addEventListener("change", async (e) => {
   const idMunicipio = selectMunicipio.value;
 
   console.log("📅 Cambio de año:", anio);
-
   resetearFiltrosDependientes(2);
 
   if (!anio) {
@@ -730,10 +719,7 @@ selectAnio.addEventListener("change", async (e) => {
   // Si se selecciona un año, cargar estaciones CON interactividad
   try {
     mostrarEstado(`Cargando estaciones operativas en ${anio}...`);
-
-    const response = await fetch(
-      `${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`
-    );
+    const response = await fetch(`${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -741,12 +727,9 @@ selectAnio.addEventListener("change", async (e) => {
       }
       throw new Error("Error al obtener estaciones");
     }
-
     const data = await response.json();
-
     // Mostrar en el mapa (CON interactividad y selección automática si solo hay 1)
     mostrarEstacionesEnMapa(data.estaciones, anio, true);
-
     // Llenamos el selector de estaciones
     selectEstacion.innerHTML =
       '<option value="">-- Selecciona estación --</option>';
@@ -829,9 +812,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
   try {
     mostrarEstado("📊 Cargando datos del contaminante...");
 
-    const response = await fetch(
-      `${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
-    );
+    const response = await fetch(`${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -846,8 +827,8 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 
     // Renderizar en el panel de información
     mostrarInformacionContaminante(datos);
-
     mostrarEstado("✅ Datos cargados correctamente");
+    anunciarAccesibilidad("Datos cargados correctamente y mostrados en el panel.");
     ocultarEstado(2000);
   } catch (error) {
     console.error("❌ Error al cargar datos históricos:", error);
@@ -856,6 +837,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 
     // Mostrar error en el panel
     mostrarErrorEnPanel(error.message);
+    anunciarAccesibilidad(`Error: ${error.message}`);
   }
 }
 
@@ -866,7 +848,6 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 // ================================================================
 // Función auxiliar 1: Obtener texto de calidad del aire
 // ================================================================
-
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "Sin datos ⚪";
 
@@ -1017,7 +998,6 @@ function crearPanelInformacion(datos, textoCalidad) {
   `;
 }
 
-
 // ================================================================
 // FUNCIÓN PRINCIPAL: mostrarInformacionContaminante(datos)
 // ================================================================
@@ -1051,7 +1031,6 @@ function mostrarInformacionContaminante(datos) {
 
 function formatearFecha(fechaISO) {
   if (!fechaISO) return "No disponible";
-
   const fecha = new Date(fechaISO);
   const opciones = {
     year: "numeric",
@@ -1060,7 +1039,6 @@ function formatearFecha(fechaISO) {
     hour: "2-digit",
     minute: "2-digit",
   };
-
   return fecha.toLocaleDateString("es-CO", opciones);
 }
 
@@ -1132,7 +1110,6 @@ function mostrarErrorEnPanel(mensaje) {
 // ==========================================================================
 // BOTÓN LIMPIAR FILTROS
 // ==========================================================================
-
 const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
 
 // Verofica si hay filtros activos
@@ -1166,20 +1143,15 @@ btnLimpiarFiltros.addEventListener('click', () => {
   selectEstacion.disabled = true;
   selectContaminante.value = '';
   selectContaminante.disabled = true;
-
   // 2. Limpiar mapa
   limpiarEstacionesDelMapa();
   limpiarInfoBox();
-
   // 3. Volver a la vista general
   map.setView([4, -76.55], 8.5);
-
   // 4. Limpiar panel de información
   limpiarPanelInformacion();
-
   // 5. Actualizar estado del botón
   actualizarBotonLimpiar();
-
   // 6. Mostrar mensaje
   mostrarEstado("✨ Filtros limpiados - Vista general");
   anunciarAccesibilidad("Filtros reiniciados. Mapa actualizado a vista general.");
@@ -1197,9 +1169,7 @@ selectContaminante.addEventListener('change', actualizarBotonLimpiar);
 // MODO OSCURO (CON CAMBIO DE MAPA)
 // ==========================================================================
 
-/**
- * Función que cambia la capa del mapa (tiles) según el modo oscuro.
- */
+/*Función que cambia la capa del mapa (tiles) según el modo oscuro.*/
 function actualizarCapaMapa(estaEnModoOscuro) {
   if (estaEnModoOscuro) {
     // Si el mapa claro está, quitarlo
@@ -1222,9 +1192,7 @@ function actualizarCapaMapa(estaEnModoOscuro) {
   }
 }
 
-/**
- * Función que activa o desactiva el modo oscuro en TODO el sitio
- */
+/*Función que activa o desactiva el modo oscuro en el sitio*/
 function setModoOscuro(activado) {
   const textoModo = document.getElementById("estado-modo");
 
@@ -1242,7 +1210,6 @@ function setModoOscuro(activado) {
     textoModo.textContent = "Modo claro activo"; // ← accesible
   }
 }
-
 
 // --- Lógica de Inicialización del Modo Oscuro ---
 
@@ -1273,8 +1240,6 @@ function inicializarVisor() {
   actualizarBotonLimpiar(); // Estado inicial del botón
   // Mensaje accesible cuando el mapa está listo
   const estadoMapa = document.getElementById("estadoMapa");
-  //estadoMapa.textContent = " Mapa cargado correctamente.";
-  //ocultarEstado(2000);
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
