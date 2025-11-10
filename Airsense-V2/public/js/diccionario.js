@@ -113,36 +113,46 @@ function renderizarLista() {
    ========================================================================== */
 function mostrarDetalle(contaminante) {
   contenidoDetalle.innerHTML = `
-    <h3 id="detalleTitulo" tabindex="-1">${contaminante.simbolo} — ${contaminante.nombre}</h3>
+    <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
     <div class="diccionario__seccion">
       <h4>¿Qué es?</h4>
-      <p id="detalleQueEs" tabindex="-1">${contaminante.que_es}</p>
+      <p>${contaminante.que_es}</p>
     </div>
     <div class="diccionario__seccion">
       <h4>Causas</h4>
-      <p id="detalleCausas" tabindex="-1">${contaminante.causas}</p>
+      <p>${contaminante.causas}</p>
     </div>
     <div class="diccionario__seccion">
       <h4>Consecuencias</h4>
-      <p id="detalleConsecuencias" tabindex="-1">${contaminante.consecuencias}</p>
+      <p>${contaminante.consecuencias}</p>
     </div>
   `;
 
-  // Cambiar vista a detalle
+  // Cambiar la vista de lista a detalle
   cambiarVista("detalle");
 
-  // Foco inicial en el título
-  document.getElementById("detalleTitulo").focus();
+  // Mover foco al contenedor detalle
+  vistaDetalle.focus();
 
-  // Leer todo el contenido con aria-live
-  const anuncio = `
-    ${contaminante.simbolo} — ${contaminante.nombre}.
-    Qué es: ${contaminante.que_es}.
-    Causas: ${contaminante.causas}.
-    Consecuencias: ${contaminante.consecuencias}.
-  `;
-  ariaLive.textContent = "";
-  setTimeout(() => { ariaLive.textContent = anuncio; }, 100);
+  // Lectura accesible sección por sección
+  const ariaLive = document.getElementById("aria-live-region");
+  ariaLive.textContent = ""; // limpiar antes
+
+  setTimeout(() => {
+    ariaLive.textContent = `${contaminante.simbolo} — ${contaminante.nombre}.`;
+  }, 100);
+
+  setTimeout(() => {
+    ariaLive.textContent = `Qué es: ${contaminante.que_es}.`;
+  }, 600);
+
+  setTimeout(() => {
+    ariaLive.textContent = `Causas: ${contaminante.causas}.`;
+  }, 1200);
+
+  setTimeout(() => {
+    ariaLive.textContent = `Consecuencias: ${contaminante.consecuencias}.`;
+  }, 1800);
 }
 
 /* ==========================================================================
