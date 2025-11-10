@@ -884,17 +884,41 @@ function obtenerTextoCalidad(clasificacion) {
 function crearPopupCalidad(datos, textoCalidad) {
   const color = datos.clasificacion.color;
   return `
-    <div style="min-width: 200px; font-family: 'Segoe UI', sans-serif;">
-      <div style="background: #fff; padding: 10px; border-left: 5px solid ${color}; border-radius: 6px;">
-        <strong style="display: block; font-size: 1.1em; color: #2a5d67; margin-bottom: 5px;">
+    <div 
+      style="min-width: 200px; font-family: 'Segoe UI', sans-serif;"
+      role="dialog"
+      aria-label="Información de calidad del aire"
+      aria-live="polite"
+    >
+      <div 
+        style="background: #fff; padding: 10px; border-left: 5px solid ${color}; border-radius: 6px;"
+        role="group"
+        aria-labelledby="titulo-contaminante"
+        aria-describedby="descripcion-contaminante"
+      >
+        <strong 
+          id="titulo-contaminante"
+          style="display: block; font-size: 1.1em; color: #2a5d67; margin-bottom: 5px;"
+        >
           ${datos.contaminante.simbolo} (${datos.contaminante.tiempo_exposicion.texto})
         </strong>
-        <div style="color: ${color}; font-weight: 600; margin-bottom: 6px;">
+
+        <div 
+          id="descripcion-contaminante"
+          style="color: ${color}; font-weight: 600; margin-bottom: 6px;"
+          aria-label="Nivel de calidad del aire"
+        >
           ${textoCalidad}
         </div>
-        <div style="font-size: 0.85em; color: #555;">
-          Promedio: <strong>${datos.estadisticas.promedio.toFixed(2)}</strong> ${datos.contaminante.unidades}<br>
-          Máximo: <strong>${datos.estadisticas.maximo.toFixed(2)}</strong> ${datos.contaminante.unidades}
+
+        <div 
+          style="font-size: 0.85em; color: #555;"
+          aria-label="Resumen estadístico"
+        >
+          Promedio: 
+          <strong>${datos.estadisticas.promedio.toFixed(2)}</strong> ${datos.contaminante.unidades}<br>
+          Máximo: 
+          <strong>${datos.estadisticas.maximo.toFixed(2)}</strong> ${datos.contaminante.unidades}
         </div>
       </div>
     </div>
@@ -906,27 +930,38 @@ function crearPopupCalidad(datos, textoCalidad) {
 // ================================================================
 function crearPanelInformacion(datos, textoCalidad) {
   return `
-    <div class="informacion-contaminante">
+    <div class="informacion-contaminante" 
+         role="region" 
+         aria-labelledby="tituloContaminante" 
+         aria-describedby="descripcionContaminante">
 
       <!-- 🟩 NIVEL 1: Hero principal -->
-      <div class="info-hero" style="background-color: ${datos.clasificacion.color}; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <h2 style="margin: 0 0 10px 0; color: #000; font-size: 1.8em;">
+      <div class="info-hero" 
+           style="background-color: ${datos.clasificacion.color}; padding: 20px; border-radius: 8px; margin-bottom: 20px;"
+           role="banner">
+        <h2 id="tituloContaminante" style="margin: 0 0 10px 0; color: #000; font-size: 1.8em;">
           ${datos.contaminante.simbolo}
         </h2>
         <p style="margin: 0; font-size: 1.2em; font-weight: 600; color: #000;">
           ${datos.contaminante.tiempo_exposicion.texto}
         </p>
-        <p style="margin: 5px 0 0 0; font-weight: bold; color: #333;">${textoCalidad}</p>
+        <p id="descripcionContaminante" style="margin: 5px 0 0 0; font-weight: bold; color: #333;">
+          ${textoCalidad}
+        </p>
       </div>
 
       <!-- 📊 NIVEL 2: Estadísticas principales -->
-      <div class="info-estadisticas" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h3 style="margin: 0 0 15px 0; color: #2a5d67; border-bottom: 2px solid #a8d0da; padding-bottom: 8px;">
+      <div class="info-estadisticas" 
+           style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;"
+           role="group"
+           aria-labelledby="tituloEstadisticas">
+        <h3 id="tituloEstadisticas" style="margin: 0 0 15px 0; color: #2a5d67; border-bottom: 2px solid #a8d0da; padding-bottom: 8px;">
           📊 Estadísticas Principales
         </h3>
 
-        <div class="stat-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+        <div class="stat-grid" 
+             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <div class="stat-item" role="group" aria-label="Promedio">
             <p style="margin: 0; font-size: 0.85em; color: #666;">Promedio</p>
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #2a5d67;">
               ${datos.estadisticas.promedio.toFixed(2)}
@@ -934,7 +969,7 @@ function crearPanelInformacion(datos, textoCalidad) {
             <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+          <div class="stat-item" role="group" aria-label="Máximo">
             <p style="margin: 0; font-size: 0.85em; color: #666;">Máximo</p>
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #ff4444;">
               ${datos.estadisticas.maximo.toFixed(2)}
@@ -942,7 +977,7 @@ function crearPanelInformacion(datos, textoCalidad) {
             <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+          <div class="stat-item" role="group" aria-label="Mínimo">
             <p style="margin: 0; font-size: 0.85em; color: #666;">Mínimo</p>
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #414141ff;">
               ${datos.estadisticas.minimo.toFixed(2)}
@@ -950,7 +985,7 @@ function crearPanelInformacion(datos, textoCalidad) {
             <p style="margin: 0; font-size: 0.75em; color: #888;">${datos.contaminante.unidades}</p>
           </div>
 
-          <div class="stat-item" style="background: white; padding: 12px; border-radius: 6px;">
+          <div class="stat-item" role="group" aria-label="Días con excedencias">
             <p style="margin: 0; font-size: 0.85em; color: #666;">Días con excedencias</p>
             <p style="margin: 5px 0 0 0; font-size: 1.4em; font-weight: bold; color: #ff8800;">
               ${datos.excedencias.dias_excendecias}
@@ -962,7 +997,9 @@ function crearPanelInformacion(datos, textoCalidad) {
         ${
           datos.clasificacion.limites_oms
             ? `
-              <div style="margin-top: 18px; padding: 12px; background: #eef9f3; border-radius: 6px; border-left: 4px solid #28a745;">
+              <div role="note" 
+                   aria-label="Límites de la OMS"
+                   style="margin-top: 18px; padding: 12px; background: #eef9f3; border-radius: 6px; border-left: 4px solid #28a745;">
                 <p style="margin: 0 0 6px 0; font-size: 0.95em; color: #155724; font-weight: bold;">
                   🌍 Límites según OMS (${datos.clasificacion.limites_oms.tiempo_horas}h)
                 </p>
@@ -978,7 +1015,8 @@ function crearPanelInformacion(datos, textoCalidad) {
             : ""
         }
 
-        <div style="margin-top: 15px; padding: 12px; background: #e8f4f8; border-radius: 6px; border-left: 4px solid #2a5d67;">
+        <div style="margin-top: 15px; padding: 12px; background: #e8f4f8; border-radius: 6px; border-left: 4px solid #2a5d67;"
+             role="note" aria-label="Fecha del pico máximo">
           <p style="margin: 0; font-size: 0.9em; color: #2a5d67;">
             <strong>📅 Fecha del pico máximo:</strong><br>
             ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}
@@ -986,7 +1024,7 @@ function crearPanelInformacion(datos, textoCalidad) {
         </div>
 
         <!-- 🔍 Detalles técnicos -->
-        <details class="info-detalles" style="margin-top: 18px;">
+        <details class="info-detalles" style="margin-top: 18px;" role="group" aria-label="Detalles técnicos">
           <summary style="cursor: pointer; padding: 12px; background: #e9ecef; border-radius: 6px; font-weight: 600; color: #2a5d67;">
             🔍 Ver detalles técnicos
           </summary>
@@ -1001,8 +1039,11 @@ function crearPanelInformacion(datos, textoCalidad) {
       </div>
 
       <!-- 💡 NIVEL 3: Interpretación -->
-      <div class="info-interpretacion" style="background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%); padding: 15px; border-radius: 8px; border: 2px solid #d1e7ec;">
-        <h4 style="margin: 0 0 10px 0; color: #2a5d67; display: flex; align-items: center; gap: 8px;">
+      <div class="info-interpretacion" 
+           style="background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%); padding: 15px; border-radius: 8px; border: 2px solid #d1e7ec;"
+           role="region" 
+           aria-labelledby="tituloInterpretacion">
+        <h4 id="tituloInterpretacion" style="margin: 0 0 10px 0; color: #2a5d67; display: flex; align-items: center; gap: 8px;">
           <span>💡</span> Interpretación
         </h4>
         <p style="margin: 0; line-height: 1.6; color: #555;">
@@ -1012,6 +1053,14 @@ function crearPanelInformacion(datos, textoCalidad) {
           ℹ️ Clasificación basada en las <strong>Guías de Calidad del Aire de la OMS 2021</strong>, más estrictas que la normativa colombiana vigente (Resolución 2254 de 2017).
         </p>
       </div>
+
+      <!-- 🔊 Texto solo para lectores de pantalla -->
+      <span class="sr-only">
+        Panel informativo del contaminante ${datos.contaminante.simbolo}.
+        Nivel de calidad: ${textoCalidad}.
+        Promedio ${datos.estadisticas.promedio.toFixed(2)}, máximo ${datos.estadisticas.maximo.toFixed(2)}, mínimo ${datos.estadisticas.minimo.toFixed(2)} ${datos.contaminante.unidades}.
+        Fecha del pico máximo: ${formatearFecha(datos.estadisticas.fecha_hora_maximo)}.
+      </span>
     </div>
   `;
 }
