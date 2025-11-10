@@ -1203,21 +1203,6 @@ body {
    BLOQUES DE INFORMACIÓN
    ========================================================================== */
 
-/* ----------- BLOQUE BASE ----------- */
-.info-hero {
-  padding: 18px;
-  border-radius: 10px;
-  margin-bottom: 18px;
-  color: var(--color-texto);
-  background-color: var(--color-fondo-claro);
-}
-.info-hero[data-color] {
-  background-color: attr(data-color color, var(--color-fondo-claro));
-}
-
-.texto-calidad {
-  font-weight: bold;
-}
 
 /* ----------- ESTADÍSTICAS ----------- */
 .info-estadisticas {
