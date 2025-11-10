@@ -27,15 +27,14 @@ const selectMunicipio = document.getElementById("selectMunicipio");
 const selectAnio = document.getElementById("selectAnio");
 const selectEstacion = document.getElementById("selectEstacion");
 const selectContaminante = document.getElementById("selectContaminante");
-const estadoMapa = document.getElementById("estadoMapa"); 
 
 const statusMsg = document.createElement("span");
 statusMsg.id = "status";
+statusMsg.setAttribute("aria-live", "polite");
 statusMsg.style.textAlign = "center";
 statusMsg.style.color = "#555";
 statusMsg.style.fontStyle = "italic";
 statusMsg.style.transition = "opacity 0.4s ease";
-statusMsg._hideTimeout = null;
 document.getElementById("estadoMapa").appendChild(statusMsg);
 
 
@@ -62,11 +61,9 @@ const API_BASE_URL = "https://airsense-v2.onrender.com/api";
 // =========================================================================
 // FUNCIONES DE UTILIDAD 
 // =========================================================================
-
 /**
- * Muestra un mensaje de error dentro de un elemento <select>
- * @param {HTMLSelectElement} selectElement - El <select> donde mostrar el error
- * @param {string} mensaje - El mensaje de error
+ * Muestra un mensaje de estado al usuario en la UI.
+ * @param {string} texto - El mensaje a mostrar.
  */
 function mostrarErrorEnSelector(selectElement, mensaje) {
   // Limpia cualquier opción anterior
@@ -86,6 +83,7 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
   selectElement.appendChild(opcionError);
 }
 
+
 // ==========================================================================
 // FUNCIONES DE RETROALIMENTACIÓN VISUAL
 // ==========================================================================
@@ -94,51 +92,16 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
  * Muestra un mensaje de estado al usuario en la UI.
  * @param {string} texto - El mensaje a mostrar.
  */
-function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
+function mostrarEstado(texto) {
   const estadoMapa = document.getElementById("estadoMapa");
-  if (!estadoMapa || !statusMsg) return;
 
-  // Actualiza solo el span con id="status" (sin eliminarlo)
+  // Actualiza visualmente el mensaje
   statusMsg.textContent = texto;
-
-  // Clases opcionales para tipo de mensaje
-  statusMsg.classList.remove("estado-info", "estado-exito", "estado-error");
-  statusMsg.classList.add(
-    tipo === "error" ? "estado-error" :
-    tipo === "exito" ? "estado-exito" :
-    "estado-info"
-  );
-
-  // Muestra el contenedor con transición
   estadoMapa.classList.add("visible");
+
+  // 🟩 Mejora de accesibilidad: anuncio para lectores de pantalla
   estadoMapa.setAttribute("aria-live", "polite");
-
-  // Limpia timeout previo y programa el ocultado
-  clearTimeout(statusMsg._hideTimeout);
-  statusMsg._hideTimeout = setTimeout(() => {
-    estadoMapa.classList.remove("visible");
-    setTimeout(() => { statusMsg.textContent = ""; }, 300);
-  }, timeout);
 }
-
-/**
- * Oculta el mensaje de estado después de un tiempo.
- * @param {boolean} [inmediato=false] - Si se debe ocultar de inmediato.
- */
-function ocultarEstado(inmediato = false) {
-  const estadoMapa = document.getElementById("estadoMapa");
-  if (!estadoMapa || !statusMsg) return;
-
-  clearTimeout(statusMsg._hideTimeout);
-  if (inmediato) {
-    estadoMapa.classList.remove("visible");
-    statusMsg.textContent = "";
-  } else {
-    estadoMapa.classList.remove("visible");
-    setTimeout(() => { statusMsg.textContent = ""; }, 300);
-  }
-}
-
 
 
 /**
