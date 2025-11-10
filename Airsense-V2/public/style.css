@@ -1232,16 +1232,6 @@ body {
   color: #ff8800;
 }
 
-/* ----------- BLOQUE PICO ----------- */
-.info-pico {
-  margin-top: 15px;
-  padding: 12px;
-  border-left: 4px solid #3da3b0;
-  border-radius: 6px;
-  background: #f2fbff;
-  color: #2a5d67;
-}
-
 /* ----------- DETALLES ----------- */
 .info-detalles summary {
   cursor: pointer;
