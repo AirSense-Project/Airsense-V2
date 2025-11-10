@@ -27,6 +27,7 @@ const selectMunicipio = document.getElementById("selectMunicipio");
 const selectAnio = document.getElementById("selectAnio");
 const selectEstacion = document.getElementById("selectEstacion");
 const selectContaminante = document.getElementById("selectContaminante");
+const estadoMapa = document.getElementById("estadoMapa");
 
 const statusMsg = document.createElement("span");
 statusMsg.id = "status";
@@ -61,10 +62,6 @@ const API_BASE_URL = "https://airsense-v2.onrender.com/api";
 // =========================================================================
 // FUNCIONES DE UTILIDAD 
 // =========================================================================
-/**
- * Muestra un mensaje de estado al usuario en la UI.
- * @param {string} texto - El mensaje a mostrar.
- */
 function mostrarErrorEnSelector(selectElement, mensaje) {
   // Limpia cualquier opción anterior
   selectElement.innerHTML = ''; 
@@ -83,7 +80,6 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
   selectElement.appendChild(opcionError);
 }
 
-
 // ==========================================================================
 // FUNCIONES DE RETROALIMENTACIÓN VISUAL
 // ==========================================================================
@@ -92,30 +88,51 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
  * Muestra un mensaje de estado al usuario en la UI.
  * @param {string} texto - El mensaje a mostrar.
  */
-function mostrarEstado(texto) {
+function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
   const estadoMapa = document.getElementById("estadoMapa");
+  if (!estadoMapa || !statusMsg) return;
 
-  // Actualiza visualmente el mensaje
+  // Actualiza solo el span con id="status" (sin eliminarlo)
   statusMsg.textContent = texto;
+
+  // Clases opcionales para tipo de mensaje
+  statusMsg.classList.remove("estado-info", "estado-exito", "estado-error");
+  statusMsg.classList.add(
+    tipo === "error" ? "estado-error" :
+    tipo === "exito" ? "estado-exito" :
+    "estado-info"
+  );
+
+  // Muestra el contenedor con transición
   estadoMapa.classList.add("visible");
-
-  // 🟩 Mejora de accesibilidad: anuncio para lectores de pantalla
   estadoMapa.setAttribute("aria-live", "polite");
-}
 
+  // Limpia timeout previo y programa el ocultado
+  clearTimeout(statusMsg._hideTimeout);
+  statusMsg._hideTimeout = setTimeout(() => {
+    estadoMapa.classList.remove("visible");
+    setTimeout(() => { statusMsg.textContent = ""; }, 300);
+  }, timeout);
+}
 
 /**
  * Oculta el mensaje de estado después de un tiempo.
- * @param {number} [delay=300] - Tiempo en milisegundos antes de ocultar.
+ * @param {boolean} [inmediato=false] - Si se debe ocultar de inmediato.
  */
-function ocultarEstado(delay = 300) {
-  setTimeout(() => {
-    document.getElementById("estadoMapa").classList.remove("visible");
-    setTimeout(() => {
-      statusMsg.textContent = "";
-    }, 400);
-  }, delay);
+function ocultarEstado(inmediato = false) {
+  const estadoMapa = document.getElementById("estadoMapa");
+  if (!estadoMapa || !statusMsg) return;
+
+  clearTimeout(statusMsg._hideTimeout);
+  if (inmediato) {
+    estadoMapa.classList.remove("visible");
+    statusMsg.textContent = "";
+  } else {
+    estadoMapa.classList.remove("visible");
+    setTimeout(() => { statusMsg.textContent = ""; }, 300);
+  }
 }
+
 
 // ==========================================================================
 // CARGA Y VISUALIZACIÓN DE MUNICIPIOS
