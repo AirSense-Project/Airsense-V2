@@ -98,7 +98,7 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
  * @param {number} opciones.timeout - Tiempo para ocultar el mensaje (ms).
  * @param {string} opciones.tipo - "info" | "exito" | "error"
  */
-function mostrarEstado(texto, {  tipo = "info" } = {}) {
+function mostrarEstado(texto, { tipo = "info", timeout = 4000 } = {}) {
   const contenedor = document.getElementById("estadoMapa");
   const visible = document.getElementById("statusVisible");
   const accesible = document.getElementById("statusAccesible");
@@ -126,7 +126,14 @@ function mostrarEstado(texto, {  tipo = "info" } = {}) {
   // 👁️ Muestra visualmente el contenedor
   contenedor.classList.add("visible");
 
+  // 🕒 Oculta el mensaje automáticamente
+  clearTimeout(contenedor._timeout);
+  contenedor._timeout = setTimeout(() => {
+    contenedor.classList.remove("visible");
+    if (visible) visible.innerHTML = "";
+  }, timeout);
 }
+
 
 /**
  * 🚫 Muestra un error en un <select> (por ejemplo: conexión fallida)
