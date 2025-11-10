@@ -180,57 +180,62 @@
             </p>
           </div> 
           
-          <!-- Panel derecho: Diccionario -->
-          <aside id="diccionario" class="panel-diccionario" role="complementary"
-            aria-labelledby="titulo-diccionario" aria-describedby="descripcion-diccionario">
+        <!-- Panel derecho: Diccionario -->
+        <aside id="diccionario" class="panel-diccionario" role="complementary"
+              aria-labelledby="titulo-diccionario" aria-describedby="descripcion-diccionario">
 
-            <p id="descripcion-diccionario" class="sr-only">
-              Panel lateral con información detallada sobre contaminantes atmosféricos y su clasificación según la OMS 2021.
-            </p>
+          <p id="descripcion-diccionario" class="sr-only">
+            Panel lateral con información detallada sobre contaminantes atmosféricos y su clasificación según la OMS 2021.
+          </p>
 
+          <h2 class="diccionario__titulo" id="titulo-diccionario">Diccionario de Contaminantes</h2>
 
-            <h2 class="diccionario__titulo" id="titulo-diccionario"> Diccionario de Contaminantes</h2>
+          <!-- Vista de lista -->
+          <div id="vistaLista" class="diccionario__vista diccionario__vista--activa"
+              tabindex="0" aria-hidden="false" aria-live="polite">
             
-            <div id="vistaLista" class="diccionario__vista diccionario__vista--activa" aria-hidden="false">
-              
-              <div class="diccionario__leyenda-compacta">
-                <h5 class="leyenda-compacta__titulo">
-                  📊 Calidad del Aire (OMS 2021)
-                </h5>
-                <div class="leyenda-compacta__grid">
-                  <div class="leyenda-compacta__item">
-                    <span class="leyenda-compacta__color leyenda-color-buena"></span>
-                    <span class="leyenda-compacta__texto">Buena</span>
-                  </div>
-                  <div class="leyenda-compacta__item">
-                    <span class="leyenda-compacta__color leyenda-color-moderada"></span>
-                    <span class="leyenda-compacta__texto">Moderada</span>
-                  </div>
-                  <div class="leyenda-compacta__item">
-                    <span class="leyenda-compacta__color leyenda-color-mala"></span>
-                    <span class="leyenda-compacta__texto">Mala</span>
-                  </div>
+            <div class="diccionario__leyenda-compacta">
+              <h5 class="leyenda-compacta__titulo">
+                📊 Calidad del Aire (OMS 2021)
+              </h5>
+              <div class="leyenda-compacta__grid">
+                <div class="leyenda-compacta__item">
+                  <span class="leyenda-compacta__color leyenda-color-buena"></span>
+                  <span class="leyenda-compacta__texto">Buena</span>
                 </div>
-              </div> <p class="diccionario__intro">
-                Explora los principales contaminantes atmosféricos monitoreados
-                en el Valle del Cauca.
-              </p>
-              <ul id="listaContaminantes" class="diccionario__lista"></ul>
+                <div class="leyenda-compacta__item">
+                  <span class="leyenda-compacta__color leyenda-color-moderada"></span>
+                  <span class="leyenda-compacta__texto">Moderada</span>
+                </div>
+                <div class="leyenda-compacta__item">
+                  <span class="leyenda-compacta__color leyenda-color-mala"></span>
+                  <span class="leyenda-compacta__texto">Mala</span>
+                </div>
+              </div>
             </div>
 
-            <div id="vistaDetalle" class="diccionario__vista" aria-hidden="true" aria-live="polite">
-              
-              <button id="btnVolver" class="diccionario__btn-volver" 
-                aria-label="Volver a la lista de contaminantes" aria-controls="vistaLista"
-                aria-expanded="false">
-                ← Volver
-              </button>
-              <article
-                id="contenidoDetalle" class="diccionario__detalle"
-              ></article>
-            </div>
+            <p class="diccionario__intro">
+              Explora los principales contaminantes atmosféricos monitoreados
+              en el Valle del Cauca.
+            </p>
+            <ul id="listaContaminantes" class="diccionario__lista"></ul>
+          </div>
+
+          <!-- Vista de detalle -->
+          <div id="vistaDetalle" class="diccionario__vista" tabindex="0"
+              aria-hidden="true" aria-live="polite">
             
-          </aside>
+            <button id="btnVolver" class="diccionario__btn-volver" 
+                    aria-label="Volver a la lista de contaminantes" aria-controls="vistaLista"
+                    aria-expanded="false">
+              ← Volver
+            </button>
+
+            <article id="contenidoDetalle" class="diccionario__detalle"></article>
+          </div>
+
+        </aside>
+
         </div><!-- FIN vista-principal -->
       </div> <!-- FIN contenedor -->
     </main>
