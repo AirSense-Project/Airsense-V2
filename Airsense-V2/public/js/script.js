@@ -816,7 +816,7 @@ selectAnio.addEventListener("change", async (e) => {
 selectEstacion.addEventListener("change", async (e) => {
   const idEstacion = e.target.value;
   const estacionTexto = e.target.options[e.target.selectedIndex]?.text;
-  const anio = selectAnio.value; // Año seleccionado actualmente
+  const anio = selectAnio.value;
 
   anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
   console.log("🏭 Cambio de estación:", idEstacion);
@@ -824,22 +824,30 @@ selectEstacion.addEventListener("change", async (e) => {
   resetearFiltrosDependientes(3);
   estacionSeleccionada = idEstacion ? parseInt(idEstacion) : null;
 
-  // Si no hay estación seleccionada, restaurar íconos
+  // 🟢 Si no hay estación seleccionada → restaurar íconos
   if (!idEstacion) {
     Object.values(marcadoresEstaciones).forEach((marker) => {
       marker.setIcon(crearIconoColor("#9E9E9E", false)); // Gris por defecto
     });
     return;
   }
-  // Verificar si se ha seleccionado un año antes de continuar
+
+  // ⚠️ Si no hay año seleccionado → advertir al usuario
   if (!anio) {
     mostrarEstado("⚠️ Primero selecciona un año antes de ver contaminantes.", { tipo: "info" });
     anunciarAccesibilidad("Debes seleccionar un año antes de cargar contaminantes.");
-    return; // Evita que se carguen contaminantes sin año
+    return;
   }
+
+  // 🎯 Resalta el marcador actual
   resaltarEstacionEnMapa(estacionSeleccionada);
-  await cargarContaminantesPorEstacion(idEstacion, anio);
+
+  // 🕐 Pequeño retraso para no sobreescribir el mensaje de estaciones
+  setTimeout(async () => {
+    await cargarContaminantesPorEstacion(idEstacion, anio);
+  }, 600); // 600 ms es suficiente
 });
+
 
 // ==========================================================================
 // EVENT LISTENER: CONTAMINANTE 
@@ -1296,7 +1304,7 @@ function inicializarVisor() {
   // Mensaje accesible cuando el mapa está listo
   const estadoMapa = document.getElementById("estadoMapa");
   mostrarEstado("Mapa cargado correctamente.", { tipo: "exito" });
-  ocultarEstado(3000);
+  ocultarEstado(4000);
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
