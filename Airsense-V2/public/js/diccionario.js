@@ -110,8 +110,7 @@ function renderizarLista() {
 
 /* ==========================================================================
    RENDERIZADO DE DETALLE
-   ========================================================================== */
-function mostrarDetalle(contaminante) {
+   ========================================================================== */function mostrarDetalle(contaminante) {
   contenidoDetalle.innerHTML = `
     <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
     <div class="diccionario__seccion">
@@ -128,32 +127,34 @@ function mostrarDetalle(contaminante) {
     </div>
   `;
 
-  // Cambiar la vista de lista a detalle
   cambiarVista("detalle");
-
-  // Mover foco al contenedor detalle
   vistaDetalle.focus();
 
-  // Lectura accesible sección por sección
   const ariaLive = document.getElementById("aria-live-region");
-  ariaLive.textContent = ""; // limpiar antes
+  ariaLive.textContent = "";
 
-  setTimeout(() => {
-    ariaLive.textContent = `${contaminante.simbolo} — ${contaminante.nombre}.`;
-  }, 100);
+  // Función para calcular tiempo de lectura aproximado según cantidad de caracteres
+  function tiempoLectura(texto) {
+    const palabras = texto.split(/\s+/).length;
+    return Math.max(1000, palabras * 200); // 200ms por palabra, mínimo 1s
+  }
 
-  setTimeout(() => {
-    ariaLive.textContent = `Qué es: ${contaminante.que_es}.`;
-  }, 600);
+  const secciones = [
+    `${contaminante.simbolo} — ${contaminante.nombre}.`,
+    `Qué es: ${contaminante.que_es}.`,
+    `Causas: ${contaminante.causas}.`,
+    `Consecuencias: ${contaminante.consecuencias}.`
+  ];
 
-  setTimeout(() => {
-    ariaLive.textContent = `Causas: ${contaminante.causas}.`;
-  }, 1200);
-
-  setTimeout(() => {
-    ariaLive.textContent = `Consecuencias: ${contaminante.consecuencias}.`;
-  }, 1800);
+  let acumulado = 0;
+  secciones.forEach(texto => {
+    setTimeout(() => {
+      ariaLive.textContent = texto;
+    }, acumulado);
+    acumulado += tiempoLectura(texto);
+  });
 }
+
 
 /* ==========================================================================
    CARGA DE DATOS
