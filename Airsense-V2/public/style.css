@@ -1214,18 +1214,6 @@ body.dark-mode .popup-calidad {
 /* ========================================================================== 
    🌙 MODO OSCURO (usando variables)
    ========================================================================== */
-body.dark-mode {
-  --color-texto: #e6f7ff;
-  --color-titulo: #c0f1ff;
-  --color-secundario: #aaa;
-  --color-fondo-claro: #2b3a3f;
-  --panel-fondo: #1e272b;
-  --tarjeta-fondo: #2b3a3f;
-  --detalle-fondo: #334045;
-
-  background-color: var(--panel-fondo);
-  color: var(--color-texto);
-}
 
 /* Ajustes específicos de bloques en modo oscuro */
 body.dark-mode .header {
