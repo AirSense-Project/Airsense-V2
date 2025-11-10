@@ -110,7 +110,8 @@ function renderizarLista() {
 
 /* ==========================================================================
    RENDERIZADO DE DETALLE
-   ========================================================================== */function mostrarDetalle(contaminante) {
+   ========================================================================== */
+function mostrarDetalle(contaminante) { 
   contenidoDetalle.innerHTML = `
     <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
     <div class="diccionario__seccion">
@@ -127,32 +128,20 @@ function renderizarLista() {
     </div>
   `;
 
+  // Cambiar a vista detalle y enfocar
   cambiarVista("detalle");
   vistaDetalle.focus();
 
   const ariaLive = document.getElementById("aria-live-region");
-  ariaLive.textContent = "";
+  ariaLive.textContent = ""; // limpiar antes
 
-  // Función para calcular tiempo de lectura aproximado según cantidad de caracteres
-  function tiempoLectura(texto) {
-    const palabras = texto.split(/\s+/).length;
-    return Math.max(1000, palabras * 200); // 200ms por palabra, mínimo 1s
-  }
+  // Construir un anuncio completo incluyendo el nombre del contaminante
+  const anuncioCompleto = `Contaminante: ${contaminante.simbolo} — ${contaminante.nombre}. Qué es: ${contaminante.que_es}. Causas: ${contaminante.causas}. Consecuencias: ${contaminante.consecuencias}.`;
 
-  const secciones = [
-    `${contaminante.simbolo} — ${contaminante.nombre}.`,
-    `Qué es: ${contaminante.que_es}.`,
-    `Causas: ${contaminante.causas}.`,
-    `Consecuencias: ${contaminante.consecuencias}.`
-  ];
-
-  let acumulado = 0;
-  secciones.forEach(texto => {
-    setTimeout(() => {
-      ariaLive.textContent = texto;
-    }, acumulado);
-    acumulado += tiempoLectura(texto);
-  });
+  // Forzar lectura después de un pequeño retraso
+  setTimeout(() => {
+    ariaLive.textContent = anuncioCompleto;
+  }, 100);
 }
 
 
