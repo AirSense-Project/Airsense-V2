@@ -91,14 +91,24 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
  * @param {number} [opciones.timeout=4000] - Tiempo en ms antes de ocultar el mensaje.
  * @param {string} [opciones.tipo="info"] - Tipo de mensaje: "info", "exito", "error".
  */
-function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
+/**
+ * 📢 Muestra un mensaje visual y accesible en el estado del mapa.
+ * @param {string} texto - Texto del mensaje.
+ * @param {object} opciones - Configuración opcional.
+ * @param {number} opciones.timeout - Tiempo para ocultar el mensaje (ms).
+ * @param {string} opciones.tipo - "info" | "exito" | "error"
+ */
+function mostrarEstado(texto, {  tipo = "info" } = {}) {
   const contenedor = document.getElementById("estadoMapa");
   const visible = document.getElementById("statusVisible");
   const accesible = document.getElementById("statusAccesible");
 
   if (!contenedor) return;
 
-  // Agrega el mensaje visual
+  // 🧱 Limpia mensajes previos
+  if (visible) visible.innerHTML = "";
+
+  // 🎨 Crea el mensaje visible con su tipo
   if (visible) {
     const mensajeDiv = document.createElement("div");
     mensajeDiv.textContent = texto;
@@ -110,33 +120,32 @@ function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
     visible.appendChild(mensajeDiv);
   }
 
-  // Mensaje accesible
+  // ♿ Actualiza el texto accesible (lectores de pantalla)
   if (accesible) accesible.textContent = texto;
 
-  // Muestra contenedor
+  // 👁️ Muestra visualmente el contenedor
   contenedor.classList.add("visible");
 
-  // Configura ocultar automático
-  clearTimeout(contenedor._timeout); // limpia cualquier timeout previo
-  contenedor._timeout = setTimeout(() => {
-    contenedor.classList.remove("visible");
-    if (visible) visible.innerHTML = "";
-  }, timeout);
 }
 
-
+/**
+ * 🚫 Muestra un error en un <select> (por ejemplo: conexión fallida)
+ */
 function mostrarErrorEnSelector(selectElement, mensaje) {
-  selectElement.innerHTML = '';
+  selectElement.innerHTML = "";
   selectElement.disabled = true;
 
-  const opcionError = document.createElement('option');
+  const opcionError = document.createElement("option");
   opcionError.value = "";
   opcionError.textContent = `⚠️ ${mensaje}`;
-  selectElement.style.color = '#d9534f';
+  selectElement.style.color = "#d9534f";
   
   selectElement.appendChild(opcionError);
 }
 
+/**
+ * 📴 Oculta manualmente el estado del mapa
+ */
 function ocultarEstado() {
   const contenedor = document.getElementById("estadoMapa");
   const visible = document.getElementById("statusVisible");
@@ -147,6 +156,7 @@ function ocultarEstado() {
   contenedor.classList.remove("visible");
   if (visible) visible.innerHTML = "";
 }
+
 
 // ==========================================================================
 // CARGA Y VISUALIZACIÓN DE MUNICIPIOS
