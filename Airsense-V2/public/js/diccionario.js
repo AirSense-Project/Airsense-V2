@@ -131,6 +131,12 @@ async function mostrarDetalle(contaminante) {
   cambiarVista("detalle");
   contenidoDetalle.focus();
 
+  // ✅ Hacer que cada título y párrafo sea focable con tabulador
+  contenidoDetalle.querySelectorAll("h3, h4, p").forEach(el => {
+    el.setAttribute("tabindex", "0");
+  });
+
+  // Lectura accesible por secciones
   const secciones = [
     `Contaminante: ${contaminante.simbolo} — ${contaminante.nombre}.`,
     `Qué es: ${contaminante.que_es}.`,
@@ -138,17 +144,13 @@ async function mostrarDetalle(contaminante) {
     `Consecuencias: ${contaminante.consecuencias}.`
   ];
 
-  // Limpiar primero
   ariaLive.innerHTML = "";
 
   for (let texto of secciones) {
-    // Crear un nodo temporal para publicar cada sección
     const span = document.createElement("span");
     span.textContent = texto;
-    ariaLive.innerHTML = "";  // limpiar para forzar la lectura de cada sección
+    ariaLive.innerHTML = "";
     ariaLive.appendChild(span);
-
-    // Espera mínima para que el lector lo detecte
     await new Promise(resolve => setTimeout(resolve, 500));
   }
 }
