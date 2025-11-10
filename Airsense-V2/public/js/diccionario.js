@@ -119,17 +119,14 @@ function renderizarLista() {
 function mostrarDetalle(contaminante) {
   contenidoDetalle.innerHTML = `
     <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
-
     <div class="diccionario__seccion">
       <h4>¿Qué es?</h4>
       <p>${contaminante.que_es}</p>
     </div>
-
     <div class="diccionario__seccion">
       <h4>Causas</h4>
       <p>${contaminante.causas}</p>
     </div>
-
     <div class="diccionario__seccion">
       <h4>Consecuencias</h4>
       <p>${contaminante.consecuencias}</p>
@@ -139,12 +136,16 @@ function mostrarDetalle(contaminante) {
   // Cambiar la vista de lista a detalle
   cambiarVista("detalle");
 
-  // Mover foco al contenedor detalle para lectura del narrador
+  // Mover foco al contenedor detalle para navegación con teclado
   vistaDetalle.focus();
 
-  // Anuncio accesible del contenido completo
+  // Anuncio accesible completo para lector de pantalla
   const anuncio = `${contaminante.simbolo} — ${contaminante.nombre}. Qué es: ${contaminante.que_es}. Causas: ${contaminante.causas}. Consecuencias: ${contaminante.consecuencias}.`;
-  anunciarAccesibilidad(anuncio);
+  const ariaLive = document.getElementById("aria-live-region");
+  ariaLive.textContent = ""; // limpiar antes
+  setTimeout(() => {
+    ariaLive.textContent = anuncio; // fuerza la lectura
+  }, 100);
 }
 
 // ==========================================================================
