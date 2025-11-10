@@ -1211,22 +1211,3 @@ body.dark-mode .popup-calidad {
   padding-top: 8px;
 }
 
-/* ========================================================================== 
-   🌙 MODO OSCURO (usando variables)
-   ========================================================================== */
-
-/* Ajustes específicos de bloques en modo oscuro */
-body.dark-mode .header {
-  background: linear-gradient(135deg, #0d3d33 0%, #1a4a4a 100%);
-}
-
-body.dark-mode .info-pico {
-  background: var(--tarjeta-fondo);
-  color: var(--color-texto);
-  border-left: 4px solid #56c0e0;
-}
-
-body.dark-mode .info-interpretacion {
-  background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-  border-color: #2a5d67;
-}
