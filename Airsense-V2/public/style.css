@@ -1198,9 +1198,6 @@ body {
 .btn-modo-oscuro:hover {
   transform: scale(1.1);
 }
-.btn-modo-oscuro .icono-luna { display: none; }
-body.dark-mode .btn-modo-oscuro .icono-sol { display: none; }
-body.dark-mode .btn-modo-oscuro .icono-luna { display: inline; }
 
 /* ========================================================================== 
    BLOQUES DE INFORMACIÓN
