@@ -152,6 +152,17 @@ function notificarCarga({ cantidad, tipo, selectId, selectElement = null, textoL
   }
 }
 
+function activarLecturaPasos() {
+  // Selecciona todos los textos de los pasos
+  const pasos = document.querySelectorAll(".paso-texto");
+  // Combina los textos en una sola cadena
+  const lectura = Array.from(pasos).map(p => p.textContent).join(". ");
+  // Pega el texto en el contenedor aria-live
+  const contenedorLectura = document.getElementById("lecturaPasos");
+  if (contenedorLectura) {
+    contenedorLectura.textContent = lectura;
+  }
+}
 
 
 /* Inicialización automática */
@@ -159,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
   configurarNavegacionAccesible();
   configurarMensajeLimpieza();
   activarLecturaFiltrosAccesibles();
-
+  activarLecturaPasos();
   
   // Activar lectura de selects individuales (si ya están en DOM)
   habilitarLecturaSelect("selectMunicipio", "estado-municipio");

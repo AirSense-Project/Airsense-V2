@@ -118,31 +118,33 @@
         <div class="vista-principal">
           
           <aside class="panel-informacion" role="region" aria-labelledby="titulo-instrucciones">
-            <div id="informacionContaminantes" class="panel-instrucciones"  tabindex="0" aria-live="polite" aria-atomic="true">
-              
+            <div id="informacionContaminantes" class="panel-instrucciones" tabindex="0" aria-live="polite" aria-atomic="true">
+
               <h2 id="titulo-instrucciones"> Cómo usar la aplicación 🌍</h2>
               <p>
-                Explora 13 años de datos históricos (2011-2023) de calidad del
-                aire en el Valle del Cauca
+                Explora 13 años de datos históricos (2011-2023) de calidad del aire en el Valle del Cauca
               </p>
 
               <ol class="pasos" aria-label="Instrucciones de uso del mapa">
                 <li class="paso paso1">
                   <div class="paso-numero">PASO 1
-                  <div class="paso-texto">
-                    📍 Selecciona un <b>municipio</b> del Valle del Cauca
+                    <div class="paso-texto">
+                      📍 Selecciona un <b>municipio</b> del Valle del Cauca
+                    </div>
                   </div>
                 </li>
                 <li class="paso paso2">
                   <div class="paso-numero">PASO 2
-                  <div class="paso-texto">
-                    🎯 Haz <b>clic en una estación</b> de monitoreo
+                    <div class="paso-texto">
+                      🎯 Haz <b>clic en una estación</b> de monitoreo
+                    </div>
                   </div>
                 </li>
                 <li class="paso paso3">
                   <div class="paso-numero">PASO 3
-                  <div class="paso-texto">
-                    🧪 Escoge un <b>contaminante</b> atmosférico
+                    <div class="paso-texto">
+                      🧪 Escoge un <b>contaminante</b> atmosférico
+                    </div>
                   </div>
                 </li>
                 <li class="paso paso4">
@@ -152,9 +154,13 @@
                   </div>
                 </li>
               </ol>
-                 <div id="infoContaminanteA11y" class="sr-only" aria-live="polite"></div>
+
+              <!-- Contenedor invisible para lectura de pasos por el lector de pantalla -->
+              <div id="lecturaPasos" class="sr-only" aria-live="polite"></div>
+
             </div> 
           </aside>
+
 
           <!-- Mapa principal -->
           <div class="vista-principal__mapa">

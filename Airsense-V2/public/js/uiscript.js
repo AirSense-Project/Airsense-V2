@@ -343,6 +343,20 @@ function limpiarPanelInformacion() {
   if (instrucciones) {
     instrucciones.classList.remove("oculto");
   }
+
+    // === Activar lectura automática de pasos ===
+  const pasos = document.querySelectorAll(".paso-texto");
+  const lectura = Array.from(pasos).map(p => p.textContent).join(". ");
+  const contenedorLectura = document.getElementById("lecturaPasos");
+  if (contenedorLectura) {
+    // Limpiar contenido anterior para forzar relectura
+    contenedorLectura.textContent = "";
+    // Pequeña espera para que el lector detecte el cambio
+    setTimeout(() => {
+      contenedorLectura.textContent = lectura;
+    }, 100);
+  }
+
 }
 
 
