@@ -1272,8 +1272,8 @@ function inicializarVisor() {
   actualizarBotonLimpiar(); // Estado inicial del botón
   // Mensaje accesible cuando el mapa está listo
   const estadoMapa = document.getElementById("estadoMapa");
-  estadoMapa.textContent = " Mapa cargado correctamente.";
-  ocultarEstado(2000);
+  //estadoMapa.textContent = " Mapa cargado correctamente.";
+  //ocultarEstado(2000);
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
