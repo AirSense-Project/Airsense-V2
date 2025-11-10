@@ -129,7 +129,7 @@ async function mostrarDetalle(contaminante) {
   `;
 
   cambiarVista("detalle");
-  vistaDetalle.focus();
+  contenidoDetalle.focus();
 
   const secciones = [
     `Contaminante: ${contaminante.simbolo} — ${contaminante.nombre}.`,
