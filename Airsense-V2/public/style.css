@@ -1145,41 +1145,6 @@ body.dark-mode .popup-calidad {
   white-space: nowrap;
 }
 
-/* ========================================================================== 
-   ESTILOS BASE (MODO CLARO por defecto)
-   ========================================================================== */
-
-:root {
-  --color-texto: #2a5d67;
-  --color-titulo: #2a5d67;
-  --color-secundario: #666;
-  --color-fondo-claro: #eef9f3;
-  --panel-fondo: #f8f9fa;
-  --tarjeta-fondo: #ffffff;
-  --detalle-fondo: #e9ecef;
-}
-
-/* --------------------------------------
-   1. Globales y Encabezado
-   -------------------------------------- */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--panel-fondo);
-  color: var(--color-texto);
-  transition: background 0.4s ease, color 0.4s ease;
-}
-
-.header {
-  background: linear-gradient(135deg, #00796b 0%, #009688 100%);
-  color: white;
-  padding: 15px;
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-
 
 /* ========================================================================== 
    BLOQUES DE INFORMACIÓN
