@@ -426,41 +426,59 @@ function mostrarEstacionesEnMapa(
 
 // Crea el HTML para el popup de un marcador de estación
 function crearPopupInteractivo(est, anio) {
+  // Texto para lectura con lectores de pantalla
+  const resumenA11y = `${est.nombre_estacion}${est.tipo_estacion ? ', tipo de estación: ' + est.tipo_estacion : ''}. Latitud: ${parseFloat(est.latitud).toFixed(4)} grados. Longitud: ${parseFloat(est.longitud).toFixed(4)} grados.${anio ? ' Botón disponible: Centrar aquí.' : ''}`;
+
   return `
-    <div style="min-width: 200px; max-width: 220px; font-family: 'Segoe UI', sans-serif; padding: 4px;">
+    <div role="region" aria-labelledby="popup-${est.id_estacion}" style="min-width: 200px; max-width: 220px; font-family: 'Segoe UI', sans-serif; padding: 4px;">
+      
+      <!-- Título visible -->
       <div style="background: #fff; padding: 12px; border-left: 4px solid #2a5d67;">
-        <strong style="font-size: 1.15em; color: #2a5d67; display: block; margin-bottom: 8px;">
+        <strong id="popup-${est.id_estacion}" style="font-size: 1.15em; color: #2a5d67; display: block; margin-bottom: 8px;">
           ${est.nombre_estacion}
         </strong>
         ${est.tipo_estacion ? `
-          <span style="display: inline-block; background: #e8f4f8; color: #2a5d67; padding: 3px 8px; border-radius: 4px; font-size: 1.1em; font-weight: 500;">
+          <span style="display: inline-block; background: #e8f4f8; color: #2a5d67; padding: 3px 8px; border-radius: 4px; font-size: 1.1em; font-weight: 500;"
+                role="text">
             📍 ${est.tipo_estacion}
           </span>
         ` : ''}
       </div>
-            
+      
+      <!-- Latitud y longitud -->
       <div style="padding: 10px 12px; font-size: 1.1em; color: #555; line-height: 1.6; background: #f9fafb;">
         <div style="margin-bottom: 5px;">
           <span style="color: #888; font-size: 1.1em;">Latitud:</span>
-          <strong style="float: right; color: #2a5d67;">${parseFloat(est.latitud).toFixed(4)}°</strong>
+          <strong style="float: right; color: #2a5d67;">
+            ${parseFloat(est.latitud).toFixed(4)}°
+          </strong>
         </div>
         <div style="margin-bottom: ${anio ? '12px' : '0'};">
           <span style="color: #888; font-size: 1.1em;">Longitud:</span>
-          <strong style="float: right; color: #2a5d67;">${parseFloat(est.longitud).toFixed(4)}°</strong>
+          <strong style="float: right; color: #2a5d67;">
+            ${parseFloat(est.longitud).toFixed(4)}°
+          </strong>
         </div>
       </div>
-      
+
+      <!-- Botón -->
       ${anio ? `
         <button 
           onclick="window.centrarMapaEnEstacion(${est.id_estacion})"
-          style=" width: 100%; padding: 10px 12px; background: #2a5d67; color: white; border: none; border-radius: 
-            6px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(42, 93, 103, 0.2);"
+          style=" width: 100%; padding: 10px 12px; background: #2a5d67; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(42, 93, 103, 0.2);"
           onmouseover="this.style.background='#1e4a54'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(42, 93, 103, 0.3)'"
           onmouseout="this.style.background='#2a5d67'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(42, 93, 103, 0.2)'"
+          aria-label="Centrar el mapa en ${est.nombre_estacion}"
         >
           🎯 Centrar aquí
         </button>
       ` : ''}
+
+      <!-- Texto para lectores de pantalla -->
+      <div class="sr-only" aria-live="polite">
+        ${resumenA11y}
+      </div>
+      
     </div>
   `;
 }
