@@ -133,21 +133,23 @@ async function mostrarDetalle(contaminante) {
 
   const secciones = [
     `Contaminante: ${contaminante.simbolo} — ${contaminante.nombre}.`,
-    `Contaminante ${contaminante.nombre}, Qué es: ${contaminante.que_es}.`,
-    `Contaminante ${contaminante.nombre}, Causas: ${contaminante.causas}.`,
-    `Contaminante ${contaminante.nombre}, Consecuencias: ${contaminante.consecuencias}.`
+    `Qué es: ${contaminante.que_es}.`,
+    `Causas: ${contaminante.causas}.`,
+    `Consecuencias: ${contaminante.consecuencias}.`
   ];
 
-  ariaLive.textContent = ""; // limpiar
+  // Limpiar primero
+  ariaLive.innerHTML = "";
 
-  // Actualizamos aria-live sección por sección sin tiempo fijo
   for (let texto of secciones) {
-    // requestAnimationFrame ayuda a que el lector detecte el cambio
-    requestAnimationFrame(() => {
-      ariaLive.textContent = texto;
-    });
-    // Espera mínima para que el lector lo detecte, pero no interfiere con la lectura completa
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Crear un nodo temporal para publicar cada sección
+    const span = document.createElement("span");
+    span.textContent = texto;
+    ariaLive.innerHTML = "";  // limpiar para forzar la lectura de cada sección
+    ariaLive.appendChild(span);
+
+    // Espera mínima para que el lector lo detecte
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 }
 
