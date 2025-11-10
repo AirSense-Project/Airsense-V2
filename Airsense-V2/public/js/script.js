@@ -85,54 +85,56 @@ function mostrarErrorEnSelector(selectElement, mensaje) {
 // ==========================================================================
 
 /**
- * Muestra un mensaje de estado al usuario en la UI.
+ * Muestra un mensaje de estado en la UI.
  * @param {string} texto - El mensaje a mostrar.
+ * @param {Object} opciones
+ * @param {number} [opciones.timeout=4000] - Tiempo en ms antes de ocultar el mensaje.
+ * @param {string} [opciones.tipo="info"] - Tipo de mensaje: "info", "exito", "error".
  */
 function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
-  const estadoMapa = document.getElementById("estadoMapa");
-  if (!estadoMapa || !statusMsg) return;
+  const contenedor = document.getElementById("estadoMapa");
+  const visible = document.getElementById("statusVisible");
+  const accesible = document.getElementById("statusAccesible");
 
-  // Actualiza solo el span con id="status" (sin eliminarlo)
-  statusMsg.textContent = texto;
+  if (!contenedor) return;
 
-  // Clases opcionales para tipo de mensaje
-  statusMsg.classList.remove("estado-info", "estado-exito", "estado-error");
-  statusMsg.classList.add(
-    tipo === "error" ? "estado-error" :
-    tipo === "exito" ? "estado-exito" :
-    "estado-info"
-  );
+  // Actualiza los mensajes
+  if (visible) {
+    visible.textContent = texto;
+    visible.classList.remove("estado-info", "estado-exito", "estado-error");
+    visible.classList.add(
+      tipo === "error" ? "estado-error" :
+      tipo === "exito" ? "estado-exito" :
+      "estado-info"
+    );
+  }
 
-  // Muestra el contenedor con transición
-  estadoMapa.classList.add("visible");
-  estadoMapa.setAttribute("aria-live", "polite");
+  if (accesible) accesible.textContent = texto;
 
-  // Limpia timeout previo y programa el ocultado
-  clearTimeout(statusMsg._hideTimeout);
-  statusMsg._hideTimeout = setTimeout(() => {
-    estadoMapa.classList.remove("visible");
-    setTimeout(() => { statusMsg.textContent = ""; }, 300);
+  // Muestra visualmente el contenedor
+  contenedor.classList.add("visible");
+
+  // Oculta automáticamente después del timeout
+  clearTimeout(contenedor._timeout);
+  contenedor._timeout = setTimeout(() => {
+    contenedor.classList.remove("visible");
+    if (visible) visible.textContent = "";
   }, timeout);
 }
 
 /**
- * Oculta el mensaje de estado después de un tiempo.
- * @param {boolean} [inmediato=false] - Si se debe ocultar de inmediato.
+ * Oculta inmediatamente el mensaje de estado.
  */
-function ocultarEstado(inmediato = false) {
-  const estadoMapa = document.getElementById("estadoMapa");
-  if (!estadoMapa || !statusMsg) return;
+function ocultarEstado() {
+  const contenedor = document.getElementById("estadoMapa");
+  const visible = document.getElementById("statusVisible");
 
-  clearTimeout(statusMsg._hideTimeout);
-  if (inmediato) {
-    estadoMapa.classList.remove("visible");
-    statusMsg.textContent = "";
-  } else {
-    estadoMapa.classList.remove("visible");
-    setTimeout(() => { statusMsg.textContent = ""; }, 300);
-  }
+  if (!contenedor) return;
+
+  clearTimeout(contenedor._timeout);
+  contenedor.classList.remove("visible");
+  if (visible) visible.textContent = "";
 }
-
 
 // ==========================================================================
 // CARGA Y VISUALIZACIÓN DE MUNICIPIOS
