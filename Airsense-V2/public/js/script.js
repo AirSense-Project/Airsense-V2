@@ -98,17 +98,19 @@ function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
 
   if (!contenedor) return;
 
-  // Actualiza los mensajes
+  // Agrega el mensaje visual (muestra varios)
   if (visible) {
-    visible.textContent = texto;
-    visible.classList.remove("estado-info", "estado-exito", "estado-error");
-    visible.classList.add(
+    const mensajeDiv = document.createElement("div");
+    mensajeDiv.textContent = texto;
+    mensajeDiv.classList.add(
       tipo === "error" ? "estado-error" :
       tipo === "exito" ? "estado-exito" :
       "estado-info"
     );
+    visible.appendChild(mensajeDiv);
   }
 
+  // Mensaje accesible para lectores de pantalla (solo último)
   if (accesible) accesible.textContent = texto;
 
   // Muestra visualmente el contenedor
@@ -118,13 +120,22 @@ function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
   clearTimeout(contenedor._timeout);
   contenedor._timeout = setTimeout(() => {
     contenedor.classList.remove("visible");
-    if (visible) visible.textContent = "";
+    if (visible) visible.innerHTML = ""; // limpia todos los mensajes visuales
   }, timeout);
 }
 
-/**
- * Oculta inmediatamente el mensaje de estado.
- */
+function mostrarErrorEnSelector(selectElement, mensaje) {
+  selectElement.innerHTML = '';
+  selectElement.disabled = true;
+
+  const opcionError = document.createElement('option');
+  opcionError.value = "";
+  opcionError.textContent = `⚠️ ${mensaje}`;
+  selectElement.style.color = '#d9534f';
+  
+  selectElement.appendChild(opcionError);
+}
+
 function ocultarEstado() {
   const contenedor = document.getElementById("estadoMapa");
   const visible = document.getElementById("statusVisible");
@@ -133,7 +144,7 @@ function ocultarEstado() {
 
   clearTimeout(contenedor._timeout);
   contenedor.classList.remove("visible");
-  if (visible) visible.textContent = "";
+  if (visible) visible.innerHTML = "";
 }
 
 // ==========================================================================
