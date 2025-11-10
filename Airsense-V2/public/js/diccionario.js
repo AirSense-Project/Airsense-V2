@@ -136,15 +136,16 @@ function mostrarDetalle(contaminante) {
   // Cambiar la vista de lista a detalle
   cambiarVista("detalle");
 
-  // Mover foco al contenedor detalle para navegación con teclado
+  // Mover foco al contenedor detalle (no al botón)
   vistaDetalle.focus();
 
-  // Anuncio accesible completo para lector de pantalla
+  // Anuncio accesible completo
   const anuncio = `${contaminante.simbolo} — ${contaminante.nombre}. Qué es: ${contaminante.que_es}. Causas: ${contaminante.causas}. Consecuencias: ${contaminante.consecuencias}.`;
+
   const ariaLive = document.getElementById("aria-live-region");
   ariaLive.textContent = ""; // limpiar antes
   setTimeout(() => {
-    ariaLive.textContent = anuncio; // fuerza la lectura
+    ariaLive.textContent = anuncio; // fuerza la lectura por el narrador
   }, 100);
 }
 
