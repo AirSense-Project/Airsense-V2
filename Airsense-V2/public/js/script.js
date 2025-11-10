@@ -98,7 +98,7 @@ function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
 
   if (!contenedor) return;
 
-  // Agrega el mensaje visual (muestra varios)
+  // Agrega el mensaje visual
   if (visible) {
     const mensajeDiv = document.createElement("div");
     mensajeDiv.textContent = texto;
@@ -110,19 +110,20 @@ function mostrarEstado(texto, { timeout = 4000, tipo = "info" } = {}) {
     visible.appendChild(mensajeDiv);
   }
 
-  // Mensaje accesible para lectores de pantalla (solo último)
+  // Mensaje accesible
   if (accesible) accesible.textContent = texto;
 
-  // Muestra visualmente el contenedor
+  // Muestra contenedor
   contenedor.classList.add("visible");
 
-  // Oculta automáticamente después del timeout
-  clearTimeout(contenedor._timeout);
+  // Configura ocultar automático
+  clearTimeout(contenedor._timeout); // limpia cualquier timeout previo
   contenedor._timeout = setTimeout(() => {
     contenedor.classList.remove("visible");
-    if (visible) visible.innerHTML = ""; // limpia todos los mensajes visuales
+    if (visible) visible.innerHTML = "";
   }, timeout);
 }
+
 
 function mostrarErrorEnSelector(selectElement, mensaje) {
   selectElement.innerHTML = '';
@@ -358,9 +359,8 @@ async function cargarAniosPorMunicipio(idMunicipio) {
 async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
-     selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
     const estaciones = await apiClient(`/estaciones/${idMunicipio}`);
-
+    selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
     // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
     mostrarEstacionesEnMapa(estaciones, null, false); 
     
