@@ -150,45 +150,51 @@ function ocultarEstado() {
 
 async function cargarMunicipios() {
   const selectMunicipio = document.getElementById("selectMunicipio");
-  // 1. Lógica de UI 
+
+  // 1️⃣ Estado inicial (loading)
   selectMunicipio.setAttribute('aria-busy', 'true');
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
-  selectMunicipio.style.color = ''; // Resetear el color de error
+  selectMunicipio.style.color = ''; // resetear color de error
 
   try {
-    // 2. Lógica de UI 
-      mostrarEstado("Cargando municipios...", { tipo: "info" });
+    mostrarEstado("Cargando municipios...", { tipo: "info" });
 
-    const data = await apiClient("/municipios"); 
+    const data = await apiClient("/municipios");
 
-    // 4. Lógica de ÉXITO 
     if (!data || data.length === 0) {
       throw new Error("No se encontraron municipios");
     }
+
+    // ✅ Llenar el <select> con los municipios
     selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
     selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
+
     data.forEach((m) => {
       const option = document.createElement("option");
       option.value = m.id_municipio;
       option.textContent = m.nombre_municipio;
       selectMunicipio.appendChild(option);
     });
+
     selectMunicipio.disabled = false;
-    mostrarEstado(`${municipios.length} municipios cargados.`, { tipo: "exito" });
-    setTimeout(ocultarEstado, 4000);
+
+    // ✅ Mensaje de éxito (variable correcta)
+    mostrarEstado(`${data.length} municipios cargados.`, { tipo: "exito" });
+    ocultarEstado(4000);
+
     anunciarAccesibilidad(`${data.length} municipios disponibles para seleccionar.`);
     habilitarLecturaSelect("selectMunicipio", "estado-municipio");
+
   } catch (error) {
-    // 5. Lógica de ERROR Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error cargando municipios:", error);
     mostrarErrorEnSelector(selectMunicipio, error.message);
-    
-  }finally {
-    // Se ejecuta SIEMPRE (en éxito o error)
-    selectMunicipio.setAttribute('aria-busy', 'false'); 
+
+  } finally {
+    selectMunicipio.setAttribute('aria-busy', 'false');
   }
 }
+
 
 /**
  * Rellena el <select> de municipios.
