@@ -151,7 +151,7 @@ function ocultarEstado() {
 async function cargarMunicipios() {
   const selectMunicipio = document.getElementById("selectMunicipio");
 
-  // 1️⃣ Estado inicial (loading)
+  // Estado inicial 
   selectMunicipio.setAttribute('aria-busy', 'true');
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
@@ -166,7 +166,6 @@ async function cargarMunicipios() {
       throw new Error("No se encontraron municipios");
     }
 
-    // ✅ Llenar el <select> con los municipios
     selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
     selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
 
@@ -178,8 +177,6 @@ async function cargarMunicipios() {
     });
 
     selectMunicipio.disabled = false;
-
-    // ✅ Mensaje de éxito (variable correcta)
     mostrarEstado(`${data.length} municipios cargados.`, { tipo: "exito" });
     ocultarEstado(4000);
 
@@ -366,6 +363,7 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
     mostrarEstacionesEnMapa(estaciones, null, false); 
     mostrarEstado(`${estaciones.length} estaciones encontradas.`);
     ocultarEstado(2500);
+    anunciarAccesibilidad(`${estaciones.length} estaciones disponibles para seleccionar.`);
     habilitarLecturaSelect("selectEstacion", "estado-estacion");
   } catch (error) {
     console.error("❌ Error al cargar estaciones:", error);
@@ -597,19 +595,27 @@ function crearIconoColor(color, resaltado = false) {
 // Centra el mapa en una estación (llamado desde el popup)
 window.centrarMapaEnEstacion = function (idEstacion) {
   console.log("🎯 Centrando mapa en estación:", idEstacion);
+
   const marker = marcadoresEstaciones[idEstacion];
-  if (marker) {
-    const latlng = marker.getLatLng();
-    map.setView(latlng, 15, { animate: true, duration: 1 });
-
-    // Cerrar el popup después de centrar
-    setTimeout(() => {
-      marker.closePopup();
-    }, 1500);
-
-    mostrarEstado("📍 Mapa centrado en la estación");
-    ocultarEstado(2000);
+  if (!marker) {
+    mostrarEstado("⚠️ No se encontró la estación en el mapa.", { tipo: "error" });
+    anunciarAccesibilidad("No se encontró la estación en el mapa.");
+    return;
   }
+
+  // 📍 Centrar el mapa en el marcador
+  const latlng = marker.getLatLng();
+  map.setView(latlng, 15, { animate: true, duration: 1 });
+
+  // 🔹 Cerrar popup después de centrar
+  setTimeout(() => {
+    marker.closePopup();
+  }, 1500);
+
+  // ✅ Retroalimentación visual + accesible
+  mostrarEstado("📍 Mapa centrado en la estación seleccionada", { tipo: "exito" });
+  anunciarAccesibilidad("Mapa centrado en la estación seleccionada.");
+  ocultarEstado(2500);
 };
 
 // ==========================================================================
@@ -661,7 +667,10 @@ window.sincronizarEstacionConSelector = function (idEstacion) {
  */
 async function cargarContaminantesPorEstacion(idEstacion, anio) {
   try {
+    // 🟡 Estado inicial (informativo)
     mostrarEstado("Cargando contaminantes disponibles...", { tipo: "info" });
+
+    // 🔹 Llamada a la API
     const responseContaminantes = await fetch(`${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`);
 
     if (!responseContaminantes.ok) {
@@ -671,11 +680,15 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
       throw new Error("Error al obtener contaminantes");
     }
 
+    // 🔹 Procesar respuesta
     const dataContaminantes = await responseContaminantes.json();
 
-    selectContaminante.innerHTML =
-      '<option value="">-- Selecciona contaminante --</option>';
-    
+    // 🔹 Limpiar y preparar el selector
+    selectContaminante.innerHTML = '<option value="">-- Selecciona contaminante --</option>';
+    selectContaminante.classList.remove("selector-error");
+    selectContaminante.style.color = "";
+
+    // 🔹 Llenar con opciones dinámicas
     dataContaminantes.contaminantes.forEach((cont) => {
       cont.tiempos_exposicion.forEach((tiempo) => {
         const option = document.createElement("option");
@@ -686,21 +699,19 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
         selectContaminante.appendChild(option);
       });
     });
-
-    selectContaminante.setAttribute("aria-label", `Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
+    selectContaminante.setAttribute("aria-label",`Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
     selectContaminante.disabled = false;
-
     mostrarEstado(`${dataContaminantes.total_contaminantes} contaminantes disponibles.`, { tipo: "exito" });
+    anunciarAccesibilidad(`${dataContaminantes.total_contaminantes} contaminantes disponibles para seleccionar.`);
     ocultarEstado(2500);
     habilitarLecturaSelect("selectContaminante", "estado-contaminante");
-
   } catch (error) {
     console.error("❌ Error al cargar contaminantes:", error);
     mostrarErrorEnSelector(selectContaminante, error.message);
-    selectContaminante.disabled = true;
     ocultarEstado(3000);
   }
 }
+
 
 // ==========================================================================
 // EVENT LISTENER: MUNICIPIO
@@ -737,10 +748,10 @@ selectMunicipio.addEventListener("change", async (e) => {
 
 selectAnio.addEventListener("change", async (e) => {
   const anio = e.target.value;
-  anunciarAccesibilidad(`Año seleccionado: ${anio || "ninguno"}`);
   const idMunicipio = selectMunicipio.value;
 
   console.log("📅 Cambio de año:", anio);
+  anunciarAccesibilidad(`Año seleccionado: ${anio || "ninguno"}`);
   resetearFiltrosDependientes(2);
 
   if (!anio) {
@@ -748,12 +759,9 @@ selectAnio.addEventListener("change", async (e) => {
     return;
   }
 
-  // Si se selecciona un año, cargar estaciones CON interactividad
   try {
-    mostrarEstado(`Cargando estaciones operativas en ${anio}...`);
-
+    mostrarEstado(`Cargando estaciones operativas en ${anio}...`, { tipo: "info" });
     const response = await fetch(`${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`);
-
     if (!response.ok) {
       if (response.status === 404) {
         throw new Error(`No hay estaciones con datos para el año ${anio}`);
@@ -763,12 +771,9 @@ selectAnio.addEventListener("change", async (e) => {
 
     const data = await response.json();
 
-    // Mostrar en el mapa (CON interactividad y selección automática si solo hay 1)
-    mostrarEstacionesEnMapa(data.estaciones, anio, true);
-
-    // Llenamos el selector de estaciones
-    selectEstacion.innerHTML =
-      '<option value="">-- Selecciona estación --</option>';
+    selectEstacion.innerHTML = '<option value="">-- Selecciona estación --</option>';
+    selectEstacion.classList.remove("selector-error");
+    selectEstacion.style.color = "";
 
     data.estaciones.forEach((est) => {
       const option = document.createElement("option");
@@ -777,15 +782,22 @@ selectAnio.addEventListener("change", async (e) => {
       selectEstacion.appendChild(option);
     });
 
+    selectEstacion.setAttribute("aria-label",`Estación (${data.total_estaciones} opciones disponibles)`);
     selectEstacion.disabled = false;
-    mostrarEstado(`${data.total_estaciones} estaciones operativas en ${anio}.`);
+
+    mostrarEstacionesEnMapa(data.estaciones, anio, true);
+    mostrarEstado(`${data.total_estaciones} estaciones operativas en ${anio}.`, { tipo: "exito" });
+    anunciarAccesibilidad(`${data.total_estaciones} estaciones operativas disponibles en ${anio}.`);
     ocultarEstado(2500);
+    habilitarLecturaSelect("selectEstacion", "estado-estacion");
+
   } catch (error) {
     console.error("❌ Error al cargar estaciones por año:", error);
-    mostrarEstado(`❌ ${error.message}`);
-    ocultarEstado(3000);
+    mostrarErrorEnSelector(selectEstacion, error.message);
+    ocultarEstado(2500);
   }
 });
+
 
 // ==========================================================================
 // EVENT LISTENER: ESTACIÓN
@@ -795,9 +807,7 @@ selectEstacion.addEventListener("change", async (e) => {
   const idEstacion = e.target.value;
   const estacionTexto = e.target.options[e.target.selectedIndex]?.text;
   anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
-
   const anio = selectAnio.value;
-
   console.log("🏭 Cambio de estación:", idEstacion);
 
   resetearFiltrosDependientes(3);
@@ -847,6 +857,7 @@ selectContaminante.addEventListener("change", async (e) => {
 async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
   try {
     mostrarEstado("📊 Cargando datos del contaminante...", { tipo: "info" });
+    anunciarAccesibilidad("Cargando datos históricos del contaminante, por favor espere.");
     const response = await fetch(`${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`);
 
     if (!response.ok) {
@@ -857,17 +868,18 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
     }
 
     const datos = await response.json();
-
     console.log("📊 Datos recibidos:", datos);
 
     // Renderizar en el panel de información
     mostrarEstado("✅ Datos cargados correctamente", { tipo: "exito" });
-    ocultarEstado(2500);
     anunciarAccesibilidad("Datos cargados correctamente y mostrados en el panel.");
+    ocultarEstado(2500);
   } catch (error) {
     console.error("❌ Error al cargar datos históricos:", error);
     mostrarEstado(`❌ ${error.message}`, { tipo: "error" });
+    anunciarAccesibilidad(`Error: ${error.message}`);
     mostrarErrorEnPanel(error.message);
+    ocultarEstado(2500);
   }
 }
 
@@ -881,7 +893,6 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "Sin datos ⚪";
-
   const nivel = clasificacion.nivel || "Sin definir ⚪";
 
   if (nivel.toLowerCase().includes("buena")) return "Calidad del aire: Buena 🟢";
@@ -1064,11 +1075,8 @@ function formatearFecha(fechaISO) {
 
   const fecha = new Date(fechaISO);
   const opciones = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    year: "numeric", month: "long", day: "numeric",
+    hour: "2-digit", minute: "2-digit",
   };
 
   return fecha.toLocaleDateString("es-CO", opciones);
@@ -1163,7 +1171,6 @@ function actualizarBotonLimpiar() {
 // Evento del botón limpiar
 btnLimpiarFiltros.addEventListener('click', () => {
   if (!hayFiltrosActivos()) return;
-
   console.log("🗑️ Limpiando filtros...");
 
   // 1. Resetear todos los selectores
@@ -1276,7 +1283,7 @@ function inicializarVisor() {
   // Mensaje accesible cuando el mapa está listo
   const estadoMapa = document.getElementById("estadoMapa");
   mostrarEstado("Mapa cargado correctamente.", { tipo: "exito" });
-  ocultarEstado(2500);
+  ocultarEstado(3000);
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
