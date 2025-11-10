@@ -136,7 +136,15 @@ function mostrarDetalle(contaminante) {
     </div>
   `;
 
+  // Cambiar la vista de lista a detalle
   cambiarVista("detalle");
+
+  // Mover foco al contenedor detalle para lectura del narrador
+  vistaDetalle.focus();
+
+  // Anuncio accesible del contenido completo
+  const anuncio = `${contaminante.simbolo} — ${contaminante.nombre}. Qué es: ${contaminante.que_es}. Causas: ${contaminante.causas}. Consecuencias: ${contaminante.consecuencias}.`;
+  anunciarAccesibilidad(anuncio);
 }
 
 // ==========================================================================
