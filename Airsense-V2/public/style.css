@@ -1132,70 +1132,6 @@ body.dark-mode .popup-calidad {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* --------------------------------------
-   6. Secciones Específicas: Estadísticas, Detalles, Límites, Pico Máximo
-   -------------------------------------- */
-
-body.dark-mode .info-estadisticas {
-  background: #1f1f1f;
-  border: 1px solid #3a5a5a;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-mode .info-estadisticas h3 {
-  color: #5bc0be;
-  border-bottom: 2px solid #3a5a5a;
-}
-
-body.dark-mode .stat-item {
-  background: #2a2a2a;
-  border: 1px solid #3a5a5a;
-  color: #e0e0e0;
-}
-body.dark-mode .stat-item:hover {
-  background: #333;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
-}
-
-/* 🔍 Ver detalles técnicos */
-body.dark-mode details summary {
-  background: #252525;
-  color: #e0e0e0;
-  border: 1px solid #3a5a5a;
-}
-body.dark-mode details summary:hover {
-  background: #303030 !important;
-}
-body.dark-mode details[open] {
-  background: #1f1f1f;
-  border: 1px solid #3a5a5a;
-  border-radius: 10px;
-  padding: 10px 15px;
-}
-
-/* 🌍 Límites según OMS */
-body.dark-mode .limite-oms {
-  background: rgba(32, 32, 32, 0.9);
-  color: #d0d0d0;
-  border: 1px solid #3a5a5a;
-  border-left: 4px solid #5bc0be;
-  padding: 10px 15px;
-  border-radius: 8px;
-}
-
-/* 📅 Fecha del pico máximo */
-body.dark-mode .fecha-pico {
-  color: #b0b0b0;
-  background: rgba(40, 40, 40, 0.8);
-  border: 1px solid #3a5a5a;
-  border-radius: 8px;
-  padding: 8px 12px;
-  display: inline-block;
-}
-
-
 /*Esto oculta el texto visualmente, pero sigue siendo leído por lectores de pantalla*/
 .sr-only {
   position: absolute;
@@ -1209,3 +1145,181 @@ body.dark-mode .fecha-pico {
   white-space: nowrap;
 }
 
+/* ========================================================================== 
+   ESTILOS BASE (MODO CLARO por defecto)
+   ========================================================================== */
+
+:root {
+  --color-texto: #2a5d67;
+  --color-titulo: #2a5d67;
+  --color-secundario: #666;
+  --color-fondo-claro: #eef9f3;
+  --panel-fondo: #f8f9fa;
+  --tarjeta-fondo: #ffffff;
+  --detalle-fondo: #e9ecef;
+}
+
+/* --------------------------------------
+   1. Globales y Encabezado
+   -------------------------------------- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--panel-fondo);
+  color: var(--color-texto);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.header {
+  background: linear-gradient(135deg, #00796b 0%, #009688 100%);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* --------------------------------------
+   2. Botón modo oscuro
+   -------------------------------------- */
+.btn-modo-oscuro {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: var(--tarjeta-fondo);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.btn-modo-oscuro:hover {
+  transform: scale(1.1);
+}
+.btn-modo-oscuro .icono-luna { display: none; }
+body.dark-mode .btn-modo-oscuro .icono-sol { display: none; }
+body.dark-mode .btn-modo-oscuro .icono-luna { display: inline; }
+
+/* ========================================================================== 
+   BLOQUES DE INFORMACIÓN
+   ========================================================================== */
+
+/* ----------- BLOQUE BASE ----------- */
+.info-hero {
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  color: var(--color-texto);
+  background-color: var(--color-fondo-claro);
+}
+.info-hero[data-color] {
+  background-color: attr(data-color color, var(--color-fondo-claro));
+}
+
+.texto-calidad {
+  font-weight: bold;
+}
+
+/* ----------- ESTADÍSTICAS ----------- */
+.info-estadisticas {
+  background: var(--panel-fondo);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  background: var(--tarjeta-fondo);
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.stat-item .maximo {
+  color: #ff4444;
+}
+.stat-item .excedencias {
+  color: #ff8800;
+}
+
+/* ----------- BLOQUE PICO ----------- */
+.info-pico {
+  margin-top: 15px;
+  padding: 12px;
+  border-left: 4px solid #3da3b0;
+  border-radius: 6px;
+  background: #f2fbff;
+  color: #2a5d67;
+}
+
+/* ----------- DETALLES ----------- */
+.info-detalles summary {
+  cursor: pointer;
+  padding: 12px;
+  background: var(--detalle-fondo);
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+.detalle-contenido {
+  padding: 15px;
+}
+
+/* ----------- INTERPRETACIÓN ----------- */
+.info-interpretacion {
+  background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%);
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #d1e7ec;
+}
+.info-interpretacion h4 {
+  margin-bottom: 10px;
+  color: var(--color-titulo);
+}
+.info-interpretacion .nota-interpretacion {
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--color-secundario);
+  border-top: 1px solid #e0e0e0;
+  padding-top: 8px;
+}
+
+/* ========================================================================== 
+   🌙 MODO OSCURO (usando variables)
+   ========================================================================== */
+body.dark-mode {
+  --color-texto: #e6f7ff;
+  --color-titulo: #c0f1ff;
+  --color-secundario: #aaa;
+  --color-fondo-claro: #2b3a3f;
+  --panel-fondo: #1e272b;
+  --tarjeta-fondo: #2b3a3f;
+  --detalle-fondo: #334045;
+
+  background-color: var(--panel-fondo);
+  color: var(--color-texto);
+}
+
+/* Ajustes específicos de bloques en modo oscuro */
+body.dark-mode .header {
+  background: linear-gradient(135deg, #0d3d33 0%, #1a4a4a 100%);
+}
+
+body.dark-mode .info-pico {
+  background: var(--tarjeta-fondo);
+  color: var(--color-texto);
+  border-left: 4px solid #56c0e0;
+}
+
+body.dark-mode .info-interpretacion {
+  background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+  border-color: #2a5d67;
+}
