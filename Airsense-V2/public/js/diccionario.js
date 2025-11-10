@@ -111,7 +111,7 @@ function renderizarLista() {
 /* ==========================================================================
    RENDERIZADO DE DETALLE
    ========================================================================== */
-function mostrarDetalle(contaminante) {
+async function mostrarDetalle(contaminante) {
   contenidoDetalle.innerHTML = `
     <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
     <div class="diccionario__seccion">
@@ -131,10 +131,6 @@ function mostrarDetalle(contaminante) {
   cambiarVista("detalle");
   vistaDetalle.focus();
 
-  const ariaLive = document.getElementById("aria-live-region");
-  ariaLive.textContent = "";
-
-  // Separar cada sección y repetir nombre del contaminante
   const secciones = [
     `Contaminante: ${contaminante.simbolo} — ${contaminante.nombre}.`,
     `Contaminante ${contaminante.nombre}, Qué es: ${contaminante.que_es}.`,
@@ -142,22 +138,17 @@ function mostrarDetalle(contaminante) {
     `Contaminante ${contaminante.nombre}, Consecuencias: ${contaminante.consecuencias}.`
   ];
 
-  // Función para calcular tiempo de lectura aproximado
-  function tiempoLectura(texto) {
-    const palabras = texto.split(/\s+/).length;
-    return Math.max(1000, palabras * 200); // 200ms por palabra, mínimo 1s
-  }
+  ariaLive.textContent = ""; // limpiar
 
-  let acumulado = 0;
-  secciones.forEach(texto => {
-    setTimeout(() => {
-      // Actualizamos dentro de requestAnimationFrame para que lector de pantalla lo detecte
-      requestAnimationFrame(() => {
-        ariaLive.textContent = texto;
-      });
-    }, acumulado);
-    acumulado += tiempoLectura(texto);
-  });
+  // Actualizamos aria-live sección por sección sin tiempo fijo
+  for (let texto of secciones) {
+    // requestAnimationFrame ayuda a que el lector detecte el cambio
+    requestAnimationFrame(() => {
+      ariaLive.textContent = texto;
+    });
+    // Espera mínima para que el lector lo detecte, pero no interfiere con la lectura completa
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
 }
 
 /* ==========================================================================
