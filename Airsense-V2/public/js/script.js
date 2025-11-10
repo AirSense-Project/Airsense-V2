@@ -27,7 +27,6 @@ const selectMunicipio = document.getElementById("selectMunicipio");
 const selectAnio = document.getElementById("selectAnio");
 const selectEstacion = document.getElementById("selectEstacion");
 const selectContaminante = document.getElementById("selectContaminante");
-const estadoMapa = document.getElementById("estadoMapa");
 
 const statusMsg = document.createElement("span");
 statusMsg.id = "status";
@@ -38,8 +37,10 @@ statusMsg.style.fontStyle = "italic";
 statusMsg.style.transition = "opacity 0.4s ease";
 document.getElementById("estadoMapa").appendChild(statusMsg);
 
-const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
+
+
 const btnModoOscuro = document.getElementById('btnModoOscuro');
+
 
 // ==========================================================================
 // VARIABLES GLOBALES
@@ -59,89 +60,61 @@ const API_BASE_URL = "https://airsense-v2.onrender.com/api";
 
 // =========================================================================
 // FUNCIONES DE UTILIDAD 
-// =========================================================================/**
-
+// =========================================================================
 /**
- * Muestra un error en un <select> (por ejemplo, al fallar la carga)
- * @param {HTMLSelectElement} selectElement - El elemento <select> afectado.
- * @param {string} mensaje - El mensaje de error a mostrar.
+ * Muestra un mensaje de estado al usuario en la UI.
+ * @param {string} texto - El mensaje a mostrar.
  */
 function mostrarErrorEnSelector(selectElement, mensaje) {
-  if (!selectElement) return;
-
-  // 🔹 Limpia las opciones previas
-  selectElement.innerHTML = "";
+  // Limpia cualquier opción anterior
+  selectElement.innerHTML = ''; 
+  
+  // Deshabilita el selector
   selectElement.disabled = true;
 
-  // 🔹 Crea una opción visual que indica error
-  const opcionError = document.createElement("option");
+  // Crea y añade la opción de error
+  const opcionError = document.createElement('option');
   opcionError.value = "";
   opcionError.textContent = `⚠️ ${mensaje}`;
+  
+  // (Opcional) Añade un poco de estilo para que se vea como un error
+  selectElement.style.color = '#d9534f'; // Rojo
+  
   selectElement.appendChild(opcionError);
-
-  // 🔹 Aplica estilo visual de error (sin romper modo oscuro)
-  selectElement.classList.add("selector-error");
-
-  // 🔹 Mensaje accesible para lectores de pantalla
-  const estadoAccesible = selectElement.parentElement.querySelector('[id^="estado-"]');
-  if (estadoAccesible) {
-    estadoAccesible.textContent = `Error: ${mensaje}`;
-  }
-
-  // 🔹 Actualiza también la barra de estado general
-  mostrarEstado(`Error: ${mensaje}`, { tipo: "error" });
 }
 
+
 // ==========================================================================
-// 🧭 FUNCIONES DE RETROALIMENTACIÓN VISUAL
+// FUNCIONES DE RETROALIMENTACIÓN VISUAL
 // ==========================================================================
+
 /**
- * Muestra un mensaje de estado en la UI.
+ * Muestra un mensaje de estado al usuario en la UI.
  * @param {string} texto - El mensaje a mostrar.
- * @param {Object} opciones
- * @param {string} [opciones.tipo="info"] - Tipo de mensaje: "info", "exito", "error".
  */
-function mostrarEstado(texto, { tipo = "info" } = {}) {
-  const contenedor = document.getElementById("estadoMapa");
-  const visible = document.getElementById("statusVisible");
-  const accesible = document.getElementById("statusAccesible");
+function mostrarEstado(texto) {
+  const estadoMapa = document.getElementById("estadoMapa");
 
-  if (!contenedor) return;
+  // Actualiza visualmente el mensaje
+  statusMsg.textContent = texto;
+  estadoMapa.classList.add("visible");
 
-  // Limpia mensajes anteriores
-  if (visible) visible.innerHTML = "";
-
-  // Crea el mensaje visible
-  if (visible) {
-    const mensajeDiv = document.createElement("div");
-    mensajeDiv.textContent = texto;
-    mensajeDiv.classList.add(
-      tipo === "error" ? "estado-error" :
-      tipo === "exito" ? "estado-exito" :
-      "estado-info"
-    );
-    visible.appendChild(mensajeDiv);
-  }
-
-  // Actualiza texto accesible (para lectores de pantalla)
-  if (accesible) accesible.textContent = texto;
-
-  // Muestra contenedor
-  contenedor.classList.add("visible");
+  // 🟩 Mejora de accesibilidad: anuncio para lectores de pantalla
+  estadoMapa.setAttribute("aria-live", "polite");
 }
 
+
 /**
- * Oculta manualmente el estado del mapa.
+ * Oculta el mensaje de estado después de un tiempo.
+ * @param {number} [delay=300] - Tiempo en milisegundos antes de ocultar.
  */
-function ocultarEstado() {
-  const contenedor = document.getElementById("estadoMapa");
-  const visible = document.getElementById("statusVisible");
-
-  if (!contenedor) return;
-
-  clearTimeout(contenedor._timeout);
-  contenedor.classList.remove("visible");
-  if (visible) visible.innerHTML = "";
+function ocultarEstado(delay = 300) {
+  setTimeout(() => {
+    document.getElementById("estadoMapa").classList.remove("visible");
+    setTimeout(() => {
+      statusMsg.textContent = "";
+    }, 400);
+  }, delay);
 }
 
 // ==========================================================================
@@ -149,49 +122,49 @@ function ocultarEstado() {
 // ==========================================================================
 
 async function cargarMunicipios() {
-  const selectMunicipio = document.getElementById("selectMunicipio");
-
-  // Estado inicial 
+  // 1. Lógica de UI 
   selectMunicipio.setAttribute('aria-busy', 'true');
   selectMunicipio.innerHTML = '<option value="">Cargando municipios...</option>';
   selectMunicipio.disabled = true;
-  selectMunicipio.style.color = ''; // resetear color de error
+  selectMunicipio.style.color = ''; // Resetear el color de error
 
   try {
-    mostrarEstado("Cargando municipios...", { tipo: "info" });
+    // 2. Lógica de UI 
+    mostrarEstado("Cargando municipios...");
 
-    const data = await apiClient("/municipios");
+    const data = await apiClient("/municipios"); 
 
+    // 4. Lógica de ÉXITO 
     if (!data || data.length === 0) {
       throw new Error("No se encontraron municipios");
     }
-
     selectMunicipio.setAttribute("aria-label", `Municipio (${data.length} opciones disponibles)`);
     selectMunicipio.innerHTML = '<option value="">-- Todos los Municipios --</option>';
-
     data.forEach((m) => {
       const option = document.createElement("option");
       option.value = m.id_municipio;
       option.textContent = m.nombre_municipio;
       selectMunicipio.appendChild(option);
     });
-
     selectMunicipio.disabled = false;
-    mostrarEstado(`${data.length} municipios cargados.`, { tipo: "exito" });
-    ocultarEstado(4000);
-
+    mostrarEstado("Municipios cargados", "exito");
     anunciarAccesibilidad(`${data.length} municipios disponibles para seleccionar.`);
+    ocultarEstado(2000);
     habilitarLecturaSelect("selectMunicipio", "estado-municipio");
-
   } catch (error) {
+    // 5. Lógica de ERROR Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error cargando municipios:", error);
-    mostrarErrorEnSelector(selectMunicipio, error.message);
-
-  } finally {
-    selectMunicipio.setAttribute('aria-busy', 'false');
+    mostrarEstado(`❌ ${error.message}`);
+    ocultarEstado(3000);
+    
+    // Lógica de error en el select
+    selectMunicipio.innerHTML = `<option value="">⚠️ ${error.message}</option>`;
+    selectMunicipio.style.color = '#d9534f';
+  }finally {
+    // Se ejecuta SIEMPRE (en éxito o error)
+    selectMunicipio.setAttribute('aria-busy', 'false'); 
   }
 }
-
 
 /**
  * Rellena el <select> de municipios.
@@ -307,14 +280,14 @@ async function cargarAniosPorMunicipio(idMunicipio) {
   selectAnio.style.color = ''; 
 
   try {
-    mostrarEstado("Cargando años disponibles...", { tipo: "info" });
+    mostrarEstado("Cargando años disponibles...");
     const response = await fetch(`${API_BASE_URL}/anios/${idMunicipio}`);
     if (!response.ok) {
       if (response.status === 404) {throw new Error("No hay datos para este municipio");}
       throw new Error("Error al obtener años");
     }
     const data = await response.json();
-    
+    selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
     selectAnio.innerHTML = '<option value="">-- Selecciona año --</option>';
     data.anios_disponibles.forEach((anio) => {
       const option = document.createElement("option");
@@ -322,16 +295,24 @@ async function cargarAniosPorMunicipio(idMunicipio) {
       option.textContent = anio;
       selectAnio.appendChild(option);
     });
-    selectAnio.setAttribute("aria-label", `Año (${data.anios_disponibles.length} opciones disponibles)`);
+
     selectAnio.disabled = false;
 
-    mostrarEstado(`${data.anios_disponibles.length} años disponibles para ${data.municipio}.`, { tipo: "exito" });
-    setTimeout(ocultarEstado, 3000);
+    mostrarEstado(
+      `${data.anios_disponibles.length} años disponibles para ${data.municipio}.`
+    );
+    ocultarEstado(2500);
     habilitarLecturaSelect("selectAnio", "estado-anio");
-
   } catch (error) {
-    console.error("❌ Error al cargar años:", error);
-    mostrarErrorEnSelector(selectAnio, error.message); 
+    // 1. Muestra tu "toast" de error (¡Perfecto!)
+    mostrarEstado(`❌ ${error.message}`);
+    ocultarEstado(3000);
+    
+    // 2. Actualiza el <select> para que no se quede "cargando"
+    selectAnio.innerHTML = '<option value="">⚠️ Error al cargar</option>';
+    selectAnio.style.color = '#d9534f'; // Rojo
+    selectAnio.disabled = true;
+
   }
 }
 
@@ -346,28 +327,22 @@ async function cargarAniosPorMunicipio(idMunicipio) {
 
 async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
-    mostrarEstado("Cargando estaciones...", { tipo: "info" });
+    mostrarEstado("Cargando estaciones...");
+     selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
     const estaciones = await apiClient(`/estaciones/${idMunicipio}`);
-    
-    selectEstacion.innerHTML = '<option value="">-- Selecciona estación --</option>';
-    estaciones.forEach((estacion) => {
-      const option = document.createElement("option");
-      option.value = estacion.id_estacion;
-      option.textContent = estacion.nombre_estacion;
-      selectEstacion.appendChild(option);
-    });
 
-    selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
-    selectEstacion.disabled = false;
-    
+    // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
     mostrarEstacionesEnMapa(estaciones, null, false); 
+    
     mostrarEstado(`${estaciones.length} estaciones encontradas.`);
     ocultarEstado(2500);
-    anunciarAccesibilidad(`${estaciones.length} estaciones disponibles para seleccionar.`);
     habilitarLecturaSelect("selectEstacion", "estado-estacion");
   } catch (error) {
+    // 4. Este catch atrapa CUALQUIER error que 'apiClient' le lance.
     console.error("❌ Error al cargar estaciones:", error);
-    mostrarErrorEnSelector(selectEstacion, error.message);
+    // Ahora muestra el error real de la API.
+    mostrarEstado(`❌ ${error.message}`); 
+    ocultarEstado(3000); 
   }
 }
 
@@ -381,80 +356,70 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
  * @param {string|null} anio - El año seleccionado (para el popup).
  * @param {boolean} conInteractividad - Si los marcadores deben ser clickables para seleccionar.
  */
-function mostrarEstacionesEnMapa(estaciones, anio = null, conInteractividad = false) {
+function mostrarEstacionesEnMapa(
+  estaciones,
+  anio = null,
+  conInteractividad = false
+) {
   console.log("🗺️ Actualizando mapa con", estaciones.length, "estaciones");
 
-  // LIMPIAR TODO ANTES DE RENDERIZAR
+  // 1. LIMPIAR TODO ANTES DE RENDERIZAR
   limpiarEstacionesDelMapa();
   limpiarInfoBox();
 
   if (estaciones.length === 0) {
-    mostrarEstado("⚠️ No hay estaciones para mostrar", { tipo: "error" });
+    mostrarEstado("⚠️ No hay estaciones para mostrar");
     map.setView([4, -76.55], 8.5);
     return;
   }
 
-  // RENDERIZAR CADA ESTACIÓN
+  // 2. RENDERIZAR CADA ESTACIÓN
   estaciones.forEach((est) => {
     if (est.latitud && est.longitud) {
       const esSeleccionada = estacionSeleccionada === est.id_estacion;
+      const colorPorDefecto = "#9E9E9E"; //Gris
       const marker = L.marker(
         [parseFloat(est.latitud), parseFloat(est.longitud)],
-        { icon: crearIconoColor("#9E9E9E", esSeleccionada) }
+        {
+          icon: crearIconoColor(colorPorDefecto, esSeleccionada),
+        }
       ).addTo(map);
 
-      // Popup y tooltip
+      // Popup siempre interactivo
       marker.bindPopup(crearPopupInteractivo(est, anio));
-      marker.bindTooltip(est.nombre_estacion, {
-        permanent: false,
-        direction: "top",
-        offset: [0, -5],
-        opacity: 0.9,
-      });
 
-      // Interactividad solo cuando corresponde
       if (conInteractividad) {
-        marker.on("click", () => window.sincronizarEstacionConSelector(est.id_estacion));
+        marker.on("click", () => {
+          window.sincronizarEstacionConSelector(est.id_estacion);
+        });
       }
+
+      marker.bindTooltip(est.nombre_estacion, {
+        permanent: false, direction: "top", offset: [0, -5], opacity: 0.9,
+      });
 
       marcadoresEstaciones[est.id_estacion] = marker;
     }
   });
 
-  // 3️⃣ CENTRAR MAPA
+  // 3. CENTRAR MAPA
   const primeraEstacion = estaciones[0];
   map.setView(
     [parseFloat(primeraEstacion.latitud), parseFloat(primeraEstacion.longitud)],
     13
   );
 
-  // 4️⃣ ACTUALIZAR INFOBOX
+  // 4. ACTUALIZAR CUADRO INFORMATIVO
   actualizarInfoBox(estaciones, anio);
 
-  // 5️⃣ AUTO–SELECCIÓN SOLO SI HAY AÑO DEFINIDO
-  if (conInteractividad && estaciones.length === 1 && anio) {
-    console.log(`🎯 Solo 1 estación (${estaciones[0].nombre_estacion}), seleccionando automáticamente...`);
-    
-    // Evitamos que se dispare el evento change prematuramente
+  // 5. SELECCIÓN AUTOMÁTICA SI SOLO HAY 1 ESTACIÓN
+  if (conInteractividad && estaciones.length === 1) {
+    console.log("🎯 Solo 1 estación, seleccionando automáticamente...");
     setTimeout(() => {
-      const selectEstacion = document.getElementById("selectEstacion");
-      selectEstacion.value = estaciones[0].id_estacion;
-
-      // Reflejar en el mapa
       window.sincronizarEstacionConSelector(estaciones[0].id_estacion);
-
-      // Cargar contaminantes directamente porque ya hay año
-      cargarContaminantesPorEstacion(estaciones[0].id_estacion, anio);
-
-      mostrarEstado(`🏭 Estación ${estaciones[0].nombre_estacion} seleccionada automáticamente.`, { tipo: "exito" });
-      anunciarAccesibilidad(`Estación ${estaciones[0].nombre_estacion} seleccionada automáticamente.`);
-      ocultarEstado(2500);
-    }, 500);
-  } else if (conInteractividad && estaciones.length === 1 && !anio) {
-    console.log("⚠️ Solo una estación disponible, pero no se selecciona porque no hay año definido.");
+    }, 500); // Pequeño delay para que se vea la animación
   }
 }
-
 
 // ==========================================================================
 // FUNCIONES AUXILIARES PARA POPUPS
@@ -605,27 +570,19 @@ function crearIconoColor(color, resaltado = false) {
 // Centra el mapa en una estación (llamado desde el popup)
 window.centrarMapaEnEstacion = function (idEstacion) {
   console.log("🎯 Centrando mapa en estación:", idEstacion);
-
   const marker = marcadoresEstaciones[idEstacion];
-  if (!marker) {
-    mostrarEstado("⚠️ No se encontró la estación en el mapa.", { tipo: "error" });
-    anunciarAccesibilidad("No se encontró la estación en el mapa.");
-    return;
+  if (marker) {
+    const latlng = marker.getLatLng();
+    map.setView(latlng, 15, { animate: true, duration: 1 });
+
+    // Cerrar el popup después de centrar
+    setTimeout(() => {
+      marker.closePopup();
+    }, 1500);
+
+    mostrarEstado("📍 Mapa centrado en la estación");
+    ocultarEstado(2000);
   }
-
-  // 📍 Centrar el mapa en el marcador
-  const latlng = marker.getLatLng();
-  map.setView(latlng, 15, { animate: true, duration: 1 });
-
-  // 🔹 Cerrar popup después de centrar
-  setTimeout(() => {
-    marker.closePopup();
-  }, 1500);
-
-  // ✅ Retroalimentación visual + accesible
-  mostrarEstado("📍 Mapa centrado en la estación seleccionada", { tipo: "exito" });
-  anunciarAccesibilidad("Mapa centrado en la estación seleccionada.");
-  ocultarEstado(2500);
 };
 
 // ==========================================================================
@@ -677,11 +634,11 @@ window.sincronizarEstacionConSelector = function (idEstacion) {
  */
 async function cargarContaminantesPorEstacion(idEstacion, anio) {
   try {
-    // 🟡 Estado inicial (informativo)
-    mostrarEstado("Cargando contaminantes disponibles...", { tipo: "info" });
+    mostrarEstado("Cargando contaminantes disponibles...");
 
-    // 🔹 Llamada a la API
-    const responseContaminantes = await fetch(`${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`);
+    const responseContaminantes = await fetch(
+      `${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`
+    );
 
     if (!responseContaminantes.ok) {
       if (responseContaminantes.status === 404) {
@@ -690,15 +647,12 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
       throw new Error("Error al obtener contaminantes");
     }
 
-    // 🔹 Procesar respuesta
     const dataContaminantes = await responseContaminantes.json();
 
-    // 🔹 Limpiar y preparar el selector
-    selectContaminante.innerHTML = '<option value="">-- Selecciona contaminante --</option>';
-    selectContaminante.classList.remove("selector-error");
-    selectContaminante.style.color = "";
-
-    // 🔹 Llenar con opciones dinámicas
+    selectContaminante.innerHTML =
+      '<option value="">-- Selecciona contaminante --</option>';
+    
+    selectContaminante.setAttribute("aria-label", `Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
     dataContaminantes.contaminantes.forEach((cont) => {
       cont.tiempos_exposicion.forEach((tiempo) => {
         const option = document.createElement("option");
@@ -709,19 +663,21 @@ async function cargarContaminantesPorEstacion(idEstacion, anio) {
         selectContaminante.appendChild(option);
       });
     });
-    selectContaminante.setAttribute("aria-label",`Contaminante (${dataContaminantes.total_contaminantes} opciones disponibles)`);
+
     selectContaminante.disabled = false;
-    mostrarEstado(`${dataContaminantes.total_contaminantes} contaminantes disponibles.`, { tipo: "exito" });
-    anunciarAccesibilidad(`${dataContaminantes.total_contaminantes} contaminantes disponibles para seleccionar.`);
+
+    mostrarEstado(
+      `${dataContaminantes.total_contaminantes} contaminantes disponibles.`
+    );
     ocultarEstado(2500);
     habilitarLecturaSelect("selectContaminante", "estado-contaminante");
   } catch (error) {
     console.error("❌ Error al cargar contaminantes:", error);
-    mostrarErrorEnSelector(selectContaminante, error.message);
+    mostrarEstado(`❌ ${error.message}`);
+    selectContaminante.disabled = true;
     ocultarEstado(3000);
   }
 }
-
 
 // ==========================================================================
 // EVENT LISTENER: MUNICIPIO
@@ -758,10 +714,11 @@ selectMunicipio.addEventListener("change", async (e) => {
 
 selectAnio.addEventListener("change", async (e) => {
   const anio = e.target.value;
+  anunciarAccesibilidad(`Año seleccionado: ${anio || "ninguno"}`);
   const idMunicipio = selectMunicipio.value;
 
   console.log("📅 Cambio de año:", anio);
-  anunciarAccesibilidad(`Año seleccionado: ${anio || "ninguno"}`);
+
   resetearFiltrosDependientes(2);
 
   if (!anio) {
@@ -769,9 +726,14 @@ selectAnio.addEventListener("change", async (e) => {
     return;
   }
 
+  // Si se selecciona un año, cargar estaciones CON interactividad
   try {
-    mostrarEstado(`Cargando estaciones operativas en ${anio}...`, { tipo: "info" });
-    const response = await fetch(`${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`);
+    mostrarEstado(`Cargando estaciones operativas en ${anio}...`);
+
+    const response = await fetch(
+      `${API_BASE_URL}/estaciones/${idMunicipio}/${anio}`
+    );
+
     if (!response.ok) {
       if (response.status === 404) {
         throw new Error(`No hay estaciones con datos para el año ${anio}`);
@@ -781,9 +743,12 @@ selectAnio.addEventListener("change", async (e) => {
 
     const data = await response.json();
 
-    selectEstacion.innerHTML = '<option value="">-- Selecciona estación --</option>';
-    selectEstacion.classList.remove("selector-error");
-    selectEstacion.style.color = "";
+    // Mostrar en el mapa (CON interactividad y selección automática si solo hay 1)
+    mostrarEstacionesEnMapa(data.estaciones, anio, true);
+
+    // Llenamos el selector de estaciones
+    selectEstacion.innerHTML =
+      '<option value="">-- Selecciona estación --</option>';
 
     data.estaciones.forEach((est) => {
       const option = document.createElement("option");
@@ -792,22 +757,15 @@ selectAnio.addEventListener("change", async (e) => {
       selectEstacion.appendChild(option);
     });
 
-    selectEstacion.setAttribute("aria-label",`Estación (${data.total_estaciones} opciones disponibles)`);
     selectEstacion.disabled = false;
-
-    mostrarEstacionesEnMapa(data.estaciones, anio, true);
-    mostrarEstado(`${data.total_estaciones} estaciones operativas en ${anio}.`, { tipo: "exito" });
-    anunciarAccesibilidad(`${data.total_estaciones} estaciones operativas disponibles en ${anio}.`);
+    mostrarEstado(`${data.total_estaciones} estaciones operativas en ${anio}.`);
     ocultarEstado(2500);
-    habilitarLecturaSelect("selectEstacion", "estado-estacion");
-
   } catch (error) {
     console.error("❌ Error al cargar estaciones por año:", error);
-    mostrarErrorEnSelector(selectEstacion, error.message);
-    ocultarEstado(2500);
+    mostrarEstado(`❌ ${error.message}`);
+    ocultarEstado(3000);
   }
 });
-
 
 // ==========================================================================
 // EVENT LISTENER: ESTACIÓN
@@ -816,38 +774,29 @@ selectAnio.addEventListener("change", async (e) => {
 selectEstacion.addEventListener("change", async (e) => {
   const idEstacion = e.target.value;
   const estacionTexto = e.target.options[e.target.selectedIndex]?.text;
+  anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
+
   const anio = selectAnio.value;
 
-  anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
   console.log("🏭 Cambio de estación:", idEstacion);
 
   resetearFiltrosDependientes(3);
-  estacionSeleccionada = idEstacion ? parseInt(idEstacion) : null;
+  estacionSeleccionada = parseInt(idEstacion);
 
-  // 🟢 Si no hay estación seleccionada → restaurar íconos
   if (!idEstacion) {
+    estacionSeleccionada = null;
+    estacionSeleccionada = idEstacion ? parseInt(idEstacion) : null;
+    // SOLO restaurar tamaños, NO remover marcadores
     Object.values(marcadoresEstaciones).forEach((marker) => {
       marker.setIcon(crearIconoColor("#9E9E9E", false)); // Gris por defecto
     });
     return;
   }
 
-  // ⚠️ Si no hay año seleccionado → advertir al usuario
-  if (!anio) {
-    mostrarEstado("⚠️ Primero selecciona un año antes de ver contaminantes.", { tipo: "info" });
-    anunciarAccesibilidad("Debes seleccionar un año antes de cargar contaminantes.");
-    return;
-  }
-
-  // 🎯 Resalta el marcador actual
+  // Resalta el marcador y carga los contaminantes
   resaltarEstacionEnMapa(estacionSeleccionada);
-
-  // 🕐 Pequeño retraso para no sobreescribir el mensaje de estaciones
-  setTimeout(async () => {
-    await cargarContaminantesPorEstacion(idEstacion, anio);
-  }, 600); // 600 ms es suficiente
+  await cargarContaminantesPorEstacion(idEstacion, anio);
 });
-
 
 // ==========================================================================
 // EVENT LISTENER: CONTAMINANTE 
@@ -877,9 +826,11 @@ selectContaminante.addEventListener("change", async (e) => {
 
 async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
   try {
-    mostrarEstado("📊 Cargando datos del contaminante...", { tipo: "info" });
-    anunciarAccesibilidad("Cargando datos históricos del contaminante, por favor espere.");
-    const response = await fetch(`${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`);
+    mostrarEstado("📊 Cargando datos del contaminante...");
+
+    const response = await fetch(
+      `${API_BASE_URL}/datos?estacion=${idEstacion}&anio=${anio}&exposicion=${idExposicion}`
+    );
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -889,18 +840,21 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
     }
 
     const datos = await response.json();
+
     console.log("📊 Datos recibidos:", datos);
 
     // Renderizar en el panel de información
-    mostrarEstado("✅ Datos cargados correctamente", { tipo: "exito" });
-    anunciarAccesibilidad("Datos cargados correctamente y mostrados en el panel.");
-    ocultarEstado(2500);
+    mostrarInformacionContaminante(datos);
+
+    mostrarEstado("✅ Datos cargados correctamente");
+    ocultarEstado(2000);
   } catch (error) {
     console.error("❌ Error al cargar datos históricos:", error);
-    mostrarEstado(`❌ ${error.message}`, { tipo: "error" });
-    anunciarAccesibilidad(`Error: ${error.message}`);
+    mostrarEstado(`❌ ${error.message}`);
+    ocultarEstado(2000);
+
+    // Mostrar error en el panel
     mostrarErrorEnPanel(error.message);
-    ocultarEstado(2500);
   }
 }
 
@@ -914,6 +868,7 @@ async function cargarDatosHistoricos(idEstacion, anio, idExposicion) {
 
 function obtenerTextoCalidad(clasificacion) {
   if (!clasificacion) return "Sin datos ⚪";
+
   const nivel = clasificacion.nivel || "Sin definir ⚪";
 
   if (nivel.toLowerCase().includes("buena")) return "Calidad del aire: Buena 🟢";
@@ -1082,6 +1037,8 @@ function mostrarInformacionContaminante(datos) {
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
   }
+
+  // Inserta el panel lateral
   const panel = document.getElementById("informacionContaminantes");
   panel.innerHTML = crearPanelInformacion(datos, textoCalidad);
 }
@@ -1096,8 +1053,11 @@ function formatearFecha(fechaISO) {
 
   const fecha = new Date(fechaISO);
   const opciones = {
-    year: "numeric", month: "long", day: "numeric",
-    hour: "2-digit", minute: "2-digit",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   };
 
   return fecha.toLocaleDateString("es-CO", opciones);
@@ -1172,6 +1132,8 @@ function mostrarErrorEnPanel(mensaje) {
 // BOTÓN LIMPIAR FILTROS
 // ==========================================================================
 
+const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
+
 // Verofica si hay filtros activos
 function hayFiltrosActivos() {
   return selectMunicipio.value !== '' || 
@@ -1192,32 +1154,35 @@ function actualizarBotonLimpiar() {
 // Evento del botón limpiar
 btnLimpiarFiltros.addEventListener('click', () => {
   if (!hayFiltrosActivos()) return;
+
   console.log("🗑️ Limpiando filtros...");
 
   // 1. Resetear todos los selectores
-  [selectMunicipio, selectAnio, selectEstacion, selectContaminante].forEach(sel => {
-    sel.value = '';
-    sel.disabled = true;
-    sel.classList.remove('selector-error'); // Limpia errores visuales previos
-    sel.style.color = ''; // Restablece color
-  });
-  selectMunicipio.disabled = false; // El primero siempre activo
+  selectMunicipio.value = '';
+  selectAnio.value = '';
+  selectAnio.disabled = true;
+  selectEstacion.value = '';
+  selectEstacion.disabled = true;
+  selectContaminante.value = '';
+  selectContaminante.disabled = true;
 
   // 2. Limpiar mapa
   limpiarEstacionesDelMapa();
   limpiarInfoBox();
-  limpiarPanelInformacion();
 
   // 3. Volver a la vista general
   map.setView([4, -76.55], 8.5);
 
-  // 4. Actualizar estado del botón
+  // 4. Limpiar panel de información
+  limpiarPanelInformacion();
+
+  // 5. Actualizar estado del botón
   actualizarBotonLimpiar();
 
-  // 5. Mostrar mensaje
-  mostrarEstado("✨ Filtros limpiados - Vista general", { tipo: "info" });
+  // 6. Mostrar mensaje
+  mostrarEstado("✨ Filtros limpiados - Vista general");
   anunciarAccesibilidad("Filtros reiniciados. Mapa actualizado a vista general.");
-  ocultarEstado(3000);
+  ocultarEstado(2000);
   selectMunicipio.focus(); 
 });
 
@@ -1277,7 +1242,9 @@ function setModoOscuro(activado) {
   }
 }
 
+
 // --- Lógica de Inicialización del Modo Oscuro ---
+
 // Verificar si ya hay preferencia guardada
 const modoGuardado = localStorage.getItem('modoOscuro');
   if (modoGuardado === 'activado') {
@@ -1286,6 +1253,8 @@ const modoGuardado = localStorage.getItem('modoOscuro');
     // Cargar el mapa claro por defecto si no hay nada guardado
     setModoOscuro(false); 
   }
+
+  // Listener del botón
   btnModoOscuro.addEventListener('click', () => {
     // Invertir el estado actual
     const estaActivadoAhora = document.body.classList.contains('dark-mode');
@@ -1303,8 +1272,8 @@ function inicializarVisor() {
   actualizarBotonLimpiar(); // Estado inicial del botón
   // Mensaje accesible cuando el mapa está listo
   const estadoMapa = document.getElementById("estadoMapa");
-  mostrarEstado("Mapa cargado correctamente.", { tipo: "exito" });
-  ocultarEstado(4000);
+  estadoMapa.textContent = " Mapa cargado correctamente.";
+  ocultarEstado(2000);
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
