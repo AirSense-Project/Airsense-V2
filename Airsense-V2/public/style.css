@@ -1228,3 +1228,15 @@ body.dark-mode details.info-detalles p {
 body.dark-mode details.info-detalles p strong {
   color: #5bc0be !important;
 }
+
+.selector-error {
+  border: 2px solid #d9534f !important;
+  background-color: #fff5f5;
+  color: #d9534f !important;
+}
+
+body.dark-mode .selector-error {
+  border-color: #ff6b6b !important;
+  background-color: #331a1a;
+  color: #ffbaba !important;
+}
