@@ -1180,24 +1180,6 @@ body {
   font-weight: bold;
 }
 
-/* --------------------------------------
-   2. Botón modo oscuro
-   -------------------------------------- */
-.btn-modo-oscuro {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background: var(--tarjeta-fondo);
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-.btn-modo-oscuro:hover {
-  transform: scale(1.1);
-}
 
 /* ========================================================================== 
    BLOQUES DE INFORMACIÓN
