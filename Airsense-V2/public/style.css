@@ -10,12 +10,33 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background-color: #f7f9fb;
-  color: #333;
+  background-color: var(--panel-fondo);
+  color: var(--color-texto);
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
 }
+
+:root {
+  --color-secundario: #666;
+  --panel-fondo: #f8f9fa;
+  --tarjeta-fondo: #ffffff;
+  --detalle-fondo: #e9ecef;
+}
+
+body:not(.dark-mode) {
+  --color-texto: #2a5d67;
+  --color-titulo: #2a5d67;
+  --color-fondo-claro: #eef9f3;
+}
+
+body.dark-mode {
+  --color-texto: #e6f7ff;
+  --color-titulo: #c0f1ff;
+  --color-fondo-claro: #2b3a3f;
+}
+
 
 .header {
   background: linear-gradient(135deg, #1b5649 0%, #2a5d67 100%);
@@ -23,6 +44,10 @@ body {
   padding: 15px 40px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  transition: background 0.4s ease;
 }
 
 .header__contenido {
@@ -424,9 +449,22 @@ h1 {
 }
 
 .info-hero {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  color: var(--color-texto);
+  background-color: var(--color-fondo-claro);
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+.info-hero[data-color] {
+  background-color: attr(data-color color, var(--color-fondo-claro));
+}
+
+.texto-calidad {
+  font-weight: bold;
+}
+
 .info-hero:hover {
   transform: translateY(-2px);
 }
@@ -806,6 +844,19 @@ details[open] summary {
 /* --------------------------------------
    1. Globales y Encabezado (Dark)
    -------------------------------------- */
+body.dark-mode {
+  --color-texto: #e6f7ff;
+  --color-titulo: #c0f1ff;
+  --color-secundario: #aaa;
+  --color-fondo-claro: #2b3a3f;
+  --panel-fondo: #1e272b;
+  --tarjeta-fondo: #2b3a3f;
+  --detalle-fondo: #334045;
+}
+
+body.dark-mode .header {
+  background: linear-gradient(135deg, #0d3d33 0%, #1a4a4a 100%);
+}
 
 body.dark-mode {
   background-color: #1a1a1a;
@@ -1145,26 +1196,104 @@ body.dark-mode .popup-calidad {
   white-space: nowrap;
 }
 
-/* 📅 Bloque de Fecha del Pico Máximo */
+/* --------------------------------------
+   3. Variables de color (modo oscuro)
+   -------------------------------------- */
 
-/* Modo claro */
-.info-pico {
-  background: #f2fbff;
-  color: #2a5d67;
-  border-left: 4px solid #3da3b0;
-  padding: 12px 15px;
-  border-radius: 8px;
-  margin-top: 16px;
-  font-size: 0.95em;
-  line-height: 1.5;
+body.dark-mode .header {
+  background: linear-gradient(135deg, #0d3d33 0%, #1a4a4a 100%);
 }
 
-/* 🌙 Modo oscuro */
+/* ========================================================================== 
+   BLOQUES DE INFORMACIÓN
+   ========================================================================== */
+/* ----------- ESTADÍSTICAS ----------- */
+.info-estadisticas {
+  background: var(--panel-fondo);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  background: var(--tarjeta-fondo);
+  padding: 12px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.stat-item .maximo {
+  color: #ff4444;
+}
+
+.stat-item .excedencias {
+  color: #ff8800;
+}
+
+/* ----------- BLOQUE PICO ----------- */
+.info-pico {
+  margin-top: 15px;
+  padding: 12px;
+  border-left: 4px solid #3da3b0;
+  border-radius: 6px;
+  background: #f2fbff;
+  color: #2a5d67;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
 body.dark-mode .info-pico {
   background: #2b3a3f;
   color: #e6f7ff;
   border-left: 4px solid #56c0e0;
 }
 
+/* ----------- DETALLES ----------- */
+.info-detalles summary {
+  cursor: pointer;
+  padding: 12px;
+  background: var(--detalle-fondo);
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
+.detalle-contenido {
+  padding: 15px;
+}
 
+/* ----------- INTERPRETACIÓN ----------- */
+.info-interpretacion {
+  background: linear-gradient(135deg, #f7f9fb 0%, #ffffff 100%);
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #d1e7ec;
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.info-interpretacion h4 {
+  margin-bottom: 10px;
+  color: var(--color-titulo);
+}
+
+.info-interpretacion .nota-interpretacion {
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--color-secundario);
+  border-top: 1px solid #e0e0e0;
+  padding-top: 8px;
+}
+
+/* --------------------------------------
+   4. Animaciones / Transiciones suaves
+   -------------------------------------- */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
