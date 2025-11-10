@@ -381,70 +381,80 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
  * @param {string|null} anio - El año seleccionado (para el popup).
  * @param {boolean} conInteractividad - Si los marcadores deben ser clickables para seleccionar.
  */
-function mostrarEstacionesEnMapa(
-  estaciones,
-  anio = null,
-  conInteractividad = false
-) {
+function mostrarEstacionesEnMapa(estaciones, anio = null, conInteractividad = false) {
   console.log("🗺️ Actualizando mapa con", estaciones.length, "estaciones");
 
-  // 1. LIMPIAR TODO ANTES DE RENDERIZAR
+  // LIMPIAR TODO ANTES DE RENDERIZAR
   limpiarEstacionesDelMapa();
   limpiarInfoBox();
 
   if (estaciones.length === 0) {
-    mostrarEstado("⚠️ No hay estaciones para mostrar");
+    mostrarEstado("⚠️ No hay estaciones para mostrar", { tipo: "error" });
     map.setView([4, -76.55], 8.5);
     return;
   }
 
-  // 2. RENDERIZAR CADA ESTACIÓN
+  // RENDERIZAR CADA ESTACIÓN
   estaciones.forEach((est) => {
     if (est.latitud && est.longitud) {
       const esSeleccionada = estacionSeleccionada === est.id_estacion;
-      const colorPorDefecto = "#9E9E9E"; //Gris
       const marker = L.marker(
         [parseFloat(est.latitud), parseFloat(est.longitud)],
-        {
-          icon: crearIconoColor(colorPorDefecto, esSeleccionada),
-        }
+        { icon: crearIconoColor("#9E9E9E", esSeleccionada) }
       ).addTo(map);
 
-      // Popup siempre interactivo
+      // Popup y tooltip
       marker.bindPopup(crearPopupInteractivo(est, anio));
-
-      if (conInteractividad) {
-        marker.on("click", () => {
-          window.sincronizarEstacionConSelector(est.id_estacion);
-        });
-      }
-
       marker.bindTooltip(est.nombre_estacion, {
-        permanent: false, direction: "top", offset: [0, -5], opacity: 0.9,
+        permanent: false,
+        direction: "top",
+        offset: [0, -5],
+        opacity: 0.9,
       });
+
+      // Interactividad solo cuando corresponde
+      if (conInteractividad) {
+        marker.on("click", () => window.sincronizarEstacionConSelector(est.id_estacion));
+      }
 
       marcadoresEstaciones[est.id_estacion] = marker;
     }
   });
 
-  // 3. CENTRAR MAPA
+  // 3️⃣ CENTRAR MAPA
   const primeraEstacion = estaciones[0];
   map.setView(
     [parseFloat(primeraEstacion.latitud), parseFloat(primeraEstacion.longitud)],
     13
   );
 
-  // 4. ACTUALIZAR CUADRO INFORMATIVO
+  // 4️⃣ ACTUALIZAR INFOBOX
   actualizarInfoBox(estaciones, anio);
 
-  // 5. SELECCIÓN AUTOMÁTICA SI SOLO HAY 1 ESTACIÓN
-  if (conInteractividad && estaciones.length === 1) {
-    console.log("🎯 Solo 1 estación, seleccionando automáticamente...");
+  // 5️⃣ AUTO–SELECCIÓN SOLO SI HAY AÑO DEFINIDO
+  if (conInteractividad && estaciones.length === 1 && anio) {
+    console.log(`🎯 Solo 1 estación (${estaciones[0].nombre_estacion}), seleccionando automáticamente...`);
+    
+    // Evitamos que se dispare el evento change prematuramente
     setTimeout(() => {
+      const selectEstacion = document.getElementById("selectEstacion");
+      selectEstacion.value = estaciones[0].id_estacion;
+
+      // Reflejar en el mapa
       window.sincronizarEstacionConSelector(estaciones[0].id_estacion);
-    }, 500); // Pequeño delay para que se vea la animación
+
+      // Cargar contaminantes directamente porque ya hay año
+      cargarContaminantesPorEstacion(estaciones[0].id_estacion, anio);
+
+      mostrarEstado(`🏭 Estación ${estaciones[0].nombre_estacion} seleccionada automáticamente.`, { tipo: "exito" });
+      anunciarAccesibilidad(`Estación ${estaciones[0].nombre_estacion} seleccionada automáticamente.`);
+      ocultarEstado(2500);
+    }, 500);
+  } else if (conInteractividad && estaciones.length === 1 && !anio) {
+    console.log("⚠️ Solo una estación disponible, pero no se selecciona porque no hay año definido.");
   }
 }
+
 
 // ==========================================================================
 // FUNCIONES AUXILIARES PARA POPUPS
@@ -1196,7 +1206,7 @@ btnLimpiarFiltros.addEventListener('click', () => {
   // 5. Mostrar mensaje
   mostrarEstado("✨ Filtros limpiados - Vista general", { tipo: "info" });
   anunciarAccesibilidad("Filtros reiniciados. Mapa actualizado a vista general.");
-  ocultarEstado(2500);
+  ocultarEstado(3000);
   selectMunicipio.focus(); 
 });
 
