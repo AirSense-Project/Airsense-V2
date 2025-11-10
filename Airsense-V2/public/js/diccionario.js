@@ -14,15 +14,13 @@ const vistaDetalle = document.getElementById("vistaDetalle");
 const listaContaminantes = document.getElementById("listaContaminantes");
 const contenidoDetalle = document.getElementById("contenidoDetalle");
 const btnVolver = document.getElementById("btnVolver");
+const ariaLive = document.getElementById("aria-live-region");
 
-// ==========================================================================
-// ESTADO GLOBAL
-// ==========================================================================
-let contaminantes = []; // Contaminantes cargados desde backend
+let contaminantes = []; // Datos cargados desde backend
 
-// ==========================================================================
-// FUNCIONES DE NAVEGACIÓN ACCESIBLE
-// ==========================================================================
+/* ==========================================================================
+   FUNCIONES DE NAVEGACIÓN ACCESIBLE
+   ========================================================================== */
 function cambiarVista(vista) {
   if (vista === "detalle") {
     vistaLista.classList.remove("diccionario__vista--activa");
@@ -33,10 +31,9 @@ function cambiarVista(vista) {
     vistaDetalle.setAttribute("aria-hidden", "false");
     vistaDetalle.inert = false;
 
-    requestAnimationFrame(() => btnVolver.focus());
+    // Foco en el botón volver para navegación
+    btnVolver.focus();
   } else if (vista === "lista") {
-    if (document.activeElement === btnVolver) document.activeElement.blur();
-
     vistaDetalle.classList.remove("diccionario__vista--activa");
     vistaDetalle.setAttribute("aria-hidden", "true");
     vistaDetalle.inert = true;
@@ -45,30 +42,29 @@ function cambiarVista(vista) {
     vistaLista.setAttribute("aria-hidden", "false");
     vistaLista.inert = false;
 
-    requestAnimationFrame(() => {
-      const primerItem = listaContaminantes.querySelector(".diccionario__item");
-      if (primerItem) primerItem.focus();
-    });
+    // Foco en el primer item de la lista
+    const primerItem = listaContaminantes.querySelector(".diccionario__item");
+    if (primerItem) primerItem.focus();
   }
 }
 
-// ==========================================================================
-// NOTIFICACIÓN DE CARGA (Reutilizable)
-// ==========================================================================
+/* ==========================================================================
+   NOTIFICACIÓN DE CARGA
+   ========================================================================== */
 function notificarCarga({ cantidad, tipo, selectId }) {
-  mostrarEstado(`${cantidad} ${tipo} cargados.`, "exito");
+  mostrarEstado(`${cantidad} ${tipo} cargados.`, { tipo: "exito" });
   ocultarEstado(2500);
+
+  // Lectura accesible
   anunciarAccesibilidad(`${cantidad} ${tipo} disponibles para seleccionar.`);
 
-  // Activar lectura accesible para el select/lista correspondiente
-  if (selectId === "listaContaminantes") {
-    habilitarLecturaSelectLista(listaContaminantes);
-  }
+  // Activar lectura de lista si corresponde
+  if (selectId === "listaContaminantes") habilitarLecturaSelectLista(listaContaminantes);
 }
 
-// ==========================================================================
-// LECTURA ACCESIBLE PARA LISTA
-// ==========================================================================
+/* ==========================================================================
+   LECTURA ACCESIBLE PARA LISTA
+   ========================================================================== */
 function habilitarLecturaSelectLista(ulElement) {
   if (!ulElement) return;
 
@@ -80,9 +76,9 @@ function habilitarLecturaSelectLista(ulElement) {
   });
 }
 
-// ==========================================================================
-// RENDERIZADO DE LISTA
-// ==========================================================================
+/* ==========================================================================
+   RENDERIZADO DE LISTA
+   ========================================================================== */
 function renderizarLista() {
   listaContaminantes.innerHTML = "";
 
@@ -109,49 +105,49 @@ function renderizarLista() {
     listaContaminantes.appendChild(li);
   });
 
-  // Notificar que la lista fue cargada
   notificarCarga({ cantidad: contaminantes.length, tipo: "contaminantes", selectId: "listaContaminantes" });
 }
 
-// ==========================================================================
-// RENDERIZADO DE DETALLE
-// ==========================================================================
+/* ==========================================================================
+   RENDERIZADO DE DETALLE
+   ========================================================================== */
 function mostrarDetalle(contaminante) {
   contenidoDetalle.innerHTML = `
-    <h3>${contaminante.simbolo} — ${contaminante.nombre}</h3>
+    <h3 id="detalleTitulo" tabindex="-1">${contaminante.simbolo} — ${contaminante.nombre}</h3>
     <div class="diccionario__seccion">
       <h4>¿Qué es?</h4>
-      <p>${contaminante.que_es}</p>
+      <p id="detalleQueEs" tabindex="-1">${contaminante.que_es}</p>
     </div>
     <div class="diccionario__seccion">
       <h4>Causas</h4>
-      <p>${contaminante.causas}</p>
+      <p id="detalleCausas" tabindex="-1">${contaminante.causas}</p>
     </div>
     <div class="diccionario__seccion">
       <h4>Consecuencias</h4>
-      <p>${contaminante.consecuencias}</p>
+      <p id="detalleConsecuencias" tabindex="-1">${contaminante.consecuencias}</p>
     </div>
   `;
 
-  // Cambiar la vista de lista a detalle
+  // Cambiar vista a detalle
   cambiarVista("detalle");
 
-  // Mover foco al contenedor detalle (no al botón)
-  vistaDetalle.focus();
+  // Foco inicial en el título
+  document.getElementById("detalleTitulo").focus();
 
-  // Anuncio accesible completo
-  const anuncio = `${contaminante.simbolo} — ${contaminante.nombre}. Qué es: ${contaminante.que_es}. Causas: ${contaminante.causas}. Consecuencias: ${contaminante.consecuencias}.`;
-
-  const ariaLive = document.getElementById("aria-live-region");
-  ariaLive.textContent = ""; // limpiar antes
-  setTimeout(() => {
-    ariaLive.textContent = anuncio; // fuerza la lectura por el narrador
-  }, 100);
+  // Leer todo el contenido con aria-live
+  const anuncio = `
+    ${contaminante.simbolo} — ${contaminante.nombre}.
+    Qué es: ${contaminante.que_es}.
+    Causas: ${contaminante.causas}.
+    Consecuencias: ${contaminante.consecuencias}.
+  `;
+  ariaLive.textContent = "";
+  setTimeout(() => { ariaLive.textContent = anuncio; }, 100);
 }
 
-// ==========================================================================
-// CARGA DE DATOS
-// ==========================================================================
+/* ==========================================================================
+   CARGA DE DATOS
+   ========================================================================== */
 async function cargarDiccionario() {
   try {
     contaminantes = await apiClient("/diccionario");
@@ -166,12 +162,12 @@ async function cargarDiccionario() {
   }
 }
 
-// ==========================================================================
-// EVENT LISTENERS
-// ==========================================================================
+/* ==========================================================================
+   EVENT LISTENERS
+   ========================================================================== */
 btnVolver.addEventListener("click", () => cambiarVista("lista"));
 
-// ==========================================================================
-// INICIALIZACIÓN
-// ==========================================================================
+/* ==========================================================================
+   INICIALIZACIÓN
+   ========================================================================== */
 cargarDiccionario();
