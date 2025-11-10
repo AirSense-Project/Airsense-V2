@@ -328,7 +328,6 @@ async function cargarAniosPorMunicipio(idMunicipio) {
 async function cargarEstacionesPorMunicipio(idMunicipio) {
   try {
     mostrarEstado("Cargando estaciones...");
-     selectEstacion.setAttribute("aria-label", `Estación (${estaciones.length} opciones disponibles)`);
     const estaciones = await apiClient(`/estaciones/${idMunicipio}`);
 
     // 3. Lógica de ÉXITO apiClient ya maneja el caso de 0 estaciones si lanza un error
@@ -336,6 +335,8 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
     
     mostrarEstado(`${estaciones.length} estaciones encontradas.`);
     ocultarEstado(2500);
+    mostrarEstado(`${estaciones.length} estaciones encontradas.`, { tipo: "exito" });
+    anunciarAccesibilidad(`${estaciones.length} estaciones disponibles para seleccionar.`);
     habilitarLecturaSelect("selectEstacion", "estado-estacion");
   } catch (error) {
     // 4. Este catch atrapa CUALQUIER error que 'apiClient' le lance.
