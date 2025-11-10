@@ -750,26 +750,70 @@ function crearPanelInformacion(datos, textoCalidad) {
 // FUNCIÓN PRINCIPAL: mostrarInformacionContaminante(datos)
 // ================================================================
 function mostrarInformacionContaminante(datos) {
+  if (!datos) return;
+
   const textoCalidad = obtenerTextoCalidad(datos.clasificacion);
 
   try {
+    // Si hay estación seleccionada y existe su marcador en el mapa
     if (estacionSeleccionada && marcadoresEstaciones[estacionSeleccionada]) {
       const marcador = marcadoresEstaciones[estacionSeleccionada];
       const color = datos.clasificacion.color;
 
-      // Actualiza color e ícono
+      // 1) Actualiza color e ícono en el marcador
       marcador.setIcon(crearIconoColor(color, true));
-      // popup adicional de calidad del aire
-      // const popupHTML = crearPopupCalidad(datos, textoCalidad);
-      // marcador.bindPopup(popupHTML).openPopup();
+
+      // 2) Genera el HTML para el popup del contaminante usando la función existente
+      //    (asegúrate que crearPopupCalidad recibe (datos, textoCalidad) como en tu código)
+      try {
+        const popupHTML = crearPopupCalidad(datos, textoCalidad);
+        marcador.bindPopup(popupHTML).openPopup();
+      } catch (errPopup) {
+        // Evitar que un error en el popup rompa la UI
+        console.warn("⚠️ No se pudo actualizar el popup del marcador:", errPopup);
+      }
     }
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
   }
 
-  // Inserta el panel lateral
+  // 3) Inserta el panel lateral (como ya lo hacías)
   const panel = document.getElementById("informacionContaminantes");
-  panel.innerHTML = crearPanelInformacion(datos, textoCalidad);
+  if (panel) {
+    panel.innerHTML = crearPanelInformacion(datos, textoCalidad);
+  }
+
+  // 4) Accesibilidad: construir texto simplificado y anunciarlo
+  const textoAccesible = `
+    Datos de ${datos.contaminante.simbolo || datos.contaminante.nombre}.
+    Calidad del aire: ${textoCalidad.replace(/<[^>]+>/g, "")}.
+    Promedio: ${Number(datos.estadisticas.promedio || 0).toFixed(2)} ${datos.contaminante.unidades || ""}.
+    Máximo: ${Number(datos.estadisticas.maximo || 0).toFixed(2)}.
+    Mínimo: ${Number(datos.estadisticas.minimo || 0).toFixed(2)}.
+    Fecha del pico máximo: ${datos.estadisticas.fecha_hora_maximo || datos.estadisticas.fecha_maxima || "No disponible"}.
+  `;
+
+  // Usar tu función de accesibilidad (anunciarAccesibilidad) para que el Narrador lo lea
+  try {
+    anunciarAccesibilidad(textoAccesible.trim());
+  } catch (errA11y) {
+    console.warn("⚠️ Error al anunciar por accesibilidad:", errA11y);
+  }
+
+  // 5) Refuerzo de foco accesible en el panel lateral (para lectores que reaccionan al foco)
+  if (panel) {
+    panel.setAttribute("tabindex", "-1");
+    try {
+      panel.focus({ preventScroll: true });
+    } catch (errFocus) {
+      // algunos navegadores pueden bloquear focus programático en ciertos contextos; capturamos el error
+      console.warn("⚠️ No se pudo forzar el foco en el panel:", errFocus);
+    }
+  }
+
+  // 6) Actualizar región sr-only local si existe (infoContaminanteA11y)
+  const infoA11y = document.getElementById("infoContaminanteA11y");
+  if (infoA11y) infoA11y.textContent = textoAccesible.trim();
 }
 
 
