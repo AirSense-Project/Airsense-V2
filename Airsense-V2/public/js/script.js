@@ -816,24 +816,27 @@ selectAnio.addEventListener("change", async (e) => {
 selectEstacion.addEventListener("change", async (e) => {
   const idEstacion = e.target.value;
   const estacionTexto = e.target.options[e.target.selectedIndex]?.text;
+  const anio = selectAnio.value; // Año seleccionado actualmente
+
   anunciarAccesibilidad(`Actualmente estás en ${estacionTexto || "ninguna estación"}`);
-  const anio = selectAnio.value;
   console.log("🏭 Cambio de estación:", idEstacion);
 
   resetearFiltrosDependientes(3);
-  estacionSeleccionada = parseInt(idEstacion);
+  estacionSeleccionada = idEstacion ? parseInt(idEstacion) : null;
 
+  // Si no hay estación seleccionada, restaurar íconos
   if (!idEstacion) {
-    estacionSeleccionada = null;
-    estacionSeleccionada = idEstacion ? parseInt(idEstacion) : null;
-    // SOLO restaurar tamaños, NO remover marcadores
     Object.values(marcadoresEstaciones).forEach((marker) => {
       marker.setIcon(crearIconoColor("#9E9E9E", false)); // Gris por defecto
     });
     return;
   }
-
-  // Resalta el marcador y carga los contaminantes
+  // Verificar si se ha seleccionado un año antes de continuar
+  if (!anio) {
+    mostrarEstado("⚠️ Primero selecciona un año antes de ver contaminantes.", { tipo: "info" });
+    anunciarAccesibilidad("Debes seleccionar un año antes de cargar contaminantes.");
+    return; // Evita que se carguen contaminantes sin año
+  }
   resaltarEstacionEnMapa(estacionSeleccionada);
   await cargarContaminantesPorEstacion(idEstacion, anio);
 });
