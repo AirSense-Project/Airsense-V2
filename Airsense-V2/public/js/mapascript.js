@@ -24,7 +24,8 @@ let capaMunicipios = L.layerGroup().addTo(map);
  * @param {Array<Object>} municipios - Lista de municipios.
  */
 function mostrarMunicipiosEnMapa(municipios) {
-  capaMunicipios.clearLayers();
+  console.log("📍 Municipios recibidos:", municipios.length, municipios);
+    capaMunicipios.clearLayers();
   municipios.forEach((m) => {
     if (m.latitud && m.longitud) {
       const marker = L.circleMarker([m.latitud, m.longitud], {
