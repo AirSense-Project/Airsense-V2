@@ -406,9 +406,6 @@ function mostrarEstacionesEnMapa(
         }
       ).addTo(map);
 
-      // Popup siempre interactivo
-      marker.bindPopup(crearPopupInteractivo(est, anio));
-
       if (conInteractividad) {
         marker.on("click", () => {
           window.sincronizarEstacionConSelector(est.id_estacion);
