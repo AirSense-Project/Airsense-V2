@@ -98,7 +98,7 @@ async function cargarMunicipios() {
     // 2. Lógica de UI 
     mostrarEstado("Cargando municipios...");
     const data = await apiClient("/municipios"); 
-
+    
     // 4. Lógica de ÉXITO 
     if (!data || data.length === 0) {throw new Error("No se encontraron municipios");}
 
@@ -117,6 +117,13 @@ async function cargarMunicipios() {
       selectId: "selectMunicipio", selectElement: selectMunicipio,
       textoLabel: `Municipio (${data.length} opciones disponibles)`
     });
+
+    if (typeof mostrarMunicipiosEnMapa === "function") {
+      mostrarMunicipiosEnMapa(data);
+      console.log(`✅ Municipios mostrados en el mapa: ${data.length}`);
+    } else {
+      console.warn("⚠️ mostrarMunicipiosEnMapa() no está definida o no se ha cargado aún");
+    }
 
   } catch (error) {
     // 5. Lógica de ERROR Este catch atrapa CUALQUIER error que 'apiClient' le lance.
