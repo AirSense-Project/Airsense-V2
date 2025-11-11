@@ -228,6 +228,20 @@ async function cargarEstacionesPorMunicipio(idMunicipio) {
  */
 async function cargarContaminantesPorEstacion(idEstacion, anio) {
   try {
+
+    const contaminanteActual = selectContaminante.value;
+
+    // Verificar si ya se cargaron contaminantes para la misma estación y año
+    if (
+      selectContaminante.dataset.estacionCargada === String(idEstacion) &&
+      selectContaminante.dataset.anioCargado === String(anio) &&
+      contaminanteActual
+    ) {
+      console.log("🔁 Misma estación y año — se conserva el contaminante actual");
+      mostrarEstado("Misma estación seleccionada, conservando contaminante actual");
+      return; // Evita volver a recargar y borrar la selección
+    }
+
     mostrarEstado("Cargando contaminantes disponibles...");
 
     const responseContaminantes = await fetch(`${API_BASE_URL}/contaminantes/${idEstacion}/${anio}`);
@@ -783,10 +797,6 @@ function mostrarInformacionContaminante(datos) {
 
       // 1) Actualiza color e ícono en el marcador
       marcador.setIcon(crearIconoColor(color, true));
-
-      // 2) Genera el HTML para el popup del contaminante usando la función existente
-      //    (asegúrate que crearPopupCalidad recibe (datos, textoCalidad) como en tu código)
-
     }
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
