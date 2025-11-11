@@ -148,7 +148,7 @@
 
 /* --- Botón "Ver Mapa" --- */
 .btn {
-  background-color: #22c55e; /* Verde brillante */
+  background-color: #166534; /* Verde brillante */
   color: white;
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
@@ -158,7 +158,7 @@
 }
 
 .btn:hover {
-  background-color: #16a34a; /* Verde más oscuro */
+  background-color: #14532d; /* Verde más oscuro */
   transform: scale(1.05);
 }
 
@@ -823,4 +823,13 @@ select:focus-visible {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/*aplicará el color azul a todos los circleMarker*/
+.mapa__marcador-municipio {
+  stroke: #fff;
+  stroke-width: 1;
+  fill: #007BFF;
+  fill-opacity: 0.8;
+}
+
 
