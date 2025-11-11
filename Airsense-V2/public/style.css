@@ -1145,8 +1145,37 @@ body.dark-mode .popup-calidad {
   white-space: nowrap;
 }
 
+/* --------------------------------------
+   Enlace "Saltar al contenido"
+   -------------------------------------- */
+
+/* Esta es la nueva clase que reemplaza a las de Tailwind */
+.enlace-saltar:focus {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 9999; /* Asegura que esté por encima de todo */
+  
+  /* --- ESTILOS DE ALTO CONTRASTE --- */
+  background-color: #1b5649; /* Verde oscuro (Ratio 7.72:1) */
+  color: #ffffff;
+  
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  
+  /* Se quitan las propiedades que estaban en .sr-only */
+  width: auto;
+  height: auto;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+}
+
 /* ========================================================================== */
-/* 🎨 MODO OSCURO ESPECÍFICO PARA ESTADÍSTICAS, LÍMITES Y DETALLES           */
+/* MODO OSCURO ESPECÍFICO PARA ESTADÍSTICAS, LÍMITES Y DETALLES           */
 /* ========================================================================== */
 
 /* --- 📊 Estadísticas principales --- */
