@@ -786,13 +786,7 @@ function mostrarInformacionContaminante(datos) {
 
       // 2) Genera el HTML para el popup del contaminante usando la función existente
       //    (asegúrate que crearPopupCalidad recibe (datos, textoCalidad) como en tu código)
-      try {
-        const popupHTML = crearPopupCalidad(datos, textoCalidad);
-        marcador.bindPopup(popupHTML).openPopup();
-      } catch (errPopup) {
-        // Evitar que un error en el popup rompa la UI
-        console.warn("⚠️ No se pudo actualizar el popup del marcador:", errPopup);
-      }
+
     }
   } catch (error) {
     console.error("Error al actualizar marcador o popup:", error);
